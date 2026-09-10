@@ -41,6 +41,7 @@ const VocabView = resilientLazy(() => import('./components/JapaneseVocabView').t
 const GrammarView = resilientLazy(() => import('./components/JapaneseGrammarView').then(m => ({ default: m.JapaneseGrammarView })), 'Grammar');
 const ListeningView = resilientLazy(() => import('./components/JapaneseListeningView').then(m => ({ default: m.JapaneseListeningView })), 'Listening');
 const JlptExamView = resilientLazy(() => import('./components/JlptExamView').then(m => ({ default: m.JlptExamView })), 'JlptExam');
+const JapaneseWritingView = resilientLazy(() => import('./components/JapaneseWritingView').then(m => ({ default: m.JapaneseWritingView })), 'JapaneseWriting');
 const JapaneseListeningView = resilientLazy(() => import('./components/JapaneseListeningView').then(m => ({ default: m.JapaneseListeningView })), 'JapaneseListening');
 const PhoneticsView = resilientLazy(() => import('./components/GojuonView').then(m => ({ default: m.GojuonView })), 'Phonetics');
 const MistakeNotebookView = resilientLazy(() => import('./components/MistakeNotebookView').then(m => ({ default: m.MistakeNotebookView })), 'MistakeNotebook');
@@ -349,10 +350,11 @@ export function App() {
               <JlptExamView
                 isVip={license.isVip}
                 onOpenVipModal={handleOpenVipModal}
+                onNavigateToWriting={() => setActiveTab('writing')}
               />
             )}
             {activeTab === 'writing' && (
-              <JapaneseListeningView
+              <JapaneseWritingView
                 isVip={license.isVip}
                 onOpenVipModal={handleOpenVipModal}
               />

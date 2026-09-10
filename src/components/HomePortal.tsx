@@ -183,7 +183,7 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
     activeBorder: 'border-sky-500',
     activeBg: 'bg-sky-50/70 border-sky-400 text-sky-950',
     activeRing: 'ring-2 ring-sky-500/20 shadow-md',
-    desc: '专为 JLPT N5~N1 考生打造的高分闭环：全真机考模考 ➔ 错题遗忘曲线复盘 ➔ 听解真题课题理解逐句精练！',
+    desc: '专为 JLPT N5~N1 考生打造的高分闭环：全真机考模考 ➔ 错题遗忘曲线复盘 ➔ 日文小论文与商务邮件 AI 智能精批！',
     steps: [
       {
         stepNum: '01',
@@ -211,15 +211,15 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
       },
       {
         stepNum: '03',
-        stepLabel: '第 3 步 · 听解精听',
-        title: 'JLPT 听解精听工坊',
-        targetBadge: '课题/要点/即时应答',
-        badgeBg: 'bg-teal-100 text-teal-800 border border-teal-200/70',
-        desc: '攻克听解失分点！课题理解、概要理解与即时应答专项逐句精听，支持 0.8x~1.2x 调速与挖空填空。',
-        actionText: '开启听解精听训练',
+        stepLabel: '第 3 步 · 写作提分',
+        title: '日文小论文与商务写作 AI 精批',
+        targetBadge: '400字原稿纸·敬语突破',
+        badgeBg: 'bg-sky-100 text-sky-800 border border-sky-200/70',
+        desc: '攻克小论文与商务邮件！AI 智能纠正「です/ます」与「だ/である」混用，提供高级学术词汇升级与官方满分范文。',
+        actionText: '开启 AI 写作批改',
         targetTab: 'writing',
         icon: PenTool,
-        buttonBg: 'bg-teal-600 hover:bg-teal-700 text-white shadow-xs'
+        buttonBg: 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs'
       }
     ]
   }

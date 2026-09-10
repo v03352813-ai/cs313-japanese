@@ -50,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'grammar' as ActiveTab, label: '文法宝典', shortLabel: '文法', icon: BookOpenCheck },
     { id: 'kdrama' as ActiveTab, label: '动漫剧场', shortLabel: '动漫', icon: Headphones },
     { id: 'speaking' as ActiveTab, label: 'AI口语', shortLabel: '口语', icon: Mic, isHero: true },
-    { id: 'writing' as ActiveTab, label: '听解精听', shortLabel: '听解', icon: PenTool },
+    { id: 'writing' as ActiveTab, label: 'AI写作', shortLabel: '写作', icon: PenTool },
     { id: 'exam' as ActiveTab, label: 'JLPT机考', shortLabel: '机考', icon: FileCheck2 },
   ];
 

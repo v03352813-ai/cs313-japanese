@@ -30,12 +30,13 @@ import { api } from '../services/api';
 interface JlptExamViewProps {
   isVip: boolean;
   onOpenVipModal: (reason?: string) => void;
+  onNavigateToWriting?: () => void;
 }
 
 type MainExamMode = 'marathon_full' | 'full_paper' | 'special_drill';
 type LevelFilterType = 'all' | 'n1' | 'n2' | 'n3' | 'n4' | 'n5';
 
-export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModal }) => {
+export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModal, onNavigateToWriting }) => {
   const [mainMode, setMainMode] = useState<MainExamMode>('marathon_full');
   const [selectedPaperId, setSelectedPaperId] = useState<string>('jlpt-n2-2025-dec');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
@@ -285,6 +286,16 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
             </p>
           </div>
         </div>
+
+        {onNavigateToWriting && (
+          <button
+            onClick={onNavigateToWriting}
+            className="px-3.5 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs shrink-0 flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98 cursor-pointer"
+          >
+            <span>✍️ 前往 AI 日语写作工坊</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
 
       {/* Main Mode Switcher & Level Filter */}
@@ -525,6 +536,18 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                       </span>
                     </button>
                   ))}
+
+                  {onNavigateToWriting && (
+                    <button
+                      onClick={onNavigateToWriting}
+                      className="px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-300 shadow-2xs ml-auto cursor-pointer"
+                      title="前往 AI 日文写作与原稿纸批改实验室"
+                    >
+                      <span>✍️</span>
+                      <span>AI写作 (原稿纸/邮件)</span>
+                      <ChevronRight className="w-3 h-3 text-sky-700" />
+                    </button>
+                  )}
                 </div>
               )}
 
