@@ -1,0 +1,14 @@
+{
+  "lastSyncTimestamp": "2026-08-27T15:43:52.763Z",
+  "lastSyncTimeDisplay": "2026/8/27 23:43:52",
+  "engineStatus": "ACTIVE_ONLINE",
+  "totalExamPapers": 56,
+  "supportedSessions": "第 81 届 ~ 第 92 届（已支持扩展至 93~97 届）",
+  "autoQualityCheck": "100% PASSED (0 Errors)",
+  "modesSynced": [
+    "🏛️ 模式 1: 官方 3小时/100分钟 全真马拉松大考 (20套完整大卷 · 81~100题配备20~30行学术长文)",
+    "⚡ 模式 2: 25~40分钟 历届高频冲刺精选卷 (20套精编卷)",
+    "🎯 模式 3: 4 大分类专项突破题库 (16套专题库)"
+  ],
+  "incomingInboxPath": "data_inbox/topik_incoming/"
+}
