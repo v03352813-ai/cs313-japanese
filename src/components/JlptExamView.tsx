@@ -401,14 +401,13 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               (覆盖 N1~N5 五大等级，每年 7月 / 12月 考后持续同步更新收录):
             </span>
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/70">
-            <span className="text-sky-600 font-extrabold">{marathonCount}套官方考期大卷</span>
-            <span>+</span>
-            <span className="text-sky-600 font-extrabold">{fullPaperCount}套高频冲刺</span>
-            <span>+</span>
-            <span className="text-sky-600 font-extrabold">{drillCount}套题型专项</span>
-            <span>=</span>
-            <span className="text-slate-900 font-black">持续扩充更新</span>
+          <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70">
+            <span className="text-emerald-600 flex items-center gap-1 font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              每年 7月 / 12月 考后官方考期同步入库
+            </span>
+            <span className="text-slate-300">|</span>
+            <span className="text-sky-600 font-extrabold">N1~N5 历届考期全覆盖</span>
           </div>
         </div>
 
@@ -428,8 +427,8 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           >
             <Timer className="w-3.5 h-3.5 text-sky-500" />
             <span>🏛️ 官方历届考期全真卷</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'marathon_full' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
-              {marathonCount}套
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${mainMode === 'marathon_full' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
+              7月/12月大考
             </span>
           </button>
 
@@ -447,8 +446,8 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           >
             <FileCheck2 className="w-3.5 h-3.5 text-sky-500" />
             <span>⚡ 考前高频精选卷</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'full_paper' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
-              {fullPaperCount}套
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${mainMode === 'full_paper' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
+              高频冲刺
             </span>
           </button>
 
@@ -466,8 +465,8 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           >
             <Target className="w-3.5 h-3.5 text-sky-500" />
             <span>🎯 四大核心题型专项突破</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'special_drill' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
-              {drillCount}套
+            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${mainMode === 'special_drill' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
+              题型专项
             </span>
           </button>
         </div>
@@ -482,9 +481,6 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           {mainMode === 'special_drill' ? (
             <div className="flex items-center gap-1.5 flex-wrap">
               {JLPT_PAPER_CATEGORIES.map((cat) => {
-                const count = cat === '全部'
-                  ? drillCount
-                  : JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === cat).length;
                 const isSelected = selectedCategory === cat;
                 return (
                   <button
@@ -496,7 +492,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
                     }`}
                   >
-                    {cat === '全部' ? '当前模式全部' : cat} ({count}套)
+                    {cat === '全部' ? '全部题型' : cat}
                   </button>
                 );
               })}
@@ -504,9 +500,8 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           ) : (
             <div className="flex items-center gap-1.5 flex-wrap">
               {(['all', 'n1', 'n2', 'n3', 'n4', 'n5'] as LevelFilterType[]).map((lvl) => {
-                const count = levelCounts[lvl] || 0;
                 const labelMap: Record<string, string> = {
-                  all: '当前模式全部',
+                  all: '全部级别',
                   n1: 'N1 (高级)',
                   n2: 'N2 (中高级)',
                   n3: 'N3 (中级)',
@@ -524,7 +519,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
-                    {labelMap[lvl]} ({count}套)
+                    {labelMap[lvl]}
                   </button>
                 );
               })}
@@ -537,7 +532,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
               <FileCheck2 className="w-4 h-4 text-sky-500" />
-              <span>选择试卷 (当前筛选收录 {filteredPapers.length} 套 · 每年7月与12月考后持续同步更新):</span>
+              <span>选择作答试卷 (每年7月与12月考后持续同步收录新考期):</span>
             </div>
 
             <div className="relative flex-1 min-w-0 max-w-2xl">
