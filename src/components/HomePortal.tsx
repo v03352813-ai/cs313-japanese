@@ -188,11 +188,11 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
       {
         stepNum: '01',
         stepLabel: '第 1 步 · 模考查漏',
-        title: 'JLPT 历届全真机考模考',
+        title: '56+套 JLPT 历届全真机考模考',
         targetBadge: '摸清 180 分水位',
         badgeBg: 'bg-sky-100 text-sky-800 border border-sky-200/70',
         desc: '分屏沉浸答题、言语知识与读解原卷、即时判分，精准测出真实水平与各大题型薄弱项。',
-        actionText: '进入 JLPT 全真考场',
+        actionText: '进入 56+ 套真题考场',
         targetTab: 'exam',
         icon: FileCheck2,
         buttonBg: 'bg-sky-500 hover:bg-sky-600 text-white shadow-sky-500/20'

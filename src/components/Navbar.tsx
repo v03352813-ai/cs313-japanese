@@ -51,7 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'kdrama' as ActiveTab, label: '动漫剧场', shortLabel: '动漫', icon: Headphones },
     { id: 'speaking' as ActiveTab, label: 'AI口语', shortLabel: '口语', icon: Mic, isHero: true },
     { id: 'writing' as ActiveTab, label: 'AI写作', shortLabel: '写作', icon: PenTool },
-    { id: 'exam' as ActiveTab, label: 'JLPT机考', shortLabel: '机考', icon: FileCheck2 },
+    { id: 'exam' as ActiveTab, label: '56+套真题', shortLabel: '56+套', icon: FileCheck2 },
   ];
 
   // 管理员视图控制（默认学员完全隐藏，管理员可通过专属暗号唤醒）
@@ -175,8 +175,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setActiveTab('exam')}
                     className="min-w-0 w-full sm:w-auto overflow-hidden flex flex-col items-center justify-center px-1 sm:px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-center cursor-pointer hover:bg-slate-100 transition active:scale-98"
                   >
-                    <span className="hidden sm:block text-sm font-black text-slate-900 whitespace-nowrap">N1~N5</span>
-                    <span className="block sm:hidden text-[10px] font-black text-slate-900 truncate w-full">N1~N5</span>
+                    <span className="hidden sm:block text-sm font-black text-slate-900 whitespace-nowrap">56+套</span>
+                    <span className="block sm:hidden text-[10px] font-black text-slate-900 truncate w-full">56+套</span>
                     <span className="hidden sm:block text-[9px] text-slate-500 font-medium whitespace-nowrap">历届真题</span>
                     <span className="block sm:hidden text-[8px] text-slate-500 font-medium truncate w-full">真题</span>
                   </button>

@@ -245,17 +245,17 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
         <div className="space-y-1.5 z-10">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs text-white text-xs font-black">
-              JLPT 日本語能力試験 · 全真机考
+              JLPT 日本語能力試験 · 56+ 套全真机考
             </span>
             <span className="text-xs text-sky-100 font-bold">
-              180分标准评分 · 言语知识/读解/听解
+              180分标准评分 · 言语知识/读解/听解 · 每届考后同步收录
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-            JLPT 历届官方真题全真机考系统
+            JLPT 56+ 套历届官方真题全真机考系统
           </h2>
           <p className="text-xs text-sky-100 font-medium">
-            全真还原官方考试作答流程，配备答案深度解析、高频词汇表与星号排序题技巧拆解！
+            全真还原官方考试作答流程，配备答案深度解析、高频词汇表与星号排序题技巧拆解！每届考后持续扩充！
           </p>
         </div>
 
@@ -306,10 +306,10 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-sky-500 shrink-0" />
             <span className="font-black text-slate-800">
-              📚 全真题库总计 56 套
+              📚 全真题库总计 56+ 套
             </span>
             <span className="text-slate-500 hidden sm:inline">
-              (包含 3 大实战训练模式，点击下方模式即可切换分库):
+              (包含 3 大实战训练模式，每届考后持续扩充，点击下方模式切换分库):
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/70">
@@ -319,7 +319,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
             <span>+</span>
             <span className="text-sky-600 font-extrabold">{drillCount}套专项突破</span>
             <span>=</span>
-            <span className="text-slate-900 font-black">全库 56 套</span>
+            <span className="text-slate-900 font-black">全库 56+ 套</span>
           </div>
         </div>
 
@@ -448,7 +448,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
               <FileCheck2 className="w-4 h-4 text-sky-500" />
-              <span>选择试卷 (当前模式 {filteredPapers.length} 套 / 全库共 56 套):</span>
+              <span>选择试卷 (当前模式 {filteredPapers.length} 套 / 全库共 56+ 套):</span>
             </div>
 
             <div className="relative flex-1 min-w-0 max-w-2xl">
@@ -460,7 +460,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                   const pIdx = filteredPapers.findIndex(p => p.id === targetId);
                   const isLockedPaper = !isVip && !targetPaper?.isFreePreview && pIdx !== 0;
                   if (isLockedPaper) {
-                    onOpenVipModal(`🔒《${targetPaper?.title}》为 VIP 专属真题考场！升级 VIP 终身卡（仅 ¥49.9），即可无限畅刷 56 套官方真题大卷！`);
+                    onOpenVipModal(`🔒《${targetPaper?.title}》为 VIP 专属真题考场！升级 VIP 终身卡（仅 ¥49.9），即可无限畅刷 56+ 套官方真题大卷（每届考后持续同步更新）！`);
                     return;
                   }
                   setSelectedPaperId(targetId);
