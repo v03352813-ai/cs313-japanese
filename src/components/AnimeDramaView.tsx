@@ -408,14 +408,17 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
         {/* Header & Filter Toolbar */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <h2 className="text-xl font-black text-slate-900 flex items-center gap-2">
+            <h2 className="text-xl font-black text-slate-900 flex items-center gap-2 flex-wrap">
               <span>经典动漫与日剧剧场</span>
+              <span className="text-xs font-bold text-sky-700 bg-sky-100 border border-sky-200/80 px-2.5 py-0.5 rounded-full">
+                🔥 每周持续扩充更新 (每周+6部)
+              </span>
               <span className="text-xs font-normal text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
-                共 {filteredScenes.length} 部经典高光
+                已收录 {allScenes.length}+ 部经典高光
               </span>
             </h2>
             <p className="text-xs text-slate-500">
-              吉卜力·新海诚·高分日剧名台词精析，掌握核心词汇与接续语法！
+              吉卜力·新海诚·高分日剧名台词精析，逐句盲听、影子跟读与考点拆解！
             </p>
           </div>
 

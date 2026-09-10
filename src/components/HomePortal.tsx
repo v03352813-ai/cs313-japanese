@@ -645,8 +645,11 @@ export const HomePortal: React.FC<HomePortalProps> = ({
                 🎧 原声磨耳朵 · 影子跟读
               </span>
             </div>
-            <p className="text-xs text-slate-500 font-medium">
-              精选《千与千寻》《你的名字》《非自然死亡》《半泽直树》等 30 部名场面逐句盲听、影子跟读与考点拆解！
+            <p className="text-xs text-slate-500 font-medium flex items-center gap-1.5 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-md bg-sky-100 text-sky-700 text-[10px] font-bold">
+                每周持续扩充更新
+              </span>
+              <span>精选《千与千寻》《你的名字》《非自然死亡》等 {ANIME_DRAMA_SCENES.length}+ 部名场面，逐句盲听、影子跟读与考点拆解！</span>
             </p>
           </div>
 
@@ -674,7 +677,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
                 key={sceneItem.id}
                 onClick={() => {
                   if (isSceneLocked) {
-                    onOpenVipModal(`🔒《${sceneItem.title}》(${sceneItem.sceneTitle})为 VIP 会员专属原声剧场！升级 VIP 终身卡（仅 ¥49.9），即可解锁全部 30 部动漫日剧沉浸台词跟读！`);
+                    onOpenVipModal(`🔒《${sceneItem.title}》(${sceneItem.sceneTitle})为 VIP 会员专属原声剧场！升级 VIP 终身卡（仅 ¥49.9），即可解锁全部 ${ANIME_DRAMA_SCENES.length}+ 部动漫日剧沉浸台词跟读与每周持续更新！`);
                     return;
                   }
                   onSelectModule('kdrama', sceneItem.id);
@@ -703,7 +706,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
           })}
         </div>
 
-        {/* View All 30 Dramas Full-width Button */}
+        {/* View All Dramas Full-width Button */}
         <div className="pt-1">
           <button
             onClick={(e) => {
@@ -712,7 +715,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
             }}
             className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-slate-50 via-sky-50/60 to-slate-50 hover:from-sky-100 hover:to-sky-50 border border-slate-200/80 hover:border-sky-300 text-slate-700 hover:text-sky-700 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition duration-200 shadow-2xs group cursor-pointer"
           >
-            <span>🎬 查看全部 30 部经典动漫与日剧原声研习库（包含《千与千寻》《你的名字》《非自然死亡》《半泽直树》等）</span>
+            <span>🎬 查看全部 {ANIME_DRAMA_SCENES.length}+ 部经典动漫与日剧原声研习库（每周持续扩充 · 包含《千与千寻》《你的名字》《非自然死亡》《半泽直树》等）</span>
             <ArrowRight className="w-4 h-4 text-sky-500 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
