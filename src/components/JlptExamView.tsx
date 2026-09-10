@@ -301,6 +301,28 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
       {/* Main Mode Switcher & Level Filter */}
       <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3.5">
         
+        {/* 全真题库架构与总量导航说明 */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-sky-500 shrink-0" />
+            <span className="font-black text-slate-800">
+              📚 全真题库总计 56 套
+            </span>
+            <span className="text-slate-500 hidden sm:inline">
+              (包含 3 大实战训练模式，点击下方模式即可切换分库):
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/70">
+            <span className="text-sky-600 font-extrabold">{marathonCount}套马拉松大考</span>
+            <span>+</span>
+            <span className="text-sky-600 font-extrabold">{fullPaperCount}套历届冲刺</span>
+            <span>+</span>
+            <span className="text-sky-600 font-extrabold">{drillCount}套专项突破</span>
+            <span>=</span>
+            <span className="text-slate-900 font-black">全库 56 套</span>
+          </div>
+        </div>
+
         {/* Row 1: 3大核心考试模式分段器 (独立整排，3等分网格，大气清晰) */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-1.5 bg-slate-100/90 rounded-2xl">
           <button
@@ -385,7 +407,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
                     }`}
                   >
-                    {cat} ({count}套)
+                    {cat === '全部' ? '当前模式全部' : cat} ({count}套)
                   </button>
                 );
               })}
@@ -395,7 +417,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               {(['all', 'n1', 'n2', 'n3', 'n4', 'n5'] as LevelFilterType[]).map((lvl) => {
                 const count = levelCounts[lvl] || 0;
                 const labelMap: Record<string, string> = {
-                  all: '全部',
+                  all: '当前模式全部',
                   n1: 'N1 (高级)',
                   n2: 'N2 (中高级)',
                   n3: 'N3 (中级)',
@@ -421,12 +443,12 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           )}
         </div>
 
-        {/* Row 2: Dropdown Quick Paper Selector + Summary Info */}
+        {/* Row 3: Dropdown Quick Paper Selector + Summary Info */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2.5 border-t border-slate-100">
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
               <FileCheck2 className="w-4 h-4 text-sky-500" />
-              <span>选择试卷 ({filteredPapers.length}套可选):</span>
+              <span>选择试卷 (当前模式 {filteredPapers.length} 套 / 全库共 56 套):</span>
             </div>
 
             <div className="relative flex-1 min-w-0 max-w-2xl">
