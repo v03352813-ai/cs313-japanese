@@ -21,7 +21,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { JAPANESE_JLPT_EXAMS, JLPT_PAPER_CATEGORIES } from '../data/japanese/jlptExams';
+import { JAPANESE_JLPT_EXAMS } from '../data/japanese/jlptExams';
 import type { JlptExamPaper, JlptQuestion } from '../data/japanese/jlptExams';
 import { speakJapanese } from '../utils/speech';
 import { api } from '../services/api';
@@ -32,25 +32,20 @@ interface JlptExamViewProps {
   onNavigateToWriting?: () => void;
 }
 
-type MainExamMode = 'marathon_full' | 'full_paper' | 'special_drill' | 'all_papers';
 type LevelFilterType = 'all' | 'n1' | 'n2' | 'n3' | 'n4' | 'n5';
 
 export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModal, onNavigateToWriting }) => {
-  const [mainMode, setMainMode] = useState<MainExamMode>('marathon_full');
   const [selectedPaperId, setSelectedPaperId] = useState<string>('marathon-jlpt-n1-2025-12');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [levelFilter, setLevelFilter] = useState<LevelFilterType>('all');
-  const [selectedCategory, setSelectedCategory] = useState<string>('全部');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showInstantExplanation, setShowInstantExplanation] = useState<boolean>(true);
 
-  // Filter papers
+  // Filter papers purely by level and search query across the complete 80-paper repository
   const filteredPapers = useMemo(() => {
     return JAPANESE_JLPT_EXAMS.filter((paper) => {
-      if (mainMode !== 'all_papers' && paper.mode !== mainMode) return false;
-
       if (levelFilter !== 'all') {
         const lvlMap: Record<string, string> = {
           n1: 'N1',
@@ -62,10 +57,6 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
         if (!paper.level.includes(lvlMap[levelFilter])) return false;
       }
 
-      if (selectedCategory !== '全部' && paper.category !== selectedCategory) {
-        return false;
-      }
-
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         return paper.title.toLowerCase().includes(q) || paper.summary.toLowerCase().includes(q);
@@ -73,48 +64,19 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
 
       return true;
     });
-  }, [mainMode, levelFilter, selectedCategory, searchQuery]);
+  }, [levelFilter, searchQuery]);
 
-  const totalCount = useMemo(() => JAPANESE_JLPT_EXAMS.length, []);
-  const marathonCount = useMemo(() => JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'marathon_full').length, []);
-  const fullPaperCount = useMemo(() => JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'full_paper').length, []);
-  const drillCount = useMemo(() => JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill').length, []);
-
-  // Filtered by current mode (before level/cat/search)
-  const currentModePapers = useMemo(() => {
-    if (mainMode === 'all_papers') return JAPANESE_JLPT_EXAMS;
-    return JAPANESE_JLPT_EXAMS.filter(p => p.mode === mainMode);
-  }, [mainMode]);
-
-  // Level counts within current mode
+  // Level counts across the whole 80-paper question bank (16 sets per level, 16*5 = 80)
   const levelCounts = useMemo(() => {
     return {
-      all: currentModePapers.length,
-      n1: currentModePapers.filter(p => p.level.includes('N1')).length,
-      n2: currentModePapers.filter(p => p.level.includes('N2')).length,
-      n3: currentModePapers.filter(p => p.level.includes('N3')).length,
-      n4: currentModePapers.filter(p => p.level.includes('N4')).length,
-      n5: currentModePapers.filter(p => p.level.includes('N5')).length,
+      all: JAPANESE_JLPT_EXAMS.length,
+      n1: JAPANESE_JLPT_EXAMS.filter(p => p.level.includes('N1')).length,
+      n2: JAPANESE_JLPT_EXAMS.filter(p => p.level.includes('N2')).length,
+      n3: JAPANESE_JLPT_EXAMS.filter(p => p.level.includes('N3')).length,
+      n4: JAPANESE_JLPT_EXAMS.filter(p => p.level.includes('N4')).length,
+      n5: JAPANESE_JLPT_EXAMS.filter(p => p.level.includes('N5')).length,
     };
-  }, [currentModePapers]);
-
-  // Drill categories with accurate counts
-  const drillCategories = useMemo(() => {
-    const counts: Record<string, number> = {
-      '全部': drillCount,
-      '言语知识专项': JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === '言语知识专项').length,
-      '文法排词★专项': JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === '文法排词★专项').length,
-      '读解分析专项': JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === '读解分析专项').length,
-      '听解原声专项': JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === '听解原声专项').length,
-    };
-    return [
-      { key: '全部', label: `全部题型 (${counts['全部']})` },
-      { key: '言语知识专项', label: `言语知识 (${counts['言语知识专项']})` },
-      { key: '文法排词★专项', label: `文法排词★ (${counts['文法排词★专项']})` },
-      { key: '读解分析专项', label: `读解分析 (${counts['读解分析专项']})` },
-      { key: '听解原声专项', label: `听解原声 (${counts['听解原声专项']})` },
-    ];
-  }, [drillCount]);
+  }, []);
 
   // Automatically select first paper if current selection is not in filtered list
   useEffect(() => {
@@ -372,29 +334,20 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0 flex-wrap">
-          <button
-            onClick={() => {
-              setMainMode('special_drill');
-              setSelectedCategory('全部');
-            }}
-            className="px-3.5 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs shrink-0 flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98 cursor-pointer"
-          >
-            <span>🎯 刷四大核心题型专项</span>
-          </button>
-          {onNavigateToWriting && (
+        {onNavigateToWriting && (
+          <div className="flex items-center gap-2 shrink-0 flex-wrap">
             <button
               onClick={onNavigateToWriting}
-              className="px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs shrink-0 flex items-center justify-center gap-1 border border-slate-200 transition cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs shrink-0 flex items-center justify-center gap-1 border border-slate-200 transition cursor-pointer shadow-2xs"
               title="JLPT官方无写作，此工坊专为EJU留考/商务邮件设计"
             >
               <span>✍️ 选修: 留考/商务写作</span>
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* Main Mode Switcher & Level Filter */}
+      {/* Level Filter & Paper Selection */}
       <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3.5">
         
         {/* 全真题库架构与总量导航说明 */}
@@ -402,10 +355,10 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-2 flex-wrap">
             <span className="w-2 h-2 rounded-full bg-sky-500 shrink-0" />
             <span className="font-black text-slate-800">
-              📚 JLPT 官方历届考期真题与全真机考题库
+              📚 JLPT 官方历届考期真题全真机考题库
             </span>
             <span className="text-slate-500 hidden sm:inline">
-              (覆盖 N1~N5 五大等级，每年 7月 / 12月 考后持续同步更新收录):
+              (N1~N5 严格各收录 16 套真题，全库共 80 套，每年 7月 / 12月 考后持续同步更新):
             </span>
           </div>
           <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70">
@@ -414,156 +367,55 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               每年 7月 / 12月 考后官方考期同步入库
             </span>
             <span className="text-slate-300">|</span>
-            <span className="text-sky-600 font-extrabold">官方考期真题 · 考前冲刺 · 专项突破 · 每年考后同步更新</span>
+            <span className="text-sky-600 font-extrabold">全真题库严格收录 80 套</span>
           </div>
         </div>
 
-        {/* Row 1: 4大核心考试模式分段器 (独立整排，4等分网格，大气清晰) */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 p-1.5 bg-slate-100/90 rounded-2xl">
-          <button
-            onClick={() => {
-              setMainMode('marathon_full');
-              setLevelFilter('all');
-              setSelectedCategory('全部');
-            }}
-            className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-              mainMode === 'marathon_full'
-                ? 'bg-white text-sky-600 shadow-xs font-black'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
-            }`}
-          >
-            <Timer className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-            <span className="truncate">🏛️ 官方考期全真卷</span>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${mainMode === 'marathon_full' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
-              {marathonCount}套大考
-            </span>
-          </button>
-
-          <button
-            onClick={() => {
-              setMainMode('full_paper');
-              setLevelFilter('all');
-              setSelectedCategory('全部');
-            }}
-            className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-              mainMode === 'full_paper'
-                ? 'bg-white text-sky-600 shadow-xs font-black'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
-            }`}
-          >
-            <FileCheck2 className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-            <span className="truncate">⚡ 考前高频精选卷</span>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${mainMode === 'full_paper' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
-              {fullPaperCount}套冲刺
-            </span>
-          </button>
-
-          <button
-            onClick={() => {
-              setMainMode('special_drill');
-              setLevelFilter('all');
-              setSelectedCategory('全部');
-            }}
-            className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-              mainMode === 'special_drill'
-                ? 'bg-white text-sky-600 shadow-xs font-black'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
-            }`}
-          >
-            <Target className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-            <span className="truncate">🎯 四大题型专项</span>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${mainMode === 'special_drill' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
-              {drillCount}套突破
-            </span>
-          </button>
-
-          <button
-            onClick={() => {
-              setMainMode('all_papers');
-              setLevelFilter('all');
-              setSelectedCategory('全部');
-            }}
-            className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
-              mainMode === 'all_papers'
-                ? 'bg-white text-indigo-600 shadow-xs font-black'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
-            <span className="truncate">🌟 全部真题综合库</span>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${mainMode === 'all_papers' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-600'}`}>
-              全{totalCount}套
-            </span>
-          </button>
-        </div>
-
-        {/* Row 2: 等级/题型快速筛选 (独立整排，告别挤压堆叠) */}
-        <div className="flex items-center gap-2 pt-2 border-t border-slate-100 flex-wrap">
+        {/* 等级快速筛选 (全部 80 套，各级别各 16 套) */}
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
             <span className="w-1.5 h-3.5 bg-sky-500 rounded-full" />
-            <span>{mainMode === 'special_drill' ? '题型分类筛选:' : 'JLPT等级筛选:'}</span>
+            <span>JLPT 级别筛选:</span>
           </div>
 
-          {mainMode === 'special_drill' ? (
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {drillCategories.map((item) => {
-                const isSelected = selectedCategory === item.key;
-                return (
-                  <button
-                    key={item.key}
-                    onClick={() => setSelectedCategory(item.key)}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
-                      isSelected
-                        ? 'bg-sky-500 text-white shadow-2xs font-black'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {(['all', 'n1', 'n2', 'n3', 'n4', 'n5'] as LevelFilterType[]).map((lvl) => {
-                const labelMap: Record<string, string> = {
-                  all: `全部级别 (${levelCounts.all})`,
-                  n1: `N1 (${levelCounts.n1})`,
-                  n2: `N2 (${levelCounts.n2})`,
-                  n3: `N3 (${levelCounts.n3})`,
-                  n4: `N4 (${levelCounts.n4})`,
-                  n5: `N5 (${levelCounts.n5})`
-                };
-                const isSelected = levelFilter === lvl;
-                return (
-                  <button
-                    key={lvl}
-                    onClick={() => setLevelFilter(lvl)}
-                    className={`px-3 py-1 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
-                      isSelected
-                        ? 'bg-slate-900 text-white shadow-2xs font-black'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
-                  >
-                    {labelMap[lvl]}
-                  </button>
-                );
-              })}
-            </div>
-          )}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {(['all', 'n1', 'n2', 'n3', 'n4', 'n5'] as LevelFilterType[]).map((lvl) => {
+              const labelMap: Record<string, string> = {
+                all: `全部级别 (${levelCounts.all})`,
+                n1: `N1 (${levelCounts.n1})`,
+                n2: `N2 (${levelCounts.n2})`,
+                n3: `N3 (${levelCounts.n3})`,
+                n4: `N4 (${levelCounts.n4})`,
+                n5: `N5 (${levelCounts.n5})`
+              };
+              const isSelected = levelFilter === lvl;
+              return (
+                <button
+                  key={lvl}
+                  onClick={() => setLevelFilter(lvl)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                    isSelected
+                      ? 'bg-slate-900 text-white shadow-2xs font-black'
+                      : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  }`}
+                >
+                  {labelMap[lvl]}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Row 3: Dropdown Quick Paper Selector + Summary Info */}
+        {/* Dropdown Quick Paper Selector + Summary Info */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2.5 border-t border-slate-100">
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
               <FileCheck2 className="w-4 h-4 text-sky-500" />
               <span>
                 选择作答试卷
-                {mainMode === 'marathon_full' && ` (官方历届全真大卷 · 共 ${filteredPapers.length} 套):`}
-                {mainMode === 'full_paper' && ` (考前高频冲刺卷 · 共 ${filteredPapers.length} 套):`}
-                {mainMode === 'special_drill' && ` (题型专项突破卷 · 共 ${filteredPapers.length} 套):`}
-                {mainMode === 'all_papers' && ` (真题题库全量汇总 · 共 ${filteredPapers.length} 套):`}
+                {levelFilter === 'all'
+                  ? ` (全库共 ${filteredPapers.length} 套):`
+                  : ` (${levelFilter.toUpperCase()} · 共 ${filteredPapers.length} 套):`}
               </span>
             </div>
 
@@ -576,7 +428,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                   const pIdx = filteredPapers.findIndex(p => p.id === targetId);
                   const isLockedPaper = !isVip && !targetPaper?.isFreePreview && pIdx !== 0;
                   if (isLockedPaper) {
-                    onOpenVipModal(`🔒《${targetPaper?.title}》为 VIP 专属真题考场！升级 VIP 终身卡（仅 ¥49.9），即可无限畅刷 JLPT 历届官方考期真题大卷与四大题型专项突破（每年7月/12月考后持续同步更新）！`);
+                    onOpenVipModal(`🔒《${targetPaper?.title}》为 VIP 专属真题考场！升级 VIP 终身卡（仅 ¥49.9），即可无限畅刷 JLPT 历届官方考期真题大卷（每年7月/12月考后持续同步更新）！`);
                     return;
                   }
                   setSelectedPaperId(targetId);

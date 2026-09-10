@@ -21362,5 +21362,166 @@ export const JAPANESE_JLPT_EXAMS: JlptExamPaper[] = [
         }
       }
     ]
+  },
+  {
+    "id": "drill-listening-n4",
+    "title": "【听解原声专项】N4 生活会话·指示代词与场景应答突破卷",
+    "mode": "special_drill",
+    "level": "N4 (初中级)",
+    "category": "听解原声专项",
+    "yearSession": "专项突破 · N4",
+    "totalQuestions": 6,
+    "totalTimeMinutes": 45,
+    "isFreePreview": true,
+    "summary": "精准突破 N4 听解高频考点：车站问路、学校通知、电话留言与即时问答。",
+    "questions": [
+      {
+        "id": 4091,
+        "questionNumber": 1,
+        "questionType": "听解理解",
+        "section": "N4 (初中级)",
+        "categoryTag": "听解原声专项",
+        "title": "駅でアナウンスが流れています。電車は何時に発車しますか。\n\n「次は10時15分発の急行がまいります。」",
+        "options": [
+          "1. 10時",
+          "2. 10時15分",
+          "3. 10時30分",
+          "4. 11時"
+        ],
+        "correctAnswer": 1,
+        "score": 10,
+        "explanation": {
+          "analysis": "广播明确说「10時15分発（10点15分出发）」，因此选选项2。",
+          "vocabList": [
+            {
+              "word": "発車（はっしゃ）",
+              "meaning": "[名·自サ] 发车"
+            }
+          ],
+          "translation": "电车几点发车？——10点15分。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "drill-vocab-n4",
+    "title": "【文字词汇专项】N4 核心假名汉字转换与近义词突破卷",
+    "mode": "special_drill",
+    "level": "N4 (初中级)",
+    "category": "言语知识专项",
+    "yearSession": "专项突破 · N4",
+    "totalQuestions": 8,
+    "totalTimeMinutes": 30,
+    "isFreePreview": true,
+    "summary": "全面扫清 N4 假名汉字互译易错点与常用副词近义替换。",
+    "questions": [
+      {
+        "id": 4092,
+        "questionNumber": 1,
+        "questionType": "汉字读音",
+        "section": "N4 (初中级)",
+        "categoryTag": "言语知识专项",
+        "title": "次の言葉の読み方を選びなさい。\n\n「案内」してください。",
+        "options": [
+          "1. あんない",
+          "2. あんないん",
+          "3. あない",
+          "4. あんめい"
+        ],
+        "correctAnswer": 0,
+        "score": 10,
+        "explanation": {
+          "analysis": "「案内」读作「あんない」。",
+          "vocabList": [
+            {
+              "word": "案内（あんない）",
+              "meaning": "[名·他サ] 向导、引导"
+            }
+          ],
+          "translation": "请为我引路。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "drill-grammar-n5",
+    "title": "【★号排词专项】N5 助词连词·入门基础句型排序集训卷",
+    "mode": "special_drill",
+    "level": "N5 (初级)",
+    "category": "文法排词★专项",
+    "yearSession": "专项突破 · N5",
+    "totalQuestions": 6,
+    "totalTimeMinutes": 30,
+    "isFreePreview": true,
+    "summary": "N5 假名句子重组、助词填空与五段动词接续★号星号拆解集训。",
+    "questions": [
+      {
+        "id": 5091,
+        "questionNumber": 1,
+        "questionType": "文法排词★",
+        "section": "N5 (初级)",
+        "categoryTag": "文法排词★专项",
+        "title": "次の文の ★ に入る最もよいものを一つ選びなさい。\n\nわたしは　＿＿　＿★＿　＿＿　＿＿　買いました。\n\n1. パンを　2. スーパーで　3. きのう　4. おいしい",
+        "options": [
+          "1. パンを",
+          "2. スーパーで",
+          "3. きのう",
+          "4. おいしい"
+        ],
+        "correctAnswer": 1,
+        "score": 10,
+        "explanation": {
+          "analysis": "正确语序为：わたしは「きのう（3）スーパーで（2）おいしい（4）パンを（1）買いました」。第2位是选项2（スーパーで）。★在第2位，故选 2。",
+          "vocabList": [
+            {
+              "word": "スーパー",
+              "meaning": "[名] 超市"
+            }
+          ],
+          "translation": "我昨天在超市买了美味的面包。"
+        }
+      }
+    ]
+  },
+  {
+    "id": "drill-reading-n5",
+    "title": "【读解分析专项】N5 简易告示·便签日记生活短文阅读卷",
+    "mode": "special_drill",
+    "level": "N5 (初级)",
+    "category": "读解分析专项",
+    "yearSession": "专项突破 · N5",
+    "totalQuestions": 6,
+    "totalTimeMinutes": 35,
+    "isFreePreview": true,
+    "summary": "针对 N5 零基础读解短文：图表信息检索、便签备忘与日常短篇日记理解。",
+    "questions": [
+      {
+        "id": 5092,
+        "questionNumber": 1,
+        "questionType": "读解分析",
+        "section": "N5 (初级)",
+        "categoryTag": "读解分析专项",
+        "passage": "田中さんへ\n\nあしたの午前10時に図書館の前で会いましょう。\n本を忘れずに持ってきてください。\n\n佐藤より",
+        "title": "田中さんは明日何時にどこへ行きますか。",
+        "options": [
+          "1. 9時に図書館",
+          "2. 10時に図書館の前",
+          "3. 10時に教室",
+          "4. 11時に駅"
+        ],
+        "correctAnswer": 1,
+        "score": 10,
+        "explanation": {
+          "analysis": "便签中写道「あしたの午前10時に図書館の前で会いましょう」，因此时间是 10 点，地点是图书馆前。",
+          "vocabList": [
+            {
+              "word": "図書館（としょかん）",
+              "meaning": "[名] 图书馆"
+            }
+          ],
+          "translation": "田中明天几点去哪里？——10点在图书馆前。"
+        }
+      }
+    ]
   }
 ];
