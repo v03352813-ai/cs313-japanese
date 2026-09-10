@@ -86,7 +86,7 @@ export const CS313_LANGUAGES: Record<LanguageCode, LanguageProfile> = {
       examCount: 'N1~N3 历年读解与听解真题库',
       mediaTheme: '吉卜力动漫金句 & 经典日剧对白精学'
     },
-    status: 'UPCOMING'
+    status: 'ONLINE'
   },
   es: {
     code: 'es',

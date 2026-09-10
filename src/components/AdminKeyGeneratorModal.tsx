@@ -46,7 +46,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
   const [pinInput, setPinInput] = useState<string>('');
   const [pinError, setPinError] = useState<string>('');
   
-  const [keyType, setKeyType] = useState<'KR' | 'ALL'>('KR');
+  const [keyType, setKeyType] = useState<'JP' | 'ALL'>('JP');
   const [generateCount, setGenerateCount] = useState<number>(20);
   const [generatedKeys, setGeneratedKeys] = useState<string[]>([]);
   const [copied, setCopied] = useState<boolean>(false);
@@ -112,7 +112,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
-      const tier = keyType === 'ALL' ? 'all_lang' : 'kr_lifetime';
+      const tier = keyType === 'ALL' ? 'all_lang' : 'jp_lifetime';
       const batchNo = `2026-${keyType}-${new Date().toISOString().slice(0, 10)}`;
       const price = keyType === 'ALL' ? 198.0 : 49.9;
 
@@ -178,14 +178,14 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center text-orange-600 border border-orange-200 shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center text-sky-600 border border-sky-200 shrink-0">
               <Settings2 className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-bold text-slate-900">店主管理后台 · 闲管家卡密生成与矩阵管理</h2>
-                <span className="px-2 py-0.5 rounded bg-orange-100 text-orange-800 border border-orange-200 text-[10px] font-bold">
-                  专为小红书发货
+                <span className="px-2 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-200 text-[10px] font-bold">
+                  专为小红书/闲鱼发货
                 </span>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -199,7 +199,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
         {!isAuthenticated ? (
           <div className="p-6 sm:p-8 space-y-5">
             <div className="text-center space-y-2 max-w-md mx-auto">
-              <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center mx-auto shadow-xs border border-orange-100">
+              <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto shadow-xs border border-sky-100">
                 <Lock className="w-6 h-6" />
               </div>
               <h3 className="text-base font-bold text-slate-900">
@@ -223,7 +223,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
                     onChange={(e) => setPinInput(e.target.value)}
                     placeholder="输入店主密钥 (初始: cs313admin)"
                     autoFocus
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-orange-500 transition"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-sky-500 transition"
                   />
                 </div>
               </div>
@@ -237,7 +237,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20 active:scale-98 transition flex items-center justify-center gap-1.5"
+                className="w-full py-2.5 bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white font-bold rounded-xl text-xs shadow-md shadow-sky-500/20 active:scale-98 transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span>验证并进入店主后台</span>
@@ -249,189 +249,135 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
             </form>
           </div>
         ) : (
-          /* Authenticated Admin Management Area */
-          <div className="p-6 space-y-5 max-h-[80vh] overflow-y-auto">
+          /* Main Admin Panel */
+          <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
             
-            {/* Real-time Analytics & Conversion Funnel Dashboard */}
+            {/* 实时运营转化率指标卡 (Real-time conversion metrics) */}
             {adminStats && (
-              <div className="space-y-3.5">
-                {/* Dashboard Header Bar */}
-                <div className="flex items-center justify-between text-xs px-1 text-slate-500 font-bold flex-wrap gap-2">
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                    <TrendingUp className="w-4 h-4 text-sky-600" />
+                    <span>小红书/闲鱼 实时流量与激活转化大盘</span>
+                  </span>
                   <div className="flex items-center gap-2">
-                    <span className="flex items-center gap-1.5 text-slate-800 text-xs font-black">
-                      <TrendingUp className="w-4 h-4 text-orange-600" />
-                      <span>流量与转化率实时看板</span>
+                    <span className="text-[10px] text-slate-400">
+                      数据更新: {adminStats.lastUpdated ? new Date(adminStats.lastUpdated).toLocaleTimeString() : '刚刚'}
                     </span>
                     <button
                       onClick={handleRefreshStats}
-                      disabled={isRefreshingStats}
-                      className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] font-medium transition cursor-pointer"
-                      title="刷新最新统计数据"
+                      className="p-1 rounded-lg hover:bg-slate-200 text-slate-500 transition"
+                      title="刷新实时大盘数据"
                     >
-                      <RefreshCw className={`w-3 h-3 ${isRefreshingStats ? 'animate-spin text-orange-600' : ''}`} />
-                      <span>{isRefreshingStats ? '刷新中...' : '刷新'}</span>
+                      <RefreshCw className={`w-3 h-3 ${isRefreshingStats ? 'animate-spin text-sky-600' : ''}`} />
                     </button>
                   </div>
-
-                  <div className="flex items-center gap-2 text-[10px]">
-                    <span className="text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <Database className="w-3 h-3 text-emerald-600" />
-                      <span>{adminStats.dbStatus || 'Connected'} ({adminStats.dbDriver?.split(' ')[0] || 'Cloud KV'})</span>
-                    </span>
-                    <span className="text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full hidden sm:inline-flex">
-                      免国内ICP备案 · 2台设备安全绑定
-                    </span>
-                  </div>
                 </div>
 
-                {/* 4 Primary Metric Cards */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  {/* Card 1: Total PV */}
                   <div className="p-3 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-1">
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 font-semibold">
-                      <span className="flex items-center gap-1">
-                        <Eye className="w-3.5 h-3.5 text-slate-400" />
-                        <span>累计浏览 (PV)</span>
-                      </span>
-                      <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded">页面总热度</span>
+                    <div className="flex items-center justify-between text-slate-400 text-xs">
+                      <Users className="w-3.5 h-3.5" />
+                      <span className="text-[10px] bg-slate-100 text-slate-600 font-semibold px-1.5 py-0.2 rounded">累计访客</span>
                     </div>
-                    <div className="text-xl font-black text-slate-900 font-mono">
-                      {adminStats.totalPV || 168} <span className="text-xs font-normal text-slate-400">次</span>
+                    <div className="text-xl font-black text-slate-800 font-mono">
+                      {adminStats.totalVisitors || 0}
                     </div>
-                    <div className="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
-                      <span>今日新增: +{adminStats.todayPV || 29} 次</span>
+                    <div className="text-[10px] text-slate-400">去重独立设备 (UV)</div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-1">
+                    <div className="flex items-center justify-between text-slate-400 text-xs">
+                      <Eye className="w-3.5 h-3.5 text-indigo-500" />
+                      <span className="text-[10px] bg-indigo-50 text-indigo-600 font-semibold px-1.5 py-0.2 rounded">浏览热度</span>
+                    </div>
+                    <div className="text-xl font-black text-indigo-600 font-mono">
+                      {adminStats.pageViews || 0}
+                    </div>
+                    <div className="text-[10px] text-indigo-400">学习功能点击 PV</div>
+                  </div>
+
+                  <div className="p-3 rounded-2xl bg-white border-2 border-sky-200/90 shadow-2xs space-y-1 bg-gradient-to-br from-white to-sky-50/40">
+                    <div className="flex items-center justify-between text-sky-600 text-xs">
+                      <TrendingUp className="w-3.5 h-3.5 text-sky-600" />
+                      <span className="text-[10px] bg-sky-100 text-sky-800 font-bold px-1.5 py-0.2 rounded">核心成交</span>
+                    </div>
+                    <div className="text-xl font-black text-sky-600 font-mono">
+                      {adminStats.activeStudents || 0}
+                    </div>
+                    <div className="text-[10px] text-sky-700 font-medium flex items-center gap-1">
+                      <span>核销率: {adminStats.conversionRate || '0.0%'}</span>
                     </div>
                   </div>
 
-                  {/* Card 2: Total UV */}
                   <div className="p-3 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-1">
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 font-semibold">
-                      <span className="flex items-center gap-1">
-                        <Users className="w-3.5 h-3.5 text-emerald-500" />
-                        <span>独立访客 (UV)</span>
-                      </span>
-                      <span className="text-[10px] bg-emerald-50 text-emerald-700 px-1.5 py-0.2 rounded">潜在买家</span>
-                    </div>
-                    <div className="text-xl font-black text-emerald-700 font-mono">
-                      {adminStats.totalUV || 45} <span className="text-xs font-normal text-slate-400">人</span>
-                    </div>
-                    <div className="text-[10px] text-emerald-600 font-medium flex items-center gap-1">
-                      <span>今日访客: +{adminStats.todayUV || 12} 人</span>
-                    </div>
-                  </div>
-
-                  {/* Card 3: VIP Intent */}
-                  <div className="p-3 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-1">
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 font-semibold">
-                      <span className="flex items-center gap-1">
-                        <Target className="w-3.5 h-3.5 text-amber-500" />
-                        <span>VIP 意向点击</span>
-                      </span>
-                      <span className="text-[10px] bg-amber-50 text-amber-700 px-1.5 py-0.2 rounded">意向率</span>
+                    <div className="flex items-center justify-between text-slate-400 text-xs">
+                      <Target className="w-3.5 h-3.5 text-amber-500" />
+                      <span className="text-[10px] bg-amber-50 text-amber-600 font-semibold px-1.5 py-0.2 rounded">意向线索</span>
                     </div>
                     <div className="text-xl font-black text-amber-600 font-mono">
-                      {adminStats.vipIntentCount || 28} <span className="text-xs font-normal text-slate-400">次</span>
+                      {adminStats.vipIntents || 0}
                     </div>
-                    <div className="text-[10px] text-amber-700 font-medium flex items-center gap-1">
-                      <span>触达率: {adminStats.intentRate || '16.7%'}</span>
-                    </div>
+                    <div className="text-[10px] text-amber-500">点击购买弹窗次数</div>
                   </div>
+                </div>
 
-                  {/* Card 4: Conversion Rate */}
-                  <div className="p-3 rounded-2xl bg-white border-2 border-orange-200/90 shadow-2xs space-y-1 bg-gradient-to-br from-white to-orange-50/40">
-                    <div className="flex items-center justify-between text-[11px] text-slate-500 font-semibold">
-                      <span className="flex items-center gap-1">
-                        <TrendingUp className="w-3.5 h-3.5 text-orange-600" />
-                        <span>综合付费转化</span>
+                {/* 漏斗可视化条 (Visual Conversion Funnel) */}
+                <div className="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                  <div className="text-[11px] font-bold text-slate-700">销售漏斗转化分析：</div>
+                  
+                  <div className="space-y-1.5 text-xs">
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-slate-500">1. 小红书/闲鱼进店扫码 (访问首页)</span>
+                      <span className="font-mono font-bold text-slate-700">{adminStats.totalVisitors || 1} 人 (100%)</span>
+                    </div>
+                    <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                      <div className="h-full bg-slate-400 rounded-full w-full" />
+                    </div>
+
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-indigo-600">2. 点击深度学习模块 (意向产生)</span>
+                      <span className="font-mono font-bold text-indigo-600">
+                        {adminStats.vipIntents || 0} 次 ({Math.min(100, Math.round(((adminStats.vipIntents || 0) / Math.max(1, adminStats.totalVisitors || 1)) * 100)) || 0}%)
                       </span>
-                      <span className="text-[10px] bg-orange-100 text-orange-800 font-bold px-1.5 py-0.2 rounded">核心成交</span>
                     </div>
-                    <div className="text-xl font-black text-orange-600 font-mono">
-                      {adminStats.conversionRate || '5.4%'}
+                    <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-indigo-500 rounded-full transition-all duration-500" 
+                        style={{ width: `${Math.min(100, Math.round(((adminStats.vipIntents || 0) / Math.max(1, adminStats.totalVisitors || 1)) * 100))}%` }} 
+                      />
                     </div>
-                    <div className="text-[10px] text-orange-700 font-medium flex items-center gap-1">
-                      <span>已激活学员: {adminStats.activeStudents || 1} 人</span>
+
+                    <div className="flex justify-between text-[11px]">
+                      <span className="text-sky-800 font-semibold">3. 小红书/闲鱼拍下 ➔ 卡密激活核销 (成功付费)</span>
+                      <span className="font-mono font-black text-sky-600">{adminStats.activeStudents || 1} 人 ({adminStats.conversionRate || '5.4%'})</span>
+                    </div>
+                    <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-gradient-to-r from-sky-500 to-indigo-600 rounded-full transition-all duration-500" 
+                        style={{ width: `${Math.min(100, parseFloat(adminStats.conversionRate || '5.4') * 5)}%` }} 
+                      />
                     </div>
                   </div>
                 </div>
 
-                {/* 3-Step Conversion Funnel Pipeline */}
-                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
-                  <div className="flex items-center justify-between text-xs font-bold text-slate-700">
+                {/* 设备多端与平台洞察 */}
+                <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                  <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
-                      <Target className="w-3.5 h-3.5 text-orange-600" />
-                      <span>从自然进站到卡密成交 · 转化漏斗分析</span>
+                      <Smartphone className="w-3.5 h-3.5 text-slate-400" />
+                      <span>手机/平板占: <strong>{adminStats.deviceBreakdown?.mobile || '72%'}</strong></span>
                     </span>
-                    <span className="text-[11px] text-slate-400 font-normal hidden sm:inline">
-                      漏斗模型：进站浏览 ➔ 弹出购买意向 ➔ 成功激活核销
+                    <span className="flex items-center gap-1">
+                      <Monitor className="w-3.5 h-3.5 text-slate-400" />
+                      <span>桌面电脑占: <strong>{adminStats.deviceBreakdown?.desktop || '28%'}</strong></span>
                     </span>
                   </div>
-
-                  <div className="space-y-2 text-xs">
-                    {/* Step 1 */}
-                    <div>
-                      <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-slate-600 font-medium">1. 访客进站试学 (UV)</span>
-                        <span className="font-mono font-bold text-slate-800">{adminStats.totalUV || 45} 人 (100%)</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-slate-500 rounded-full w-full"></div>
-                      </div>
-                    </div>
-
-                    {/* Step 2 */}
-                    <div>
-                      <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-amber-800 font-medium">2. 触碰付费模块 / 唤起VIP开通窗 (意向用户)</span>
-                        <span className="font-mono font-bold text-amber-700">{adminStats.vipIntentCount || 28} 次 ({adminStats.intentRate || '16.7%'})</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-amber-500 rounded-full transition-all duration-500"
-                          style={{ width: `${Math.min(Math.max(parseFloat(adminStats.intentRate || '16.7'), 10), 100)}%` }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    {/* Step 3 */}
-                    <div>
-                      <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-orange-800 font-semibold">3. 小红书/闲鱼拍下 ➔ 卡密激活核销 (成功付费)</span>
-                        <span className="font-mono font-black text-orange-600">{adminStats.activeStudents || 1} 人 ({adminStats.conversionRate || '5.4%'})</span>
-                      </div>
-                      <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full transition-all duration-500"
-                          style={{ width: `${Math.min(Math.max(parseFloat(adminStats.conversionRate || '5.4') * 3, 8), 100)}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Device Distribution & Key Stock */}
-                  <div className="pt-2 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-500">
-                    <div className="flex items-center gap-2">
-                      <Smartphone className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span>设备分布：手机 <strong className="text-slate-700 font-mono">68%</strong> · iPad平板 <strong className="text-slate-700 font-mono">22%</strong> · 电脑 <strong className="text-slate-700 font-mono">10%</strong></span>
-                    </div>
-                    <div className="flex items-center gap-2 sm:justify-end">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>总生成卡密: <strong className="text-slate-700 font-mono">{adminStats.totalCards || 200}张</strong> · 单卡绑定 <strong className="text-slate-700 font-mono">2台设备</strong></span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Vercel Web Analytics Official Deep Link Tip */}
-                <div className="p-2.5 rounded-xl bg-slate-100/80 border border-slate-200/80 flex items-center justify-between text-[11px] text-slate-600">
-                  <span className="flex items-center gap-1.5">
-                    <span className="text-slate-700 font-bold">💡 深度来源分析：</span>
-                    <span>想看全国省份地图、小红书/知乎各渠道引流转化？可在 Vercel 控制台免费开启 <strong>Web Analytics</strong></span>
-                  </span>
                   <a
                     href="https://vercel.com/analytics"
                     target="_blank"
                     rel="noreferrer"
-                    className="text-orange-600 hover:text-orange-700 font-bold flex items-center gap-0.5 shrink-0 ml-2"
+                    className="text-sky-600 hover:text-sky-700 font-bold flex items-center gap-0.5 shrink-0 ml-2"
                   >
                     <span>控制台</span>
                     <ExternalLink className="w-3 h-3" />
@@ -441,13 +387,13 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
             )}
 
             {/* Global Access Policy Switcher Card */}
-            <div className="p-4 bg-orange-50/70 rounded-2xl border border-orange-200/80 space-y-3">
+            <div className="p-4 bg-sky-50/70 rounded-2xl border border-sky-200/80 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black text-orange-950 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-orange-600" />
+                <span className="text-xs font-black text-sky-950 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-sky-600" />
                   <span>全局访问与变现策略设置（随时一键切换）：</span>
                 </span>
-                <span className="text-[11px] px-2 py-0.5 rounded-md font-bold bg-white text-orange-700 border border-orange-200">
+                <span className="text-[11px] px-2 py-0.5 rounded-md font-bold bg-white text-sky-700 border border-sky-200">
                   当前：{accessPolicy === 'strict' ? '🔒 纯私域封闭交付' : '🆓 试学尝鲜引流'}
                 </span>
               </div>
@@ -457,16 +403,16 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
                   onClick={() => handleUpdatePolicy('freemium')}
                   className={`p-3 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between gap-1 ${
                     accessPolicy === 'freemium'
-                      ? 'bg-white border-orange-500 shadow-xs ring-2 ring-orange-500/20 text-orange-950'
+                      ? 'bg-white border-sky-500 shadow-xs ring-2 ring-sky-500/20 text-sky-950'
                       : 'bg-white/60 hover:bg-white border-slate-200 text-slate-600'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-black">模式 ①：试学尝鲜引流模式 (推荐)</span>
-                    {accessPolicy === 'freemium' && <Check className="w-3.5 h-3.5 text-orange-600" />}
+                    {accessPolicy === 'freemium' && <Check className="w-3.5 h-3.5 text-sky-600" />}
                   </div>
                   <p className="text-[11px] text-slate-500 leading-relaxed">
-                    开放部分词汇与前3部韩剧供买家免费试学。遇到重磅VIP模块（完整韩剧、AI对练、考场）自动弹窗引导拍卡密激活，自然转化率极高！
+                    开放部分词汇与前3部动漫名场面供买家免费试学。遇到重磅VIP模块（全量动漫、AI对练、JLPT真题考场）自动弹窗引导拍卡密激活，自然转化率极高！
                   </p>
                 </button>
 
@@ -474,13 +420,13 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
                   onClick={() => handleUpdatePolicy('strict')}
                   className={`p-3 rounded-xl border text-left transition cursor-pointer flex flex-col justify-between gap-1 ${
                     accessPolicy === 'strict'
-                      ? 'bg-white border-orange-500 shadow-xs ring-2 ring-orange-500/20 text-orange-950'
+                      ? 'bg-white border-sky-500 shadow-xs ring-2 ring-sky-500/20 text-sky-950'
                       : 'bg-white/60 hover:bg-white border-slate-200 text-slate-600'
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-black">模式 ②：纯私域封闭交付模式</span>
-                    {accessPolicy === 'strict' && <Check className="w-3.5 h-3.5 text-orange-600" />}
+                    {accessPolicy === 'strict' && <Check className="w-3.5 h-3.5 text-sky-600" />}
                   </div>
                   <p className="text-[11px] text-slate-500 leading-relaxed">
                     全站强制卡密验证，未激活买家无法进入任何页面。适合闲鱼/小红书“拍下发卡密直接交付”，零被白嫖风险！
@@ -497,10 +443,10 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
                 </label>
                 <select
                   value={keyType}
-                  onChange={(e) => setKeyType(e.target.value as 'KR' | 'ALL')}
+                  onChange={(e) => setKeyType(e.target.value as 'JP' | 'ALL')}
                   className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-hidden"
                 >
-                  <option value="KR">韩语单语种终身卡 (¥49.9)</option>
+                  <option value="JP">日语单语种终身卡 (¥49.9)</option>
                   <option value="ALL">全语种黑金通卡 (¥88.8)</option>
                 </select>
               </div>
@@ -525,7 +471,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
               <div className="flex items-end">
                 <button
                   onClick={handleGenerate}
-                  className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold text-xs shadow-xs shadow-orange-500/20 transition flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl font-bold text-xs shadow-xs shadow-sky-500/20 transition flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>立即生成卡密</span>
@@ -533,7 +479,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
               </div>
             </div>
 
-                        {/* Generated Keys Display Box */}
+            {/* Generated Keys Display Box */}
             {generatedKeys.length > 0 && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -545,7 +491,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
                   <div className="flex items-center gap-2">
                     <button
                       onClick={copyForXianGuanJia}
-                      className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
                     >
                       {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{copied ? '已复制闲管家格式！' : '一键复制(闲管家格式)'}</span>
@@ -564,10 +510,10 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
                 {/* Scrollable Keys Area */}
                 <div className="bg-slate-50 text-slate-800 p-4 rounded-2xl font-mono text-xs max-h-56 overflow-y-auto space-y-1 select-all border border-slate-200">
                   {generatedKeys.map((key, idx) => (
-                    <div key={idx} className="flex items-center justify-between hover:bg-orange-50/60 px-2 py-1 rounded transition">
-                      <span className="text-orange-600 font-bold">{key}</span>
+                    <div key={idx} className="flex items-center justify-between hover:bg-sky-50/60 px-2 py-1 rounded transition">
+                      <span className="text-sky-600 font-bold">{key}</span>
                       <span className="text-[10px] text-slate-500">
-                        {keyType === 'KR' ? '韩语¥49.9' : '全语种通卡'} · 2设备
+                        {keyType === 'JP' ? '日语¥49.9' : '全语种通卡'} · 2设备
                       </span>
                     </div>
                   ))}
@@ -576,14 +522,14 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
             )}
 
             {/* Multi-language Platform Matrix Quick Entry (Admin Only) */}
-            <div className="bg-amber-50/70 p-4 rounded-2xl border border-amber-200/80 flex items-center justify-between gap-3 text-xs">
+            <div className="bg-sky-50/70 p-4 rounded-2xl border border-sky-200/80 flex items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-xs shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-sky-500 text-white flex items-center justify-center shadow-xs shrink-0">
                   <Globe2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <strong className="block text-amber-950 font-bold">多语种平台矩阵管理（仅管理员可见）</strong>
-                  <span className="text-[11px] text-amber-800/80">快捷管理与切换日语 (JP)、俄语 (RU)、西语 (ES) 独立矩阵站点</span>
+                  <strong className="block text-sky-950 font-bold">多语种平台矩阵管理（仅管理员可见）</strong>
+                  <span className="text-[11px] text-sky-800/80">快捷管理与切换韩语 (KR)、俄语 (RU)、西语 (ES) 独立矩阵站点</span>
                 </div>
               </div>
 
@@ -592,7 +538,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
                   onClose();
                   if (onOpenMultiLangModal) onOpenMultiLangModal();
                 }}
-                className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition shrink-0"
+                className="px-3 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs shadow-xs transition shrink-0 cursor-pointer"
               >
                 打开语种矩阵
               </button>
@@ -601,13 +547,13 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
             {/* XianGuanJia Operation SOP Guide */}
             <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-2 text-xs text-slate-600">
               <h4 className="font-bold text-slate-800 flex items-center gap-1.5">
-                <FileText className="w-4 h-4 text-orange-600" />
+                <FileText className="w-4 h-4 text-sky-600" />
                 <span>闲管家自动发货 3 步操作指引：</span>
               </h4>
               <ol className="list-decimal list-inside space-y-1 text-[11px] text-slate-600">
                 <li>点击上方 <strong>“一键复制(闲管家格式)”</strong>。</li>
                 <li>打开闲管家后台 ➡️ 进入 <strong>“虚拟商品管理”</strong> ➡️ 选择对应商品 ➡️ 点击 <strong>“卡密库导入”</strong> 粘贴。</li>
-                <li>在发货模板中设置内容：<i>“您的专属学习网址为 kr.cs313.cn，激活码为【卡密】，支持 1台iPad+1台手机同时使用。”</i></li>
+                <li>在发货模板中设置内容：<i>“您的专属学习网址为 jp.cs313.cn，激活码为【卡密】，支持 1台iPad+1台手机同时使用。”</i></li>
               </ol>
             </div>
 

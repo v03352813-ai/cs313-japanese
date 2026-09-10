@@ -1,10 +1,10 @@
 /**
- * CS313 韩语学习平台 · 卡密密码学防伪签名与核销算法
+ * CS313 日语学习平台 · 卡密密码学防伪签名与核销算法
  * 基于 HMAC-SHA256 算法生成数学级数字防伪签名，杜绝任意伪造、穷举或绕过
  */
 
 // 平台专属服务端防伪私钥盐值（绝不泄露）
-const SIGNATURE_SECRET_SALT = 'CS313_KR_2026_PRODUCTION_AUTH_KEY_V9X_TOP_SECRET';
+const SIGNATURE_SECRET_SALT = 'CS313_JP_2026_PRODUCTION_AUTH_KEY_V9X_TOP_SECRET';
 
 // 排除易混淆字符 0, O, 1, I 的 32 位标准 Base32 字母表
 const SAFE_CHARSET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -72,11 +72,15 @@ export function sha256(ascii: string): string {
       let temp2 =
         (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) +
         ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+
       hash = [(temp1 + temp2) | 0].concat(hash);
       hash[4] = (hash[4] + temp1) | 0;
     }
-    for (i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
+    for (i = 0; i < 8; i++) {
+      hash[i] = (hash[i] + oldHash[i]) | 0;
+    }
   }
+
   for (i = 0; i < 8; i++) {
     for (let b = 3; b >= 0; b--) {
       let byte = (hash[i] >> (8 * b)) & 255;
@@ -89,7 +93,7 @@ export function sha256(ascii: string): string {
 /**
  * 计算卡密专属的 4 位防伪校验签名
  */
-export function computeKeySignature(type: 'KR' | 'ALL', serial: string): string {
+export function computeKeySignature(type: 'JP' | 'KR' | 'ALL', serial: string): string {
   const payload = `${SIGNATURE_SECRET_SALT}:${type}:${serial.toUpperCase()}`;
   const rawHash = sha256(payload);
 
@@ -105,9 +109,9 @@ export function computeKeySignature(type: 'KR' | 'ALL', serial: string): string 
 
 /**
  * 生成符合闲管家自动发货标准的防伪卡密
- * 格式：CS313-KR-XXXX-YYYY 或 CS313-ALL-XXXX-YYYY
+ * 格式：CS313-JP-XXXX-YYYY 或 CS313-ALL-XXXX-YYYY
  */
-export function generateSignedCardKey(type: 'KR' | 'ALL', customSerial?: string): string {
+export function generateSignedCardKey(type: 'JP' | 'KR' | 'ALL', customSerial?: string): string {
   let serial = customSerial?.toUpperCase();
   if (!serial || serial.length !== 4) {
     serial = '';
@@ -121,7 +125,7 @@ export function generateSignedCardKey(type: 'KR' | 'ALL', customSerial?: string)
 
 export interface KeyVerificationResult {
   valid: boolean;
-  type?: 'KR' | 'ALL';
+  type?: 'JP' | 'KR' | 'ALL';
   serial?: string;
   signature?: string;
   cleanKey: string;
@@ -139,8 +143,8 @@ export function verifyKeySignature(rawKey: string): KeyVerificationResult {
     return { valid: false, cleanKey: clean, reason: '请输入激活卡密' };
   }
 
-  // 严格正则匹配标准格式: CS313-(KR|ALL)-[4位序号]-[4位签名]
-  const match = clean.match(/^CS313-(KR|ALL)-([2-9A-HJ-NP-Z]{4})-([2-9A-HJ-NP-Z]{4})$/);
+  // 严格正则匹配标准格式: CS313-(JP|KR|ALL)-[4位序号]-[4位签名]
+  const match = clean.match(/^CS313-(JP|KR|ALL)-([2-9A-HJ-NP-Z]{4})-([2-9A-HJ-NP-Z]{4})$/);
   if (!match) {
     return {
       valid: false,
@@ -149,7 +153,7 @@ export function verifyKeySignature(rawKey: string): KeyVerificationResult {
     };
   }
 
-  const type = match[1] as 'KR' | 'ALL';
+  const type = match[1] as 'JP' | 'KR' | 'ALL';
   const serial = match[2];
   const providedSig = match[3];
 
@@ -175,7 +179,7 @@ export function verifyKeySignature(rawKey: string): KeyVerificationResult {
 /**
  * 批量生成供店主导入闲管家发货的卡密列表
  */
-export function generateBatchSignedKeys(type: 'KR' | 'ALL', count: number = 20): string[] {
+export function generateBatchSignedKeys(type: 'JP' | 'KR' | 'ALL', count: number = 20): string[] {
   const keys = new Set<string>();
   let attempts = 0;
   while (keys.size < count && attempts < count * 5) {

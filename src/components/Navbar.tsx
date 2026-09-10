@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import type { LicenseInfo } from '../data/auth/cardKeys';
 import { checkAdminSession } from '../data/auth/cardKeys';
-import { getTopikExamCountdown } from '../utils/examCountdown';
+import { getJlptExamCountdown } from '../utils/examCountdown';
 
 export type ActiveTab = 'home' | 'speaking' | 'exam' | 'writing' | 'phonetics' | 'mistakes' | 'kdrama' | 'vocab' | 'grammar' | 'listening';
 
@@ -39,7 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenWallpaperModal,
   onOpenExamModal
 }) => {
-  const examCountdown = getTopikExamCountdown();
+  const examCountdown = getJlptExamCountdown();
 
   // 首页 + 8 大核心模块直接平铺 (共 9 项)
   const navItems = [

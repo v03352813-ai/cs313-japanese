@@ -16,8 +16,8 @@ interface DramaThumbnailProps {
   className?: string;
 }
 
-// 统一采用站内 4 大经典色系（暖橙、琥珀金、翡翠绿、深石板/白）构建明亮轻盈的高级视觉卡片
-const DRAMA_THEMES: Record<string, {
+// 统一采用日式和风与现代审美 4 大经典色系（富士天青、吉卜力青翠、琥珀暖金、深靛蓝）
+const ANIME_THEMES: Record<string, {
   bg: string;
   border: string;
   icon: string;
@@ -25,252 +25,146 @@ const DRAMA_THEMES: Record<string, {
   badgeBg: string;
   dotColor: string;
 }> = {
-  // 1. 暖橙色系 (浪漫喜剧 / 治愈甜暖 / 青春日常)
-  '欢迎来到王之国': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '👑',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  // 1. 富士天青 / 奇幻治愈 (吉卜力 / 新海诚)
+  '千与千寻': {
+    bg: 'bg-gradient-to-br from-sky-50 via-indigo-50/40 to-sky-100/60',
+    border: 'border-sky-200/90',
+    icon: '🏮',
+    titleColor: 'text-sky-800',
+    badgeBg: 'bg-white/95 text-sky-700 border-sky-200 shadow-2xs',
+    dotColor: 'bg-sky-500'
   },
-  '请回答 1988': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '📻',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  '你的名字': {
+    bg: 'bg-gradient-to-br from-sky-50 via-indigo-50/40 to-indigo-100/60',
+    border: 'border-indigo-200/90',
+    icon: '☄️',
+    titleColor: 'text-indigo-800',
+    badgeBg: 'bg-white/95 text-indigo-700 border-indigo-200 shadow-2xs',
+    dotColor: 'bg-indigo-500'
   },
-  '社内相亲': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '💍',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  '哈尔的移动城堡': {
+    bg: 'bg-gradient-to-br from-sky-50 via-blue-50/40 to-sky-100/60',
+    border: 'border-sky-200/90',
+    icon: '🏰',
+    titleColor: 'text-sky-800',
+    badgeBg: 'bg-white/95 text-sky-700 border-sky-200 shadow-2xs',
+    dotColor: 'bg-sky-500'
   },
-  '大力女子都奉顺': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '💖',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  '天空之城': {
+    bg: 'bg-gradient-to-br from-sky-50 via-teal-50/40 to-sky-100/60',
+    border: 'border-sky-200/90',
+    icon: '🕊️',
+    titleColor: 'text-sky-800',
+    badgeBg: 'bg-white/95 text-sky-700 border-sky-200 shadow-2xs',
+    dotColor: 'bg-sky-500'
   },
-  '三流之路': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '🥊',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
-  },
-  '浪漫的体质': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '🥂',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
-  },
-  '梨泰院CLASS': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '🔥',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
-  },
-  '举重妖精金福珠': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '🎀',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
-  },
-
-  // 2. 翡翠绿系 (励志独白 / 治愈人生)
-  '名场面励志独白': {
-    bg: 'bg-gradient-to-br from-emerald-50 via-teal-50/30 to-emerald-100/60',
-    border: 'border-emerald-200/90',
-    icon: '✨',
-    titleColor: 'text-emerald-700',
-    badgeBg: 'bg-white/95 text-emerald-700 border-emerald-200 shadow-2xs',
-    dotColor: 'bg-emerald-500'
-  },
-  '太阳的后裔': {
-    bg: 'bg-gradient-to-br from-amber-50 via-orange-50/30 to-amber-100/60',
-    border: 'border-amber-200/90',
-    icon: '🎖️',
-    titleColor: 'text-amber-800',
-    badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
-    dotColor: 'bg-amber-500'
-  },
-  '我的解放日志': {
-    bg: 'bg-gradient-to-br from-amber-50 via-orange-50/30 to-amber-100/60',
-    border: 'border-amber-200/90',
-    icon: '🌾',
-    titleColor: 'text-amber-800',
-    badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
-    dotColor: 'bg-amber-500'
-  },
-  '二十五，二十一': {
-    bg: 'bg-gradient-to-br from-amber-50 via-orange-50/30 to-amber-100/60',
-    border: 'border-amber-200/90',
-    icon: '🤺',
-    titleColor: 'text-amber-800',
-    badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
-    dotColor: 'bg-amber-500'
-  },
-  '主君的太阳': {
-    bg: 'bg-gradient-to-br from-amber-50 via-orange-50/30 to-amber-100/60',
-    border: 'border-amber-200/90',
+  '天气之子': {
+    bg: 'bg-gradient-to-br from-sky-50 via-indigo-50/30 to-sky-100/60',
+    border: 'border-sky-200/90',
     icon: '☀️',
-    titleColor: 'text-amber-800',
-    badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
-    dotColor: 'bg-amber-500'
+    titleColor: 'text-sky-800',
+    badgeBg: 'bg-white/95 text-sky-700 border-sky-200 shadow-2xs',
+    dotColor: 'bg-sky-500'
   },
-  'Signal 信号': {
-    bg: 'bg-gradient-to-br from-amber-50 via-orange-50/30 to-amber-100/60',
-    border: 'border-amber-200/90',
-    icon: '📡',
-    titleColor: 'text-amber-800',
-    badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
-    dotColor: 'bg-amber-500'
-  },
-  '德鲁纳酒店': {
-    bg: 'bg-gradient-to-br from-amber-50 via-orange-50/30 to-amber-100/60',
-    border: 'border-amber-200/90',
-    icon: '🌙',
-    titleColor: 'text-amber-800',
-    badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
-    dotColor: 'bg-amber-500'
+  '铃芽之旅': {
+    bg: 'bg-gradient-to-br from-sky-50 via-indigo-50/40 to-sky-100/60',
+    border: 'border-sky-200/90',
+    icon: '🚪',
+    titleColor: 'text-sky-800',
+    badgeBg: 'bg-white/95 text-sky-700 border-sky-200 shadow-2xs',
+    dotColor: 'bg-sky-500'
   },
 
-  // 3. 琥珀金与翡翠绿系 (奇幻深情 / 自然唯美 / 医疗职场)
-  '孤单又灿烂的神-鬼怪': {
-    bg: 'bg-gradient-to-br from-amber-50 via-orange-50/30 to-amber-100/60',
+  // 2. 翡翠与竹青 (自然纯粹 / 热血羁绊)
+  '龙猫': {
+    bg: 'bg-gradient-to-br from-emerald-50 via-teal-50/30 to-emerald-100/60',
+    border: 'border-emerald-200/90',
+    icon: '🌱',
+    titleColor: 'text-emerald-800',
+    badgeBg: 'bg-white/95 text-emerald-700 border-emerald-200 shadow-2xs',
+    dotColor: 'bg-emerald-500'
+  },
+  '鬼灭之刃': {
+    bg: 'bg-gradient-to-br from-emerald-50 via-teal-50/30 to-emerald-100/60',
+    border: 'border-emerald-200/90',
+    icon: '⚔️',
+    titleColor: 'text-emerald-800',
+    badgeBg: 'bg-white/95 text-emerald-700 border-emerald-200 shadow-2xs',
+    dotColor: 'bg-emerald-500'
+  },
+  '灌篮高手': {
+    bg: 'bg-gradient-to-br from-amber-50 via-rose-50/30 to-amber-100/60',
     border: 'border-amber-200/90',
-    icon: '🗡️',
-    titleColor: 'text-amber-800',
+    icon: '🏀',
+    titleColor: 'text-amber-900',
     badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
     dotColor: 'bg-amber-500'
   },
-  '那年，我们的夏天': {
-    bg: 'bg-gradient-to-br from-emerald-50 via-teal-50/30 to-emerald-100/60',
-    border: 'border-emerald-200/90',
-    icon: '🍃',
-    titleColor: 'text-emerald-700',
-    badgeBg: 'bg-white/95 text-emerald-700 border-emerald-200 shadow-2xs',
-    dotColor: 'bg-emerald-500'
-  },
-  '爱的迫降': {
-    bg: 'bg-gradient-to-br from-emerald-50 via-teal-50/30 to-emerald-100/60',
-    border: 'border-emerald-200/90',
-    icon: '🪂',
-    titleColor: 'text-emerald-700',
-    badgeBg: 'bg-white/95 text-emerald-700 border-emerald-200 shadow-2xs',
-    dotColor: 'bg-emerald-500'
-  },
-  '机智的医生生活': {
-    bg: 'bg-gradient-to-br from-emerald-50 via-teal-50/30 to-emerald-100/60',
-    border: 'border-emerald-200/90',
-    icon: '🩺',
-    titleColor: 'text-emerald-700',
-    badgeBg: 'bg-white/95 text-emerald-700 border-emerald-200 shadow-2xs',
-    dotColor: 'bg-emerald-500'
-  },
-  '虽然是精神病但没关系': {
-    bg: 'bg-gradient-to-br from-emerald-50 via-teal-50/30 to-emerald-100/60',
-    border: 'border-emerald-200/90',
-    icon: '🦋',
-    titleColor: 'text-emerald-700',
-    badgeBg: 'bg-white/95 text-emerald-700 border-emerald-200 shadow-2xs',
-    dotColor: 'bg-emerald-500'
-  },
-
-  // 4. 浅灰/纯白深石板典雅系 (财阀豪门 / 悬疑职场 / 高概念名作)
-  '眼泪女王': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
-    icon: '💎',
+  '进击的巨人': {
+    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-200/50',
+    border: 'border-slate-300/90',
+    icon: '🛡️',
     titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+    badgeBg: 'bg-white/95 text-slate-800 border-slate-300 shadow-2xs',
+    dotColor: 'bg-slate-600'
   },
-  '未生': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
+
+  // 3. 经典日剧系列 (法医 / 职场 / 人生)
+  '非自然死亡': {
+    bg: 'bg-gradient-to-br from-indigo-50 via-sky-50/30 to-indigo-100/60',
+    border: 'border-indigo-200/90',
+    icon: '🔬',
+    titleColor: 'text-indigo-900',
+    badgeBg: 'bg-white/95 text-indigo-700 border-indigo-200 shadow-2xs',
+    dotColor: 'bg-indigo-500'
+  },
+  '半泽直树': {
+    bg: 'bg-gradient-to-br from-slate-100 via-sky-50/30 to-slate-200/50',
+    border: 'border-slate-300/90',
     icon: '💼',
     titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+    badgeBg: 'bg-white/95 text-slate-800 border-slate-300 shadow-2xs',
+    dotColor: 'bg-sky-600'
   },
-  '秘密森林': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
-    icon: '🌲',
-    titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  '孤独的美食家': {
+    bg: 'bg-gradient-to-br from-amber-50 via-yellow-50/30 to-amber-100/60',
+    border: 'border-amber-200/90',
+    icon: '🍱',
+    titleColor: 'text-amber-900',
+    badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
+    dotColor: 'bg-amber-500'
   },
-  '黑暗荣耀': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
-    icon: '♟️',
-    titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  '悠长假期': {
+    bg: 'bg-gradient-to-br from-sky-50 via-amber-50/30 to-sky-100/60',
+    border: 'border-sky-200/90',
+    icon: '🎹',
+    titleColor: 'text-sky-800',
+    badgeBg: 'bg-white/95 text-sky-700 border-sky-200 shadow-2xs',
+    dotColor: 'bg-sky-500'
   },
-  '非常律师禹英禑': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
-    icon: '🐳',
-    titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  '情书': {
+    bg: 'bg-gradient-to-br from-sky-50 via-indigo-50/20 to-sky-100/50',
+    border: 'border-sky-200/80',
+    icon: '❄️',
+    titleColor: 'text-sky-900',
+    badgeBg: 'bg-white/95 text-sky-700 border-sky-200 shadow-2xs',
+    dotColor: 'bg-sky-500'
   },
-  '继承者们': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
-    icon: '🏰',
-    titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  '东京爱情故事': {
+    bg: 'bg-gradient-to-br from-indigo-50 via-sky-50/40 to-indigo-100/60',
+    border: 'border-indigo-200/90',
+    icon: '🗼',
+    titleColor: 'text-indigo-900',
+    badgeBg: 'bg-white/95 text-indigo-700 border-indigo-200 shadow-2xs',
+    dotColor: 'bg-indigo-500'
   },
-  '来自星星的你': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
-    icon: '⭐',
-    titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
-  },
-  '少年法庭': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
-    icon: '⚖️',
-    titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
-  },
-  'W-两个世界': {
-    bg: 'bg-gradient-to-br from-slate-100 via-stone-50 to-slate-50',
-    border: 'border-slate-200/90',
-    icon: '📖',
-    titleColor: 'text-slate-900',
-    badgeBg: 'bg-white/95 text-slate-700 border-slate-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
-  },
-  '背着善宰跑': {
-    bg: 'bg-gradient-to-br from-orange-50 via-amber-50/40 to-orange-100/60',
-    border: 'border-orange-200/90',
-    icon: '☂️',
-    titleColor: 'text-orange-700',
-    badgeBg: 'bg-white/95 text-orange-700 border-orange-200 shadow-2xs',
-    dotColor: 'bg-orange-500'
+  '逃避虽可耻但有用': {
+    bg: 'bg-gradient-to-br from-amber-50 via-sky-50/30 to-amber-100/60',
+    border: 'border-amber-200/90',
+    icon: '☕',
+    titleColor: 'text-amber-900',
+    badgeBg: 'bg-white/95 text-amber-800 border-amber-200 shadow-2xs',
+    dotColor: 'bg-amber-500'
   }
 };
 
@@ -284,20 +178,20 @@ export const DramaThumbnail: React.FC<DramaThumbnailProps> = ({
   showLevelTag = false,
   className = "w-full h-full"
 }) => {
-  // 根据剧名精准匹配高定视觉主题
+  // 根据动漫日剧名精准匹配日式高定视觉主题
   const titleStr = typeof dramaTitle === 'string' ? dramaTitle : '';
-  const themeKey = Object.keys(DRAMA_THEMES).find(k => titleStr && (titleStr.includes(k) || k.includes(titleStr))) || '欢迎来到王之国';
-  const theme = DRAMA_THEMES[themeKey] || DRAMA_THEMES['欢迎来到王之国'];
+  const themeKey = Object.keys(ANIME_THEMES).find(k => titleStr && (titleStr.includes(k) || k.includes(titleStr))) || '千与千寻';
+  const theme = ANIME_THEMES[themeKey] || ANIME_THEMES['千与千寻'];
 
   const shouldRenderLevel = levelTag && (actionText || showLevelTag);
 
   return (
     <div className={`relative w-full h-full ${theme.bg} flex flex-col justify-between p-3.5 sm:p-4 select-none overflow-hidden ${className}`}>
       
-      {/* Background Korean Typography Watermark */}
+      {/* Background Japanese Typography Watermark */}
       <div className="absolute -right-2 -bottom-2 pointer-events-none opacity-5 select-none">
         <span className="text-4xl sm:text-5xl font-black text-slate-900 whitespace-nowrap tracking-wider">
-          {koreanDramaTitle || '드라마'}
+          {koreanDramaTitle || 'アニメ'}
         </span>
       </div>
 
@@ -326,7 +220,7 @@ export const DramaThumbnail: React.FC<DramaThumbnailProps> = ({
         )}
       </div>
 
-      {/* Center Drama Title & Artwork */}
+      {/* Center Anime Title & Artwork */}
       <div className="relative z-10 space-y-1 my-auto py-1.5">
         <p className={`text-xs sm:text-sm font-black tracking-wide truncate ${theme.titleColor}`}>
           《{dramaTitle}》

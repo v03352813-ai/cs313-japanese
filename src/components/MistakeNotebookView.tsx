@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   BookMarked, 
   RotateCcw, 
@@ -24,8 +24,8 @@ import {
   recordMistakeReview, 
   removeMistakeRecord, 
   MistakeRecord 
-} from '../data/korean/mistakeBook';
-import { speakKorean } from '../utils/speech';
+} from '../data/japanese/mistakeBook';
+import { speakJapanese } from '../utils/speech';
 
 interface MistakeNotebookViewProps {
   isVip: boolean;
@@ -81,7 +81,7 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
   };
 
   const handlePlayVoice = (text?: string) => {
-    if (text) speakKorean(text);
+    if (text) speakJapanese(text);
   };
 
   return (
@@ -90,12 +90,12 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
       {/* Lightweight Header Card */}
       <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-orange-500 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs">
+          <div className="w-10 h-10 rounded-xl bg-sky-500 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs shadow-sky-500/20">
             05
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60">
+              <span className="text-xs font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200/60">
                 提分闭环
               </span>
               <h2 className="text-base sm:text-lg font-black text-slate-900">
@@ -103,14 +103,14 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
               </h2>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              基于 1-3-7-15 天遗忘衰减规律，真题考场做错题目自动归集并周期推送重测
+              基于 1-3-7-15 天遗忘衰减规律，JLPT 全真考场做错题目自动归集并周期推送重测
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-orange-500" />
+            <Sparkles className="w-3.5 h-3.5 text-sky-500" />
             遗忘曲线靶向复习
           </span>
         </div>
@@ -122,11 +122,11 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
         <div 
           onClick={() => setFilterMode('today')}
           className={`bg-white rounded-2xl p-5 border cursor-pointer transition shadow-xs flex items-center justify-between ${
-            filterMode === 'today' ? 'border-amber-500 ring-2 ring-amber-500/20' : 'border-slate-200 hover:border-amber-300'
+            filterMode === 'today' ? 'border-sky-500 ring-2 ring-sky-500/20' : 'border-slate-200 hover:border-sky-300'
           }`}
         >
           <div className="space-y-1">
-            <span className="text-xs font-bold text-amber-600 flex items-center gap-1">
+            <span className="text-xs font-bold text-sky-600 flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" /> 今日待复习错题
             </span>
             <div className="text-2xl sm:text-3xl font-black text-slate-900">
@@ -134,7 +134,7 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
             </div>
             <p className="text-[11px] text-slate-400 font-medium">按遗忘曲线到期需重练</p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-black">
+          <div className="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-black">
             ⚡
           </div>
         </div>
@@ -207,13 +207,13 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
 
         {/* Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto">
-          {['全部', '词汇语法', '图表告示', '逻辑排序', '长篇阅读'].map(cat => (
+          {['全部', '文字词汇', '文法接续', '短篇读解', '综合读解', '听解应答'].map(cat => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer whitespace-nowrap ${
                 selectedCategory === cat
-                  ? 'bg-orange-50 text-orange-700 border border-orange-200 font-bold'
+                  ? 'bg-sky-50 text-sky-700 border border-sky-200 font-bold'
                   : 'text-slate-500 hover:bg-slate-50'
               }`}
             >
@@ -233,7 +233,7 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
             {filterMode === 'today' ? '太棒了！今日暂无待复习的错题' : '暂无符合条件的错题记录'}
           </h3>
           <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-            在 56 套全真考场做题时，做错的题目会自动进入这里排期推送。保持坚持，拿下 TOPIK 高分！
+            在 JLPT 全真考场做题时，做错的题目会自动进入这里排期推送。保持坚持，拿下 JLPT 高分满分！
           </p>
         </div>
       ) : (
@@ -243,8 +243,8 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
             if (isMistakeLocked) {
               if (idx === 3) {
                 return (
-                  <div key="locked-barrier" className="p-8 rounded-3xl bg-amber-50/40 border-2 border-dashed border-amber-300 text-center space-y-3 animate-in fade-in duration-300">
-                    <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto shadow-xs">
+                  <div key="locked-barrier" className="p-8 rounded-3xl bg-sky-50/40 border-2 border-dashed border-sky-300 text-center space-y-3 animate-in fade-in duration-300">
+                    <div className="w-12 h-12 rounded-2xl bg-sky-100 text-sky-700 flex items-center justify-center mx-auto shadow-xs">
                       <BookMarked className="w-6 h-6" />
                     </div>
                     <div>
@@ -255,9 +255,9 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
                     </div>
                     <button
                       onClick={() => onOpenVipModal('🔒 升级 VIP 终身卡（仅 ¥49.9），即可解锁全部错题无限次重测与记忆推送！')}
-                      className="px-6 py-2.5 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-black shadow-md transition active:scale-98 cursor-pointer inline-flex items-center gap-1.5"
+                      className="px-6 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-black shadow-md shadow-sky-500/20 transition active:scale-98 cursor-pointer inline-flex items-center gap-1.5"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+                      <Sparkles className="w-3.5 h-3.5 text-sky-200" />
                       <span>立即解锁全部错题 (¥49.9)</span>
                     </button>
                   </div>
@@ -346,7 +346,7 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
                       >
                         <div className="flex items-center gap-2">
                           <span className="w-5 h-5 rounded-full bg-white text-slate-700 border border-slate-200 flex items-center justify-center text-[10px] font-bold shrink-0">
-                            {['A', 'B', 'C', 'D'][optIdx]}
+                            {['1', '2', '3', '4'][optIdx]}
                           </span>
                           <span className="leading-relaxed">{opt}</span>
                         </div>
@@ -364,15 +364,15 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
 
                 {/* Analysis Box when Answered */}
                 {hasAnswered && (
-                  <div className="bg-gradient-to-r from-orange-50/60 to-amber-50/60 p-4 rounded-2xl border border-orange-200/80 space-y-2.5 animate-in fade-in duration-200">
+                  <div className="bg-gradient-to-r from-sky-50/60 to-indigo-50/60 p-4 rounded-2xl border border-sky-200/80 space-y-2.5 animate-in fade-in duration-200">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-orange-950 flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5 text-orange-600" />
+                      <span className="text-xs font-bold text-sky-950 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-sky-600" />
                         {isAnswerCorrect ? '🎉 答对了！艾宾浩斯复习周期已向后推进' : '💡 错因与考点拆解：'}
                       </span>
                       <button
                         onClick={() => handlePlayVoice(item.passage || item.title)}
-                        className="p-1.5 rounded-lg bg-white text-orange-600 hover:bg-orange-500 hover:text-white transition shadow-2xs border border-orange-200 flex items-center gap-1 text-[11px] font-bold cursor-pointer"
+                        className="p-1.5 rounded-lg bg-white text-sky-600 hover:bg-sky-500 hover:text-white transition shadow-2xs border border-sky-200 flex items-center gap-1 text-[11px] font-bold cursor-pointer"
                       >
                         <Volume2 className="w-3.5 h-3.5" /> 听题干发音
                       </button>
@@ -383,11 +383,11 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
                     </p>
 
                     {item.vocabList && item.vocabList.length > 0 && (
-                      <div className="pt-2 border-t border-orange-200/50 flex items-center gap-2 flex-wrap">
-                        <span className="text-[11px] font-bold text-orange-900">核心生词：</span>
+                      <div className="pt-2 border-t border-sky-200/50 flex items-center gap-2 flex-wrap">
+                        <span className="text-[11px] font-bold text-sky-900">核心生词：</span>
                         {item.vocabList.map((v, i) => (
-                          <span key={i} className="px-2 py-0.5 rounded-lg bg-white text-[11px] text-slate-700 border border-orange-200/60 font-medium">
-                            <span className="font-bold text-orange-950">{v.word}</span>: {v.meaning}
+                          <span key={i} className="px-2 py-0.5 rounded-lg bg-white text-[11px] text-slate-700 border border-sky-200/60 font-medium">
+                            <span className="font-bold text-sky-950">{v.word}</span>: {v.meaning}
                           </span>
                         ))}
                       </div>
@@ -402,19 +402,19 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
 
       {/* Free User Mistake VIP Upsell Banner */}
       {!isVip && (
-        <div className="bg-gradient-to-r from-amber-50/90 via-orange-50/60 to-white rounded-3xl p-5 text-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 border border-amber-200/90 shadow-sm">
+        <div className="bg-gradient-to-r from-sky-50/90 via-indigo-50/60 to-white rounded-3xl p-5 text-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 border border-sky-200/90 shadow-sm">
           <div className="space-y-1 text-center sm:text-left">
             <div className="flex items-center gap-1.5 justify-center sm:justify-start font-black text-sm text-slate-900">
-              <Sparkles className="w-4 h-4 text-amber-600" />
+              <Sparkles className="w-4 h-4 text-sky-600" />
               <span>艾宾浩斯遗忘曲线 · 靶向提分核心库</span>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed">
-              免费学员支持体验前 3 道错题。开通 VIP 终身卡（仅 ¥49.9），立即解锁 <strong>全站 56 套真题错题自动归集</strong>、1-3-7-15 天记忆周期靶向推送与多设备云端备份！
+              免费学员支持体验前 3 道错题。开通 VIP 终身卡（仅 ¥49.9），立即解锁 <strong>JLPT 历届全真题错题自动归集</strong>、1-3-7-15 天记忆周期靶向推送与多设备云端备份！
             </p>
           </div>
           <button
             onClick={() => onOpenVipModal('🔒 开通 VIP 终身卡（仅 ¥49.9），即可解锁全量错题智能归集与艾宾浩斯记忆周期突破！')}
-            className="px-5 py-2.5 rounded-2xl bg-orange-500 hover:bg-orange-600 font-black text-xs text-white shadow-md transition active:scale-98 shrink-0 flex items-center gap-1.5 cursor-pointer"
+            className="px-5 py-2.5 rounded-2xl bg-sky-500 hover:bg-sky-600 font-black text-xs text-white shadow-md shadow-sky-500/20 transition active:scale-98 shrink-0 flex items-center gap-1.5 cursor-pointer"
           >
             <Lock className="w-3.5 h-3.5" />
             <span>解锁无限错题本 (¥49.9)</span>

@@ -96,7 +96,7 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
   };
 
   const testKeys = [
-    { key: 'CS313-JP-8888-YQK5', name: '日语终身VIP (¥49.9示范码)' },
+    { key: 'CS313-JP-8888-HL3Y', name: '日语终身VIP (¥49.9示范码)' },
     { key: 'CS313-ALL-GOLD-7U7R', name: '全语种黑金卡 (示范码)' }
   ];
 
@@ -114,7 +114,7 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
           </button>
 
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-100 border border-amber-200/80 flex items-center justify-center text-2xl shadow-xs shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-100 to-yellow-100 border border-amber-200/80 flex items-center justify-center text-2xl shadow-xs shrink-0">
               👑
             </div>
             <div>
@@ -207,7 +207,7 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
               </div>
 
               {/* Channel 1: Xianyu Official Escrow Purchase Card */}
-              <div className="bg-gradient-to-br from-amber-50/90 via-orange-50/60 to-yellow-50/80 p-4 rounded-2xl border-2 border-amber-300 shadow-sm space-y-3 relative overflow-hidden">
+              <div className="bg-gradient-to-br from-amber-50/90 via-amber-50/60 to-yellow-50/80 p-4 rounded-2xl border-2 border-amber-300 shadow-sm space-y-3 relative overflow-hidden">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <span className="w-7 h-7 rounded-xl bg-amber-400 text-slate-950 font-black text-sm flex items-center justify-center shadow-sm">
@@ -250,7 +250,7 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
               {/* Switch to manual key input button */}
               <button
                 onClick={() => setModalTab('input')}
-                className="w-full py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-sm shadow-md shadow-orange-500/15 transition cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-2xl bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 hover:from-sky-700 hover:to-indigo-700 text-white font-black text-sm shadow-md shadow-sky-500/15 transition cursor-pointer flex items-center justify-center gap-2"
               >
                 <KeyRound className="w-4 h-4" />
                 <span>输入卡密激活</span>
@@ -264,13 +264,13 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
             <div className="space-y-4 animate-in fade-in duration-200">
               
               {/* 2-Device Policy Assurance Card */}
-              <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/70 space-y-2">
-                <div className="flex items-center justify-between text-xs font-bold text-amber-900">
+              <div className="p-3.5 rounded-2xl bg-sky-50/80 border border-sky-200/70 space-y-2">
+                <div className="flex items-center justify-between text-xs font-bold text-sky-900">
                   <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-orange-600" />
+                    <ShieldCheck className="w-4 h-4 text-sky-600" />
                     <span>支持 2 台主力设备同时使用 (如 iPad + 手机)</span>
                   </span>
-                  <span className="bg-amber-200/60 text-amber-900 px-2 py-0.5 rounded-md text-[10px] font-bold">
+                  <span className="bg-sky-200/60 text-sky-900 px-2 py-0.5 rounded-md text-[10px] font-bold">
                     防转卖保护
                   </span>
                 </div>
@@ -296,7 +296,7 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
                         setErrorMsg('');
                       }}
                       onKeyDown={(e) => e.key === 'Enter' && handleActivate()}
-                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono tracking-wider focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-orange-500/20 focus:border-orange-400 uppercase transition font-bold text-slate-900 placeholder:normal-case placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400"
+                      className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-mono tracking-wider focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500 uppercase transition font-bold text-slate-900 placeholder:normal-case placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-400"
                     />
                   </div>
                 </div>
@@ -349,13 +349,13 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
                           setInputKey(item.key);
                           handleActivate(item.key);
                         }}
-                        className="text-left p-2.5 rounded-xl bg-slate-50 hover:bg-orange-50/60 border border-slate-200/80 hover:border-orange-200 text-[11px] text-slate-700 transition flex items-center justify-between group cursor-pointer"
+                        className="text-left p-2.5 rounded-xl bg-slate-50 hover:bg-sky-50/60 border border-slate-200/80 hover:border-sky-200 text-[11px] text-slate-700 transition flex items-center justify-between group cursor-pointer"
                       >
                         <div>
-                          <strong className="block font-mono text-orange-600 group-hover:underline">{item.key}</strong>
+                          <strong className="block font-mono text-sky-600 group-hover:underline">{item.key}</strong>
                           <span className="text-slate-400 text-[10px]">{item.name}</span>
                         </div>
-                        <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                        <Sparkles className="w-3.5 h-3.5 text-sky-500" />
                       </button>
                     ))}
                   </div>

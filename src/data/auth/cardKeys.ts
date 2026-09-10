@@ -4,6 +4,7 @@ import {
   generateBatchSignedKeys 
 } from '../../utils/cardKeyCrypto';
 import { 
+  OFFICIAL_PRESET_JP_KEYS,
   OFFICIAL_PRESET_KR_KEYS, 
   OFFICIAL_PRESET_ALL_KEYS 
 } from './officialKeyPool';
@@ -12,7 +13,7 @@ export interface LicenseInfo {
   isVip: boolean;
   licenseKey?: string;
   cardKey?: string;
-  type?: 'KOREAN_SINGLE' | 'ALL_LANGUAGES_VIP';
+  type?: 'JAPANESE_SINGLE' | 'KOREAN_SINGLE' | 'ALL_LANGUAGES_VIP';
   tier?: string;
   activatedAt?: string;
   planName?: string;
@@ -22,12 +23,12 @@ export interface LicenseInfo {
 }
 
 // 预设的一批官方首推示范卡密（已注入密码学签名）
-export const PRESET_VIP_KEYS: Record<string, { type: 'KOREAN_SINGLE' | 'ALL_LANGUAGES_VIP'; planName: string }> = {
-  'CS313-KR-8888-YQK5': { type: 'KOREAN_SINGLE', planName: '韩语单语种终身VIP' },
-  'CS313-KR-9999-YWME': { type: 'KOREAN_SINGLE', planName: '韩语单语种终身VIP' },
-  'CS313-KR-5200-5BNR': { type: 'KOREAN_SINGLE', planName: '韩语单语种终身VIP' },
-  'CS313-KR-6666-3GA7': { type: 'KOREAN_SINGLE', planName: '韩语单语种终身VIP' },
-  'CS313-KR-7777-N6P8': { type: 'KOREAN_SINGLE', planName: '韩语单语种终身VIP' },
+export const PRESET_VIP_KEYS: Record<string, { type: 'JAPANESE_SINGLE' | 'KOREAN_SINGLE' | 'ALL_LANGUAGES_VIP'; planName: string }> = {
+  'CS313-JP-8888-HL3Y': { type: 'JAPANESE_SINGLE', planName: '日语单语种终身VIP' },
+  'CS313-JP-9999-DVCG': { type: 'JAPANESE_SINGLE', planName: '日语单语种终身VIP' },
+  'CS313-JP-5200-Q2NH': { type: 'JAPANESE_SINGLE', planName: '日语单语种终身VIP' },
+  'CS313-JP-6666-9575': { type: 'JAPANESE_SINGLE', planName: '日语单语种终身VIP' },
+  'CS313-JP-7777-UU7Z': { type: 'JAPANESE_SINGLE', planName: '日语单语种终身VIP' },
   'CS313-ALL-GOLD-7U7R': { type: 'ALL_LANGUAGES_VIP', planName: '全球小语种黑金终身通卡' },
   'CS313-ALL-VIP8-87GT': { type: 'ALL_LANGUAGES_VIP', planName: '全球小语种黑金终身通卡' }
 };
@@ -143,12 +144,13 @@ export function verifyCardKey(
   }
 
   // 2. 第二道防线：官方正版出库库比对（杜绝未售出或伪造号码）
+  const isInPresetJp = OFFICIAL_PRESET_JP_KEYS.includes(cleanKey);
   const isInPresetKr = OFFICIAL_PRESET_KR_KEYS.includes(cleanKey);
   const isInPresetAll = OFFICIAL_PRESET_ALL_KEYS.includes(cleanKey);
   const isInPresetDemo = Boolean(PRESET_VIP_KEYS[cleanKey]);
   const isInAdminGenerated = getAdminGeneratedKeys().includes(cleanKey);
 
-  const isOfficiallyIssued = isInPresetKr || isInPresetAll || isInPresetDemo || isInAdminGenerated;
+  const isOfficiallyIssued = isInPresetJp || isInPresetKr || isInPresetAll || isInPresetDemo || isInAdminGenerated;
 
   if (!isOfficiallyIssued) {
     return {
@@ -189,14 +191,14 @@ export function verifyCardKey(
   }
 
   const isAllLang = sigResult.type === 'ALL' || cleanKey.includes('ALL') || PRESET_VIP_KEYS[cleanKey]?.type === 'ALL_LANGUAGES_VIP';
-  const planName = isAllLang ? 'CS313 全球小语种黑金终身通卡' : 'CS313 韩语单语种终身VIP';
-  const tier = isAllLang ? '全语种黑金卡' : '韩语单语种终身VIP';
+  const planName = isAllLang ? 'CS313 全球小语种黑金终身通卡' : 'CS313 日语单语种终身VIP';
+  const tier = isAllLang ? '全语种黑金卡' : '日语单语种终身VIP';
 
   const license: LicenseInfo = {
     isVip: true,
     licenseKey: cleanKey,
     cardKey: cleanKey,
-    type: isAllLang ? 'ALL_LANGUAGES_VIP' : 'KOREAN_SINGLE',
+    type: isAllLang ? 'ALL_LANGUAGES_VIP' : 'JAPANESE_SINGLE',
     tier,
     planName,
     activatedAt: record.firstActivatedAt || new Date().toLocaleDateString('zh-CN'),
@@ -222,13 +224,11 @@ export function getSavedLicense(): LicenseInfo {
   try {
     let data = localStorage.getItem(STORAGE_KEY);
     if (!data) {
-      // 兼容可能存在的 cs313_license_info key
       data = localStorage.getItem('cs313_license_info');
     }
     if (data) {
       const parsed = JSON.parse(data);
       if (parsed && typeof parsed === 'object') {
-        // 双向同步确保无论读取哪个 key 都能持久保持
         if (!localStorage.getItem(STORAGE_KEY)) {
           localStorage.setItem(STORAGE_KEY, data);
         }
@@ -267,7 +267,7 @@ export function clearLicense() {
  * 批量生成供店主导入闲管家发货的卡密列表
  * 并自动入库，确保学员拿到即可正常激活！
  */
-export function generateBatchKeys(type: 'KR' | 'ALL', count: number = 20): string[] {
+export function generateBatchKeys(type: 'JP' | 'KR' | 'ALL' = 'JP', count: number = 20): string[] {
   const newKeys = generateBatchSignedKeys(type, count);
   saveAdminGeneratedKeys(newKeys);
   return newKeys;

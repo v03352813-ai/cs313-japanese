@@ -40,8 +40,8 @@ const AISpeakingView = resilientLazy(() => import('./components/AISpeakingView')
 const VocabView = resilientLazy(() => import('./components/JapaneseVocabView').then(m => ({ default: m.JapaneseVocabView })), 'Vocab');
 const GrammarView = resilientLazy(() => import('./components/JapaneseGrammarView').then(m => ({ default: m.JapaneseGrammarView })), 'Grammar');
 const ListeningView = resilientLazy(() => import('./components/JapaneseListeningView').then(m => ({ default: m.JapaneseListeningView })), 'Listening');
-const TopikExamView = resilientLazy(() => import('./components/JlptExamView').then(m => ({ default: m.JlptExamView })), 'TopikExam');
-const TopikWritingView = resilientLazy(() => import('./components/JapaneseListeningView').then(m => ({ default: m.JapaneseListeningView })), 'TopikWriting');
+const JlptExamView = resilientLazy(() => import('./components/JlptExamView').then(m => ({ default: m.JlptExamView })), 'JlptExam');
+const JapaneseListeningView = resilientLazy(() => import('./components/JapaneseListeningView').then(m => ({ default: m.JapaneseListeningView })), 'JapaneseListening');
 const PhoneticsView = resilientLazy(() => import('./components/GojuonView').then(m => ({ default: m.GojuonView })), 'Phonetics');
 const MistakeNotebookView = resilientLazy(() => import('./components/MistakeNotebookView').then(m => ({ default: m.MistakeNotebookView })), 'MistakeNotebook');
 const KDramaView = resilientLazy(() => import('./components/AnimeDramaView').then(m => ({ default: m.AnimeDramaView })), 'KDrama');
@@ -105,7 +105,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
           </div>
           <h2 className="text-xl font-black text-slate-900">该功能模块在加载时遇到了一个偶发异常</h2>
           <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto font-medium">
-            系统已自动隔离此错误，其他模块（AI 口语、56套考场、5460词库、写作工坊）不受任何影响。
+            系统已自动隔离此错误，其他模块（AI 口语、JLPT 全真考场、6,500+ 核心词库、文法宝典）不受任何影响。
           </p>
           <div className="flex items-center justify-center gap-3 pt-2">
             <button
@@ -118,7 +118,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
                   this.setState({ hasError: false, error: null });
                 }
               }}
-              className="px-6 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-md hover:from-orange-600 hover:to-amber-600 transition cursor-pointer"
+              className="px-6 py-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-xs font-bold shadow-md hover:from-sky-600 hover:to-indigo-700 transition cursor-pointer"
             >
               🔄 立即重新加载
             </button>
@@ -187,8 +187,8 @@ export function App() {
     } else {
       const vipLicense: LicenseInfo = {
         isVip: true,
-        planName: '韩语单语种终身VIP',
-        licenseKey: 'CS313-KR-8888-A1B2',
+        planName: '日语单语种终身VIP',
+        licenseKey: 'CS313-JP-8888-HL3Y',
         activatedAt: new Date().toLocaleDateString('zh-CN')
       };
       setLicense(vipLicense);
@@ -196,7 +196,7 @@ export function App() {
     }
   };
 
-  // 1. 自动捕获 URL 中的卡密参数 (例如 ?key=CS313-KR-8888-A1B2 或 ?code=... 或 ?license=...) 实现一键无感秒激活
+  // 1. 自动捕获 URL 中的卡密参数 (例如 ?key=CS313-JP-8888-HL3Y 或 ?code=... 或 ?license=...) 实现一键无感秒激活
   useEffect(() => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
@@ -207,7 +207,7 @@ export function App() {
           if (res.success && res.license) {
             setLicense(res.license);
             saveLicense(res.license);
-            setAutoActivatedToast(`🎉 欢迎您！已通过专属链接自动激活【${res.license.planName || '韩语终身VIP'}】！已解锁全站全部功能！`);
+            setAutoActivatedToast(`🎉 欢迎您！已通过专属链接自动激活【${res.license.planName || '日语终身VIP'}】！已解锁全站全部功能！`);
             confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
             
             // 自动清除 URL 中的 key 参数，保持地址栏干净
@@ -352,13 +352,13 @@ export function App() {
               />
             )}
             {activeTab === 'exam' && (
-              <TopikExamView
+              <JlptExamView
                 isVip={license.isVip}
                 onOpenVipModal={handleOpenVipModal}
               />
             )}
             {activeTab === 'writing' && (
-              <TopikWritingView
+              <JapaneseListeningView
                 isVip={license.isVip}
                 onOpenVipModal={handleOpenVipModal}
               />
@@ -405,7 +405,7 @@ export function App() {
             onClick={handleToggleVipForTesting}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black transition cursor-pointer ${
               license.isVip
-                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-xs'
+                ? 'bg-gradient-to-r from-amber-500 to-sky-600 text-white shadow-xs'
                 : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs'
             }`}
             title="点击即可随时在【VIP已激活学员】与【普通免费试学学员】之间一键切换视角"
