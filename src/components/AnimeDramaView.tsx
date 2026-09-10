@@ -476,25 +476,33 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
 
         {/* Category Chips */}
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
-          {ANIME_GENRE_CATEGORIES.map(genre => (
-            <button
-              key={genre}
-              onClick={() => setSelectedGenre(genre)}
-              className={`whitespace-nowrap px-3 py-1 rounded-xl text-xs font-semibold transition cursor-pointer ${
-                selectedGenre === genre
-                  ? 'bg-sky-600 text-white shadow-xs'
-                  : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-              }`}
-            >
-              {genre}
-            </button>
-          ))}
+          {ANIME_GENRE_CATEGORIES.map(genre => {
+            const count = genre === '全部' 
+              ? allScenes.length 
+              : allScenes.filter(s => s.genre === genre || s.category === genre).length;
+            return (
+              <button
+                key={genre}
+                onClick={() => setSelectedGenre(genre)}
+                className={`whitespace-nowrap px-3 py-1 rounded-xl text-xs font-semibold transition cursor-pointer flex items-center gap-1.5 ${
+                  selectedGenre === genre
+                    ? 'bg-sky-600 text-white shadow-xs font-bold'
+                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                <span>{genre}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${selectedGenre === genre ? 'bg-white/25 text-white' : 'bg-slate-100 text-slate-500 font-bold'}`}>
+                  {count}部
+                </span>
+              </button>
+            );
+          })}
         </div>
 
-        {/* --- 模式 1: 原生上下滑动列表视图 (List View - 默认精选 6 部 + 一键展开) --- */}
+        {/* --- 模式 1: 原生上下滑动列表视图 (List View - 全部 30 部完整呈现) --- */}
         {viewMode === 'list' && (
           <div className="space-y-3">
-            {(isListExpanded ? filteredScenes : filteredScenes.slice(0, 6)).map(s => {
+            {filteredScenes.map((s, idx) => {
               const isSelected = s.id === selectedSceneId;
               const isLocked = !isVip && !s.isFreePreview;
               const firstLine = s.dialogues[0];
@@ -600,28 +608,7 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
               );
             })}
 
-            {/* Expand / Collapse Button */}
-            {filteredScenes.length > 6 && (
-              <div className="pt-2">
-                {!isListExpanded ? (
-                  <button
-                    onClick={() => setIsListExpanded(true)}
-                    className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-sky-50 via-indigo-50/40 to-sky-50 hover:from-sky-100 hover:to-indigo-100 border border-sky-200 text-sky-700 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition duration-200 shadow-2xs hover:shadow-xs group cursor-pointer"
-                  >
-                    <span>向下展开查看全部 {filteredScenes.length} 部经典 (剩余 {filteredScenes.length - 6} 部)</span>
-                    <ChevronDown className="w-4 h-4 text-sky-600 group-hover:translate-y-0.5 transition-transform" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setIsListExpanded(false)}
-                    className="w-full py-3 px-4 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition duration-200 shadow-2xs cursor-pointer"
-                  >
-                    <span>收起列表 (返回精选 6 部)</span>
-                    <ChevronUp className="w-4 h-4 text-slate-500" />
-                  </button>
-                )}
-              </div>
-            )}
+
           </div>
         )}
 
