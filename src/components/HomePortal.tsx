@@ -466,6 +466,166 @@ export const HomePortal: React.FC<HomePortalProps> = ({
 
       </div>
 
+      {/* ========================================================================= */}
+      {/* 🧭 【置顶核心】3 大目标学习主线向导选择器 (一眼明确主线，告别进站一脸懵) */}
+      {/* ========================================================================= */}
+      <div className="bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/80 shadow-xs space-y-5">
+        
+        {/* Selector Top Banner */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-100">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold flex items-center gap-1.5">
+                <Compass className="w-3.5 h-3.5 text-sky-600" /> 新学员指引 · 学习主线向导
+              </span>
+              <span className="text-xs text-slate-400 hidden sm:inline">
+                不知道从哪学起？点击下方选定你的目标：
+              </span>
+            </div>
+            <h2 className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+              <span>你当前的核心学习目标是什么？</span>
+            </h2>
+          </div>
+
+          <div className="flex items-center gap-1.5 shrink-0 bg-slate-50 px-3 py-1.5 rounded-2xl border border-slate-200/60 text-xs font-bold text-slate-700">
+            <span className="text-slate-400">当前主线:</span>
+            <span className="text-sky-600 flex items-center gap-1 font-black">
+              <span>{currentTrackConfig.icon}</span>
+              <span>{currentTrackConfig.name}</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Current Track Summary Callout (置于顶栏正下方、3 大主线按钮正上方，精准对齐红框规范) */}
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-sky-50/80 via-indigo-50/40 to-slate-50 border border-sky-200/70 space-y-2">
+          {/* Header Row: Title on Left, Badge on Right */}
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <div className="flex items-center gap-2 text-xs font-black text-slate-900">
+              <span className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse shrink-0" />
+              <span>【{currentTrackConfig.name}】闭环指引</span>
+            </div>
+            <span className="px-2 py-0.5 rounded-full bg-white text-sky-700 border border-sky-200 text-[10px] font-extrabold shrink-0 shadow-2xs">
+              按顺序执行 {currentTrackConfig.steps.length} 步 ➔ 达成闭环
+            </span>
+          </div>
+
+          {/* Description Text: Full Width, Comfortable Line Height */}
+          <p className="text-xs text-slate-700 leading-relaxed font-medium pl-3 border-l-2 border-sky-400">
+            {currentTrackConfig.desc}
+          </p>
+        </div>
+
+        {/* 3 Large Track Tabs */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {(Object.keys(TRACKS_CONFIG) as TrackId[]).map((trackKey) => {
+            const track = TRACKS_CONFIG[trackKey];
+            const isSelected = selectedTrack === trackKey;
+
+            return (
+              <button
+                key={trackKey}
+                onClick={() => handleTrackCardClick(trackKey)}
+                className={`p-4 rounded-2xl text-left border transition-all duration-200 relative overflow-hidden flex flex-col justify-between gap-2.5 cursor-pointer group ${
+                  isSelected
+                    ? `${track.activeBg} ${track.activeBorder} ${track.activeRing}`
+                    : 'bg-slate-50/70 border-slate-200/80 hover:bg-slate-100/80 text-slate-700 hover:border-slate-300'
+                }`}
+                title={isSelected ? `点击直接进入【${track.name}】核心学习` : `点击切换至【${track.name}】主线`}
+              >
+                {isSelected && (
+                  <div className="absolute top-0 right-0 w-12 h-12 overflow-hidden pointer-events-none">
+                    <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-sky-500 text-white flex items-center justify-center text-[10px] font-black shadow-xs">
+                      ✓
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-2xl">{track.icon}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold border ${
+                    isSelected ? 'bg-white/90 text-slate-900 border-slate-200/80 shadow-2xs' : 'bg-white text-slate-500 border-slate-200'
+                  }`}>
+                    {track.tag}
+                  </span>
+                </div>
+
+                <div>
+                  <h3 className={`text-base font-black tracking-tight ${
+                    isSelected ? 'text-slate-900' : 'text-slate-800'
+                  }`}>
+                    {track.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    {track.targetAudience}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between text-[11px] font-bold pt-1.5 border-t border-black/5">
+                  <span className={isSelected ? 'text-sky-600 font-black flex items-center gap-1' : 'text-slate-400'}>
+                    {isSelected ? `▶ 立即进入学习 (${track.steps[0].actionText.slice(0, 7)})` : '点击切换此路线'}
+                  </span>
+                  <span className={`text-xs ${isSelected ? 'text-sky-600 font-bold group-hover:translate-x-1 transition-transform' : 'text-slate-400'}`}>➔</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Steps Sequential Roadmap Cards */}
+        <div id="track-steps-roadmap" className={`grid grid-cols-1 ${currentTrackConfig.steps.length === 4 ? 'sm:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3'} gap-4 relative`}>
+          {currentTrackConfig.steps.map((step) => {
+            const StepIcon = step.icon;
+
+            return (
+              <div
+                key={step.stepNum}
+                className="rounded-2xl p-4 sm:p-5 border border-slate-200/80 bg-white hover:border-sky-300 hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-3.5 group relative"
+              >
+                {/* Top row */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-lg bg-slate-900 text-white font-mono text-[11px] font-black tracking-wider flex items-center gap-1 shadow-2xs">
+                      <span>STEP</span>
+                      <span className="text-sky-300">{step.stepNum}</span>
+                    </span>
+
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${step.badgeBg}`}>
+                      {step.targetBadge}
+                    </span>
+                  </div>
+
+                  {/* Title & Icon */}
+                  <div className="flex items-center gap-2 pt-1">
+                    <div className="w-8 h-8 rounded-xl bg-slate-50 text-slate-700 flex items-center justify-center shrink-0 border border-slate-100 group-hover:bg-sky-50 group-hover:text-sky-600 transition">
+                      <StepIcon className="w-4 h-4" />
+                    </div>
+                    <h4 className="text-sm sm:text-base font-black text-slate-900 group-hover:text-sky-600 transition">
+                      {step.title}
+                    </h4>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                    {step.desc}
+                  </p>
+                </div>
+
+                {/* Action CTA Button */}
+                <div className="pt-2 border-t border-slate-100">
+                  <button
+                    onClick={() => handleStepClick(step)}
+                    className={`w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all duration-200 active:scale-98 shadow-xs cursor-pointer ${step.buttonBg}`}
+                  >
+                    <span>{step.actionText}</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+      </div>
 
       {/* --- 5. 经典动漫与日剧名台词研习室 (精选 4 部 + 30部全库直达) --- */}
       <div
