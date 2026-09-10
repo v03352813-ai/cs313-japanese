@@ -98,6 +98,24 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
     };
   }, [currentModePapers]);
 
+  // Drill categories with accurate counts
+  const drillCategories = useMemo(() => {
+    const counts: Record<string, number> = {
+      '全部': drillCount,
+      '言语知识专项': JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === '言语知识专项').length,
+      '文法排词★专项': JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === '文法排词★专项').length,
+      '读解分析专项': JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === '读解分析专项').length,
+      '听解原声专项': JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === '听解原声专项').length,
+    };
+    return [
+      { key: '全部', label: `全部题型 (${counts['全部']})` },
+      { key: '言语知识专项', label: `言语知识 (${counts['言语知识专项']})` },
+      { key: '文法排词★专项', label: `文法排词★ (${counts['文法排词★专项']})` },
+      { key: '读解分析专项', label: `读解分析 (${counts['读解分析专项']})` },
+      { key: '听解原声专项', label: `听解原声 (${counts['听解原声专项']})` },
+    ];
+  }, [drillCount]);
+
   // Automatically select first paper if current selection is not in filtered list
   useEffect(() => {
     if (filteredPapers.length > 0 && !filteredPapers.some(p => p.id === selectedPaperId)) {
@@ -498,19 +516,19 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
 
           {mainMode === 'special_drill' ? (
             <div className="flex items-center gap-1.5 flex-wrap">
-              {JLPT_PAPER_CATEGORIES.map((cat) => {
-                const isSelected = selectedCategory === cat;
+              {drillCategories.map((item) => {
+                const isSelected = selectedCategory === item.key;
                 return (
                   <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
+                    key={item.key}
+                    onClick={() => setSelectedCategory(item.key)}
                     className={`px-3 py-1 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                       isSelected
                         ? 'bg-sky-500 text-white shadow-2xs font-black'
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
                     }`}
                   >
-                    {cat === '全部' ? '全部题型' : cat}
+                    {item.label}
                   </button>
                 );
               })}
