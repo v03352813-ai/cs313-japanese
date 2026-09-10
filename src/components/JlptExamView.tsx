@@ -290,85 +290,88 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
       {/* Main Mode Switcher & Level Filter */}
       <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3.5">
         
-        {/* Row 1: 3 Mode Buttons + Level/Category Filters */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          
-          {/* 3 Main Modes */}
-          <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl overflow-x-auto no-scrollbar">
-            <button
-              onClick={() => {
-                setMainMode('marathon_full');
-                setLevelFilter('all');
-                setSelectedCategory('全部');
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
-                mainMode === 'marathon_full'
-                  ? 'bg-white text-sky-600 shadow-2xs font-black'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Timer className="w-3.5 h-3.5 text-sky-500" />
-              <span>🏛️ 官方马拉松大考</span>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${mainMode === 'marathon_full' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
-                {marathonCount}套
-              </span>
-            </button>
+        {/* Row 1: 3大核心考试模式分段器 (独立整排，3等分网格，大气清晰) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-1.5 bg-slate-100/90 rounded-2xl">
+          <button
+            onClick={() => {
+              setMainMode('marathon_full');
+              setLevelFilter('all');
+              setSelectedCategory('全部');
+            }}
+            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+              mainMode === 'marathon_full'
+                ? 'bg-white text-sky-600 shadow-xs font-black'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+            }`}
+          >
+            <Timer className="w-3.5 h-3.5 text-sky-500" />
+            <span>🏛️ 官方马拉松大考</span>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'marathon_full' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
+              {marathonCount}套
+            </span>
+          </button>
 
-            <button
-              onClick={() => {
-                setMainMode('full_paper');
-                setLevelFilter('all');
-                setSelectedCategory('全部');
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
-                mainMode === 'full_paper'
-                  ? 'bg-white text-sky-600 shadow-2xs font-black'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <FileCheck2 className="w-3.5 h-3.5 text-sky-500" />
-              <span>⚡ 历届高频冲刺卷</span>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${mainMode === 'full_paper' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
-                {fullPaperCount}套
-              </span>
-            </button>
+          <button
+            onClick={() => {
+              setMainMode('full_paper');
+              setLevelFilter('all');
+              setSelectedCategory('全部');
+            }}
+            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+              mainMode === 'full_paper'
+                ? 'bg-white text-sky-600 shadow-xs font-black'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+            }`}
+          >
+            <FileCheck2 className="w-3.5 h-3.5 text-sky-500" />
+            <span>⚡ 历届高频冲刺卷</span>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'full_paper' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
+              {fullPaperCount}套
+            </span>
+          </button>
 
-            <button
-              onClick={() => {
-                setMainMode('special_drill');
-                setLevelFilter('all');
-                setSelectedCategory('全部');
-              }}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
-                mainMode === 'special_drill'
-                  ? 'bg-white text-sky-600 shadow-2xs font-black'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Target className="w-3.5 h-3.5 text-sky-500" />
-              <span>🎯 4大分类专项突破</span>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${mainMode === 'special_drill' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
-                {drillCount}套
-              </span>
-            </button>
+          <button
+            onClick={() => {
+              setMainMode('special_drill');
+              setLevelFilter('all');
+              setSelectedCategory('全部');
+            }}
+            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+              mainMode === 'special_drill'
+                ? 'bg-white text-sky-600 shadow-xs font-black'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+            }`}
+          >
+            <Target className="w-3.5 h-3.5 text-sky-500" />
+            <span>🎯 4大分类专项突破</span>
+            <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'special_drill' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
+              {drillCount}套
+            </span>
+          </button>
+        </div>
+
+        {/* Row 2: 等级/题型快速筛选 (独立整排，告别挤压堆叠) */}
+        <div className="flex items-center gap-2 pt-2 border-t border-slate-100 flex-wrap">
+          <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
+            <span className="w-1.5 h-3.5 bg-sky-500 rounded-full" />
+            <span>{mainMode === 'special_drill' ? '题型分类筛选:' : 'JLPT等级筛选:'}</span>
           </div>
 
-          {/* Level Filter Chips (for Marathon & Full Paper) OR Category Filter Chips (for Special Drill) */}
           {mainMode === 'special_drill' ? (
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-              <span className="text-[11px] font-bold text-slate-400 shrink-0">题型分类:</span>
+            <div className="flex items-center gap-1.5 flex-wrap">
               {JLPT_PAPER_CATEGORIES.map((cat) => {
                 const count = cat === '全部'
                   ? drillCount
                   : JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill' && p.category === cat).length;
+                const isSelected = selectedCategory === cat;
                 return (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer ${
-                      selectedCategory === cat
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                      isSelected
                         ? 'bg-sky-500 text-white shadow-2xs font-black'
-                        : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
                     }`}
                   >
                     {cat} ({count}套)
@@ -377,26 +380,26 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               })}
             </div>
           ) : (
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-              <span className="text-[11px] font-bold text-slate-400 shrink-0">级别筛选:</span>
+            <div className="flex items-center gap-1.5 flex-wrap">
               {(['all', 'n1', 'n2', 'n3', 'n4', 'n5'] as LevelFilterType[]).map((lvl) => {
                 const count = levelCounts[lvl] || 0;
                 const labelMap: Record<string, string> = {
                   all: '全部',
-                  n1: 'N1',
-                  n2: 'N2',
-                  n3: 'N3',
-                  n4: 'N4',
-                  n5: 'N5'
+                  n1: 'N1 (高级)',
+                  n2: 'N2 (中高级)',
+                  n3: 'N3 (中级)',
+                  n4: 'N4 (初中级)',
+                  n5: 'N5 (入门)'
                 };
+                const isSelected = levelFilter === lvl;
                 return (
                   <button
                     key={lvl}
                     onClick={() => setLevelFilter(lvl)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer ${
-                      levelFilter === lvl
-                        ? 'bg-slate-900 text-white shadow-2xs'
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                      isSelected
+                        ? 'bg-slate-900 text-white shadow-2xs font-black'
+                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                   >
                     {labelMap[lvl]} ({count}套)
@@ -405,7 +408,6 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               })}
             </div>
           )}
-
         </div>
 
         {/* Row 2: Dropdown Quick Paper Selector + Summary Info */}
