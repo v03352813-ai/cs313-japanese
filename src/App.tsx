@@ -49,6 +49,7 @@ const AdminKeyGeneratorModal = resilientLazy(() => import('./components/AdminKey
 const MultiLangModal = resilientLazy(() => import('./components/MultiLangModal').then(m => ({ default: m.MultiLangModal })), 'MultiLang');
 const WallpaperRewardModal = resilientLazy(() => import('./components/WallpaperRewardModal').then(m => ({ default: m.WallpaperRewardModal })), 'Wallpaper');
 const ExamRegistrationModal = resilientLazy(() => import('./components/ExamRegistrationModal').then(m => ({ default: m.ExamRegistrationModal })), 'ExamRegistration');
+import { WallpaperBanner } from './components/WallpaperBanner';
 import { getSavedLicense, saveLicense, clearLicense } from './data/auth/cardKeys';
 import { getDeviceFingerprint } from './utils/fingerprint';
 import { Shield, Sparkles, ChevronLeft, Tablet, AlertTriangle, CheckCircle2 } from 'lucide-react';
@@ -389,6 +390,13 @@ export function App() {
             )}
           </React.Suspense>
         </ErrorBoundary>
+
+        {/* 🎁 学员美学福利 · 一子一木 4K 伴学治愈壁纸屋横幅 (所有二级页面底部统一展示) */}
+        {activeTab !== 'home' && (
+          <div className="max-w-6xl mx-auto px-4 mt-8 pb-2">
+            <WallpaperBanner onOpenWallpaperModal={() => setIsWallpaperModalOpen(true)} />
+          </div>
+        )}
       </main>
 
       {/* Floating Store Owner Role Tester Pill (仅在本地开发环境或带有 ?test_mode=1 时显示，线上生产环境自动对真实用户隐藏) */}
