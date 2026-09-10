@@ -215,12 +215,12 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
         stepLabel: '第 3 步 · 专项攻坚',
         title: '四大核心题型与原声听解专项突破',
         targetBadge: '听解原声 · ★排词攻坚',
-        badgeBg: 'bg-amber-100 text-amber-800 border border-amber-200/70',
+        badgeBg: 'bg-blue-100 text-blue-800 border border-blue-200/70',
         desc: '攻克 JLPT 最大失分雷区：听解即时应答与课题理解磨耳朵、文法★号排词破题拆解、长篇读解信息检索靶向集训！',
         actionText: '进入四大题型专项考场',
         targetTab: 'exam',
         icon: Target,
-        buttonBg: 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'
+        buttonBg: 'bg-blue-600 hover:bg-blue-700 text-white shadow-xs'
       }
     ]
   }
@@ -246,6 +246,11 @@ export const HomePortal: React.FC<HomePortalProps> = ({
   // 学习主线选择器状态（自动记忆在本地，默认推荐零基础入门）
   const [selectedTrack, setSelectedTrack] = useState<TrackId>(() => {
     if (typeof window !== 'undefined') {
+      const searchStr = window.location.search || (window.location.hash.includes('?') ? window.location.hash.substring(window.location.hash.indexOf('?')) : '');
+      const urlTrack = new URLSearchParams(searchStr).get('track');
+      if (urlTrack === 'beginner' || urlTrack === 'speaking' || urlTrack === 'exam') {
+        return urlTrack as TrackId;
+      }
       const saved = localStorage.getItem('cs313_jp_active_track');
       if (saved === 'beginner' || saved === 'speaking' || saved === 'exam') {
         return saved as TrackId;

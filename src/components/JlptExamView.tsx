@@ -406,7 +406,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               每年 7月 / 12月 考后官方考期同步入库
             </span>
             <span className="text-slate-300">|</span>
-            <span className="text-sky-600 font-extrabold">{marathonCount}套官方全真大卷 · 全库共{totalCount}套真题</span>
+            <span className="text-sky-600 font-extrabold">官方考期真题 · 考前冲刺 · 专项突破 · 每年考后同步更新</span>
           </div>
         </div>
 
@@ -550,7 +550,13 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
               <FileCheck2 className="w-4 h-4 text-sky-500" />
-              <span>选择作答试卷 (当前库共 {filteredPapers.length} 套 · 全库共 {totalCount} 套):</span>
+              <span>
+                选择作答试卷
+                {mainMode === 'marathon_full' && ` (官方历届全真大卷 · 共 ${filteredPapers.length} 套):`}
+                {mainMode === 'full_paper' && ` (考前高频冲刺卷 · 共 ${filteredPapers.length} 套):`}
+                {mainMode === 'special_drill' && ` (题型专项突破卷 · 共 ${filteredPapers.length} 套):`}
+                {mainMode === 'all_papers' && ` (真题题库全量汇总 · 共 ${filteredPapers.length} 套):`}
+              </span>
             </div>
 
             <div className="relative flex-1 min-w-0 max-w-2xl">
