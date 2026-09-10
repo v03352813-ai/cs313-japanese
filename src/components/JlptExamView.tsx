@@ -335,7 +335,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
   return (
     <div className="max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-5">
       
-      {/* Top Hero Banner (Clean white card style aligned with Image 3) */}
+      {/* Top Hero Banner */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
@@ -352,16 +352,6 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <p className="text-xs sm:text-sm text-slate-500">
             全真还原官方考试作答流程，覆盖 N1~N5 历年官方 7月/12月 考期全真卷与题型专项强化，每年考后持续同步扩充！
           </p>
-        </div>
-
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => handleResetExam()}
-            className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer border border-slate-200"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-            <span>重置答卷</span>
-          </button>
         </div>
       </div>
 
@@ -827,9 +817,21 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                 <Target className="w-4 h-4 text-sky-500" />
                 <span>答题卡</span>
               </h4>
-              <span className="text-xs text-slate-400 font-mono">
-                已答 {Object.keys(answers).length} / {currentPaper?.questions.length || 0}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-slate-400 font-mono">
+                  已答 {Object.keys(answers).length} / {currentPaper?.questions.length || 0}
+                </span>
+                {Object.keys(answers).length > 0 && !isSubmitted && (
+                  <button
+                    onClick={handleResetExam}
+                    className="text-[11px] text-slate-400 hover:text-rose-600 transition flex items-center gap-0.5 cursor-pointer font-bold px-1.5 py-0.5 rounded bg-slate-50 hover:bg-rose-50 border border-slate-200"
+                    title="清空当前试卷已选答案"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>清空作答</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Answer Bubbles Grid */}
