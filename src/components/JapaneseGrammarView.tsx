@@ -17,6 +17,7 @@ import {
   Compass,
   CreditCard,
   List,
+  Network,
   X
 } from 'lucide-react';
 import { 
@@ -26,6 +27,7 @@ import {
   JlptGrammarPoint 
 } from '../data/japanese/jlptGrammar';
 import { speakJapanese } from '../utils/speech';
+import { JapaneseGrammarVisualMindMap } from './JapaneseGrammarVisualMindMap';
 
 interface JapaneseGrammarViewProps {
   isVip?: boolean;
@@ -39,6 +41,10 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
   const [viewMode, setViewMode] = useState<'focused' | 'list'>('focused');
   const [currentGrammarIndex, setCurrentGrammarIndex] = useState<number>(0);
   const [expandedIds, setExpandedIds] = useState<string[]>(['jp-g-n5-01']);
+  const [showMindMap, setShowMindMap] = useState<boolean>(true);
+  const [isFullOverviewOpen, setIsFullOverviewOpen] = useState<boolean>(false);
+  const [modalSearchQuery, setModalSearchQuery] = useState<string>('');
+  const [modalActiveCategory, setModalActiveCategory] = useState<string>('全部');
 
   const filteredPoints = useMemo(() => {
     return JLPT_GRAMMAR_POINTS.filter(p => {
@@ -88,18 +94,58 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
     setExpandedIds([]);
   };
 
+  const scrollToGrammar = (grammarId: string) => {
+    setActiveTab('library');
+    setSelectedLevel('全部');
+    setSearchQuery('');
+    setIsFullOverviewOpen(false);
+
+    const targetIdx = JLPT_GRAMMAR_POINTS.findIndex(g => g.id === grammarId);
+    if (targetIdx !== -1) {
+      setCurrentGrammarIndex(targetIdx);
+    }
+    setExpandedIds([grammarId]);
+
+    setTimeout(() => {
+      const element = document.getElementById(grammarId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.classList.add('ring-4', 'ring-sky-400/50');
+        setTimeout(() => {
+          element.classList.remove('ring-4', 'ring-sky-400/50');
+        }, 2000);
+      }
+    }, 150);
+  };
+
+  const modalFilteredPoints = useMemo(() => {
+    return JLPT_GRAMMAR_POINTS.filter((p) => {
+      const matchCat = 
+        modalActiveCategory === '全部' || 
+        p.category === modalActiveCategory || 
+        p.level === modalActiveCategory;
+      const q = modalSearchQuery.trim().toLowerCase();
+      const matchQ = !q ||
+        p.pattern.toLowerCase().includes(q) ||
+        p.meaning.toLowerCase().includes(q) ||
+        p.connection.toLowerCase().includes(q) ||
+        p.explanation.toLowerCase().includes(q);
+      return matchCat && matchQ;
+    });
+  }, [modalActiveCategory, modalSearchQuery]);
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
       
       {/* 1. Header */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold">
               💡 体系化文法宝典
             </span>
             <span className="text-xs text-slate-400 font-medium">
-              420+ 核心考点 · 动词10大活用变形 · 四大助词辨析
+              72 权威核心考点大树 · 动词10大活用变形 · 四大助词深度辨析 · 全景思维导图
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -110,32 +156,55 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
           </p>
         </div>
 
-        {/* Tab Switchers */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shrink-0">
+        {/* Right Action Controls: Mindmap + Overview + Tab Switchers */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 shrink-0 flex-wrap">
           <button
-            onClick={() => setActiveTab('library')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-              activeTab === 'library' ? 'bg-white text-sky-700 shadow-2xs font-black' : 'text-slate-600'
+            onClick={() => setShowMindMap(!showMindMap)}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs border cursor-pointer ${
+              showMindMap
+                ? 'bg-sky-500 text-white border-sky-600 shadow-sky-500/20'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
             }`}
           >
-            句型库
+            <Network className="w-3.5 h-3.5" />
+            <span>{showMindMap ? '收起导图' : '全景思维导图'}</span>
           </button>
+
           <button
-            onClick={() => setActiveTab('conjugation')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-              activeTab === 'conjugation' ? 'bg-white text-sky-700 shadow-2xs font-black' : 'text-slate-600'
-            }`}
+            onClick={() => setIsFullOverviewOpen(true)}
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
           >
-            动词10大变形
+            <Compass className="w-3.5 h-3.5" />
+            <span>全体系通览 (72点)</span>
           </button>
-          <button
-            onClick={() => setActiveTab('particles')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-              activeTab === 'particles' ? 'bg-white text-sky-700 shadow-2xs font-black' : 'text-slate-600'
-            }`}
-          >
-            四大助词辨析
-          </button>
+
+          {/* Tab Switchers */}
+          <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shrink-0">
+            <button
+              onClick={() => setActiveTab('library')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                activeTab === 'library' ? 'bg-white text-sky-700 shadow-2xs font-black' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              句型库
+            </button>
+            <button
+              onClick={() => setActiveTab('conjugation')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                activeTab === 'conjugation' ? 'bg-white text-sky-700 shadow-2xs font-black' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              动词10大变形
+            </button>
+            <button
+              onClick={() => setActiveTab('particles')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                activeTab === 'particles' ? 'bg-white text-sky-700 shadow-2xs font-black' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              四大助词辨析
+            </button>
+          </div>
         </div>
       </div>
 
@@ -143,6 +212,20 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
       {activeTab === 'library' && (
         <div className="space-y-4">
           
+          {/* --- 全景日本语语法可视化思维导图 (Visual Tree Graph Mind Map) --- */}
+          {showMindMap && (
+            <JapaneseGrammarVisualMindMap
+              onSelectGrammar={scrollToGrammar}
+              onSelectTab={(tab) => {
+                setActiveTab(tab);
+                setTimeout(() => {
+                  window.scrollTo({ top: 320, behavior: 'smooth' });
+                }, 50);
+              }}
+              onOpenFullOverview={() => setIsFullOverviewOpen(true)}
+            />
+          )}
+
           {/* 🎯 下拉式快捷控制与直达工具栏 (全面采用下拉方式解决页面过长问题) */}
           <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-xs space-y-3.5">
             
@@ -268,7 +351,7 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
           {viewMode === 'focused' && (
             <div>
               {activePoint ? (
-                <div className="bg-white rounded-3xl border border-slate-200/90 shadow-md p-5 sm:p-7 space-y-5 animate-in fade-in duration-200">
+                <div id={activePoint.id} className="bg-white rounded-3xl border border-slate-200/90 shadow-md p-5 sm:p-7 space-y-5 animate-in fade-in duration-200 transition-all">
                   
                   {/* Top Header: 考点标头 + 快捷翻页控制器 */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
@@ -611,6 +694,140 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 4. 全体系文法考点总览大表 Modal (Full Overview Modal) */}
+      {/* ========================================================================= */}
+      {isFullOverviewOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+            
+            {/* Modal Header */}
+            <div className="p-5 sm:px-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-2xl bg-sky-500 text-white shadow-md shadow-sky-500/20">
+                  <BookOpenCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2 flex-wrap">
+                    <span>日本语全景文法考点总览 (72核心考点大表)</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 font-extrabold">
+                      N5~N1 权威体系
+                    </span>
+                  </h3>
+                  <p className="text-xs text-slate-500 font-medium">
+                    涵盖品词基石、动词10大变形、核心格助词与逻辑复句大树 · 支持即时检索与一键定位
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsFullOverviewOpen(false)}
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-white/80 transition border border-transparent hover:border-slate-200 shrink-0 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Search & Filter */}
+            <div className="p-4 sm:px-6 border-b border-slate-100 space-y-3 bg-slate-50/50">
+              <div className="relative">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="在全体系中快速检索句型公式、含义或接续法则..."
+                  value={modalSearchQuery}
+                  onChange={(e) => setModalSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-hidden focus:ring-2 focus:ring-sky-500/20 focus:border-sky-400 transition"
+                />
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                {['全部', '助词体系', '动词活用', '时间顺序', '假定条件', '原因理由', '转折让步', '授受体系', '敬语规约', '建议忠告', '社会情理', '确信断定'].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setModalActiveCategory(cat)}
+                    className={`whitespace-nowrap px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                      modalActiveCategory === cat
+                        ? 'bg-sky-500 text-white shadow-xs shadow-sky-500/20 font-bold'
+                        : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Modal Body: Scrollable Grid of Grammar Cards */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {modalFilteredPoints.map((item) => {
+                  const levelBg = 
+                    item.level === 'N5' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                    item.level === 'N4' ? 'bg-sky-50 text-sky-700 border-sky-200' :
+                    item.level === 'N3' ? 'bg-indigo-50 text-indigo-700 border-indigo-200' :
+                    item.level === 'N2' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                    'bg-rose-50 text-rose-700 border-rose-200';
+
+                  return (
+                    <div
+                      key={item.id}
+                      onClick={() => scrollToGrammar(item.id)}
+                      className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-sky-400 hover:shadow-md hover:shadow-sky-500/5 transition cursor-pointer group flex flex-col justify-between space-y-2 select-none active:scale-98"
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${levelBg}`}>
+                            {item.level}
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-medium">
+                            {item.category}
+                          </span>
+                        </div>
+
+                        <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-sky-600 transition flex items-center justify-between">
+                          <span>{item.pattern}</span>
+                          <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-sky-500 group-hover:translate-x-0.5 transition" />
+                        </h4>
+
+                        <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed font-medium">
+                          {item.meaning}
+                        </p>
+                      </div>
+
+                      <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                        <code className="text-sky-700 bg-sky-50 px-1.5 py-0.5 rounded truncate max-w-[180px] border border-sky-100">
+                          {item.connection}
+                        </code>
+                        <span className="text-sky-600 font-bold shrink-0">点击查看</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {modalFilteredPoints.length === 0 && (
+                <div className="p-12 text-center text-slate-400 text-sm">
+                  未匹配到相关日语文法考点
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+              <span>当前已呈现 {modalFilteredPoints.length} 个考点（共 {JLPT_GRAMMAR_POINTS.length} 个）</span>
+              <button
+                onClick={() => setIsFullOverviewOpen(false)}
+                className="px-4 py-1.5 rounded-xl bg-slate-200 text-slate-700 font-semibold hover:bg-slate-300 transition cursor-pointer"
+              >
+                关闭
+              </button>
+            </div>
+
+          </div>
         </div>
       )}
 
