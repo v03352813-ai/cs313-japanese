@@ -318,31 +318,31 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
   return (
     <div className="max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-5">
       
-      {/* Top Hero Banner */}
-      <div className="bg-gradient-to-r from-sky-500 via-indigo-600 to-sky-700 text-white rounded-3xl p-6 sm:p-7 shadow-lg relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-1.5 z-10">
+      {/* Top Hero Banner (Clean white card style aligned with Image 3) */}
+      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs text-white text-xs font-black">
-              JLPT 日本語能力試験 · 历届考期真题机考
+            <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold">
+              🏛️ 官方全真考场
             </span>
-            <span className="text-xs text-sky-100 font-bold">
+            <span className="text-xs text-slate-400 font-medium">
               180分官方标准评分 · 言语知识/读解/听解 · 每年7月/12月考后同步收录
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             JLPT 历届官方考期真题与全真机考系统
-          </h2>
-          <p className="text-xs text-sky-100 font-medium">
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500">
             全真还原官方考试作答流程，覆盖 N1~N5 历年官方 7月/12月 考期全真卷与题型专项强化，每年考后持续同步扩充！
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0 z-10">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => handleResetExam()}
-            className="px-4 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs transition flex items-center gap-1.5 cursor-pointer"
+            className="px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer border border-slate-200"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
             <span>重置答卷</span>
           </button>
         </div>

@@ -160,31 +160,31 @@ export const JapaneseListeningView: React.FC<JapaneseListeningViewProps> = ({ is
   return (
     <div className="max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-5">
       
-      {/* Top Banner */}
-      <div className="bg-gradient-to-r from-teal-600 via-sky-600 to-indigo-700 text-white rounded-3xl p-6 sm:p-7 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-1 z-10">
+      {/* Top Banner (Clean white card style aligned with Image 3) */}
+      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="px-2.5 py-0.5 rounded-full bg-white/20 text-white text-xs font-black flex items-center gap-1">
-              <Headphones className="w-3.5 h-3.5" /> JLPT 听解精听研习工坊
+            <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold flex items-center gap-1">
+              <Headphones className="w-3.5 h-3.5" /> 听解精听工坊
             </span>
-            <span className="text-xs text-teal-100 font-bold">
+            <span className="text-xs text-slate-400 font-medium">
               纯正东京腔原声 · 课题理解 / 即时应答
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             JLPT 听解真题原声盲听与逐句精炼
-          </h2>
-          <p className="text-xs text-teal-100 font-medium">
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500">
             告别“听懂了但选不对”！支持盲听磨耳朵、日文脚本对照、挖空精听与即时应答技巧拆解。
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0 z-10">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={handlePlayAudio}
-            className="px-5 py-2.5 rounded-2xl bg-white text-teal-700 font-black text-xs hover:bg-teal-50 transition shadow-md flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer"
           >
-            <Play className="w-4 h-4 fill-current" />
+            <Play className="w-3.5 h-3.5 fill-current" />
             <span>播放原声音频 ({audioSpeed}x)</span>
           </button>
         </div>
