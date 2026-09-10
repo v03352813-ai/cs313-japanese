@@ -49,9 +49,7 @@ const AdminKeyGeneratorModal = resilientLazy(() => import('./components/AdminKey
 const MultiLangModal = resilientLazy(() => import('./components/MultiLangModal').then(m => ({ default: m.MultiLangModal })), 'MultiLang');
 const WallpaperRewardModal = resilientLazy(() => import('./components/WallpaperRewardModal').then(m => ({ default: m.WallpaperRewardModal })), 'Wallpaper');
 const ExamRegistrationModal = resilientLazy(() => import('./components/ExamRegistrationModal').then(m => ({ default: m.ExamRegistrationModal })), 'ExamRegistration');
-import { ExamRegistrationBanner } from './components/ExamRegistrationBanner';
 import { getSavedLicense, saveLicense, clearLicense } from './data/auth/cardKeys';
-import type { LicenseInfo } from './data/auth/cardKeys';
 import { getDeviceFingerprint } from './utils/fingerprint';
 import { Shield, Sparkles, ChevronLeft, Tablet, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
@@ -271,11 +269,6 @@ export function App() {
         onOpenWallpaperModal={() => setIsWallpaperModalOpen(true)}
         onOpenExamModal={() => setIsExamModalOpen(true)}
       />
-
-      {/* JLPT 考试考期倒计时全局交互横幅 */}
-      <div className="max-w-6xl mx-auto px-4 pt-3 w-full">
-        <ExamRegistrationBanner />
-      </div>
 
       {/* Auto Activated Success Toast Banner */}
       {autoActivatedToast && (
