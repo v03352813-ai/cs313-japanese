@@ -114,6 +114,71 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
 
   const currentQuestion: JlptQuestion | undefined = currentPaper?.questions[currentQuestionIndex];
 
+  // 计算当前试卷三大官方核心板块（言语知识、读解分析、听解原声）的题量与起始位置
+  const sectionTabs = useMemo(() => {
+    if (!currentPaper || !currentPaper.questions || currentPaper.questions.length === 0) return [];
+    
+    let vocabStart = -1, vocabCount = 0;
+    let readingStart = -1, readingCount = 0;
+    let listeningStart = -1, listeningCount = 0;
+
+    currentPaper.questions.forEach((q, idx) => {
+      const isReading = q.questionType === '读解分析' || q.categoryTag.includes('读解');
+      const isListening = q.questionType === '听解理解' || q.categoryTag.includes('听解');
+
+      if (isReading) {
+        if (readingStart === -1) readingStart = idx;
+        readingCount++;
+      } else if (isListening) {
+        if (listeningStart === -1) listeningStart = idx;
+        listeningCount++;
+      } else {
+        if (vocabStart === -1) vocabStart = idx;
+        vocabCount++;
+      }
+    });
+
+    const curQ = currentPaper.questions[currentQuestionIndex];
+    const curIsReading = curQ && (curQ.questionType === '读解分析' || curQ.categoryTag.includes('读解'));
+    const curIsListening = curQ && (curQ.questionType === '听解理解' || curQ.categoryTag.includes('听解'));
+    const curIsVocab = curQ && !curIsReading && !curIsListening;
+
+    const list: { key: string; name: string; icon: string; startIndex: number; count: number; isActive: boolean }[] = [];
+
+    if (vocabCount > 0) {
+      list.push({
+        key: 'vocab',
+        name: '言语知识 (词汇·文法)',
+        icon: '🈳',
+        startIndex: vocabStart,
+        count: vocabCount,
+        isActive: Boolean(curIsVocab)
+      });
+    }
+    if (readingCount > 0) {
+      list.push({
+        key: 'reading',
+        name: '读解分析 (长短篇阅读)',
+        icon: '📖',
+        startIndex: readingStart,
+        count: readingCount,
+        isActive: Boolean(curIsReading)
+      });
+    }
+    if (listeningCount > 0) {
+      list.push({
+        key: 'listening',
+        name: '听解原声 (场景应答)',
+        icon: '🎧',
+        startIndex: listeningStart,
+        count: listeningCount,
+        isActive: Boolean(curIsListening)
+      });
+    }
+
+    return list;
+  }, [currentPaper, currentQuestionIndex]);
+
   // Handle select option
   const handleSelectOption = (optIndex: number) => {
     if (isSubmitted) return;
@@ -201,6 +266,24 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
             <RotateCcw className="w-3.5 h-3.5" />
             <span>重置答卷</span>
           </button>
+        </div>
+      </div>
+
+      {/* 📌 官方 JLPT 考纲权威指引横幅 (消除无写作顾虑，讲透客观机考体系) */}
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-sky-50 via-indigo-50/50 to-slate-50 border border-sky-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-start gap-2.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-sky-500 mt-1 shrink-0 animate-pulse" />
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2 font-black text-slate-900">
+              <span>JLPT 官方考纲权威说明</span>
+              <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 text-[10px] font-extrabold">
+                100% 客观选择题 · 官方无写作
+              </span>
+            </div>
+            <p className="text-slate-600 leading-relaxed font-medium">
+              日本语能力测试（JLPT N1~N5）官方大纲全卷为客观四选一（机读涂卡），<strong>官方不设主观写作（作文）题型</strong>。本机考题库严格对齐官方大纲，完整覆盖<strong>【言语知识】、【文法排词★】、【读解长文分析】与【听解原声】</strong>四大核心板块。
+            </p>
+          </div>
         </div>
       </div>
 
@@ -418,6 +501,31 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           
           {currentQuestion ? (
             <div className="space-y-5">
+              {/* 三大板块快速直达 (言语知识 / 读解长文 / 听解原声) */}
+              {sectionTabs.length > 1 && (
+                <div className="flex items-center gap-1.5 p-1.5 bg-slate-100/90 rounded-2xl overflow-x-auto no-scrollbar">
+                  <span className="text-[11px] font-bold text-slate-500 pl-2 shrink-0">题型直达:</span>
+                  {sectionTabs.map((tab) => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setCurrentQuestionIndex(tab.startIndex)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+                        tab.isActive
+                          ? 'bg-sky-500 text-white shadow-xs font-black'
+                          : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200/60'
+                      }`}
+                      title={`直接跳转到【${tab.name}】首题`}
+                    >
+                      <span>{tab.icon}</span>
+                      <span>{tab.name}</span>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-md ${tab.isActive ? 'bg-white/25 text-white font-black' : 'bg-slate-100 text-slate-600'}`}>
+                        {tab.count}题
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {/* Question Header */}
               <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-2">
@@ -441,10 +549,21 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                 </button>
               </div>
 
-              {/* Passage if any */}
+              {/* Passage if any - 100% Authentic JLPT Reading Layout */}
               {currentQuestion.passage && (
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium whitespace-pre-line">
-                  {currentQuestion.passage}
+                <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/40 border-2 border-amber-200/80 space-y-2.5 select-text shadow-2xs relative">
+                  <div className="flex items-center justify-between pb-2 border-b border-amber-200/60">
+                    <span className="text-xs font-black text-amber-900 flex items-center gap-1.5">
+                      <BookOpen className="w-4 h-4 text-sky-600" />
+                      <span>【读解分析 · 官方全真日文阅读文本材料】</span>
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-white text-amber-800 border border-amber-200 shadow-2xs">
+                      日文原汁原味阅读长文
+                    </span>
+                  </div>
+                  <div className="text-xs sm:text-sm text-slate-800 leading-relaxed font-medium whitespace-pre-line font-serif">
+                    {currentQuestion.passage}
+                  </div>
                 </div>
               )}
 
