@@ -5,7 +5,6 @@ import {
   XCircle, 
   Sparkles, 
   Volume2, 
-  Lock,
   ChevronRight,
   ChevronLeft,
   RotateCcw,
@@ -576,39 +575,6 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               {currentPaper?.questions.length} 道题目 · {currentPaper?.totalTimeMinutes} 分钟
             </span>
           </div>
-        </div>
-
-        {/* Paper Selector Pills (Horizontal Scroll or Grid) */}
-        <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-slate-100 no-scrollbar">
-          {filteredPapers.map((paper, idx) => {
-            const isPaperLocked = !isVip && !paper.isFreePreview && idx !== 0;
-            const isSelected = selectedPaperId === paper.id;
-
-            return (
-              <button
-                key={paper.id}
-                onClick={() => {
-                  if (isPaperLocked) {
-                    onOpenVipModal(`🔒【${paper.title}】为 VIP 会员专享全真试卷！升级终身 VIP 即可畅刷所有 N5~N1 历年大卷！`);
-                    return;
-                  }
-                  setSelectedPaperId(paper.id);
-                  handleResetExam();
-                }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition shrink-0 flex items-center gap-1.5 cursor-pointer border ${
-                  isSelected
-                    ? 'bg-sky-50 border-sky-400 text-sky-700 shadow-2xs ring-1 ring-sky-300'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                {isPaperLocked ? <Lock className="w-3 h-3 text-amber-500" /> : <span className="text-sky-500 font-mono text-[10px]">#{idx + 1}</span>}
-                <span className="max-w-[200px] truncate">{paper.title}</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-slate-100 text-slate-500">
-                  {paper.level}
-                </span>
-              </button>
-            );
-          })}
         </div>
       </div>
 
