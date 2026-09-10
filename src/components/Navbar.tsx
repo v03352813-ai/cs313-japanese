@@ -164,19 +164,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <div className="mobile-grid-5 sm:flex sm:items-center gap-1 sm:gap-2 w-full sm:w-auto min-w-0">
                   <button 
                     onClick={() => setActiveTab('speaking')}
-                    className="min-w-0 w-full sm:w-auto overflow-hidden flex flex-col items-center justify-center px-1 sm:px-3 py-1.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-center cursor-pointer transition shadow-xs active:scale-98"
+                    className="min-w-0 w-full sm:w-auto overflow-hidden flex flex-col items-center justify-center px-1 sm:px-3 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-center cursor-pointer transition shadow-xs shadow-sky-500/20 active:scale-98"
                   >
                     <span className="hidden sm:block text-sm font-black text-white whitespace-nowrap">🎙️ AI口语</span>
                     <span className="block sm:hidden text-[10px] font-black text-white truncate w-full">🎙️ 口语</span>
-                    <span className="hidden sm:block text-[9px] text-orange-100 font-medium whitespace-nowrap">麦克风对练</span>
-                    <span className="block sm:hidden text-[8px] text-orange-100 font-medium truncate w-full">对练</span>
+                    <span className="hidden sm:block text-[9px] text-sky-100 font-medium whitespace-nowrap">麦克风对练</span>
+                    <span className="block sm:hidden text-[8px] text-sky-100 font-medium truncate w-full">对练</span>
                   </button>
                   <button 
                     onClick={() => setActiveTab('exam')}
                     className="min-w-0 w-full sm:w-auto overflow-hidden flex flex-col items-center justify-center px-1 sm:px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-center cursor-pointer hover:bg-slate-100 transition active:scale-98"
                   >
-                    <span className="hidden sm:block text-sm font-black text-slate-900 whitespace-nowrap">56套</span>
-                    <span className="block sm:hidden text-[10px] font-black text-slate-900 truncate w-full">56套</span>
+                    <span className="hidden sm:block text-sm font-black text-slate-900 whitespace-nowrap">N1~N5</span>
+                    <span className="block sm:hidden text-[10px] font-black text-slate-900 truncate w-full">N1~N5</span>
                     <span className="hidden sm:block text-[9px] text-slate-500 font-medium whitespace-nowrap">历届真题</span>
                     <span className="block sm:hidden text-[8px] text-slate-500 font-medium truncate w-full">真题</span>
                   </button>
@@ -184,21 +184,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setActiveTab('vocab')}
                     className="min-w-0 w-full sm:w-auto overflow-hidden flex flex-col items-center justify-center px-1 sm:px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-center cursor-pointer hover:bg-slate-100 transition active:scale-98"
                   >
-                    <span className="hidden sm:block text-sm font-black text-slate-900 whitespace-nowrap">5000+</span>
-                    <span className="block sm:hidden text-[10px] font-black text-slate-900 truncate w-full">5000+</span>
-                    <span className="hidden sm:block text-[9px] text-slate-500 font-medium whitespace-nowrap">场景词库</span>
+                    <span className="hidden sm:block text-sm font-black text-slate-900 whitespace-nowrap">6500+</span>
+                    <span className="block sm:hidden text-[10px] font-black text-slate-900 truncate w-full">6500+</span>
+                    <span className="hidden sm:block text-[9px] text-slate-500 font-medium whitespace-nowrap">分级词库</span>
                     <span className="block sm:hidden text-[8px] text-slate-500 font-medium truncate w-full">词库</span>
                   </button>
-                  {/* 框位 1：官方考期 (全景色) */}
+                  {/* 框位 1：官方考期 (全景色 - 与全局天蓝色调统一) */}
                   <button 
                     onClick={onOpenExamModal}
-                    className="min-w-0 w-full sm:w-auto overflow-hidden flex flex-col items-center justify-center px-1 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white text-center cursor-pointer transition shadow-xs active:scale-98 group"
-                    title="2026 TOPIK 官方考期全景与避坑指南"
+                    className="min-w-0 w-full sm:w-auto overflow-hidden flex flex-col items-center justify-center px-1 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 hover:from-sky-700 hover:to-indigo-700 text-white text-center cursor-pointer transition shadow-xs shadow-sky-500/20 active:scale-98 group"
+                    title="2026 JLPT 官方考期全景与避坑指南"
                   >
                     <span className="hidden sm:block text-sm font-black text-white whitespace-nowrap">📅 官方考期</span>
                     <span className="block sm:hidden text-[10px] font-black text-white truncate w-full">📅 考期</span>
-                    <span className="hidden sm:block text-[9px] text-rose-100 font-medium whitespace-nowrap">{examCountdown.buttonSubText}</span>
-                    <span className="block sm:hidden text-[8px] text-rose-100 font-medium truncate w-full">{examCountdown.days}天</span>
+                    <span className="hidden sm:block text-[9px] text-sky-100 font-medium whitespace-nowrap">{examCountdown.buttonSubText}</span>
+                    <span className="block sm:hidden text-[8px] text-sky-100 font-medium truncate w-full">{examCountdown.days}天</span>
                   </button>
                   <button 
                     onClick={onOpenWallpaperModal}
@@ -220,19 +220,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                       className="p-1.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition border border-slate-200/80 shrink-0 cursor-pointer flex items-center gap-1 text-xs font-bold"
                       title="店主管理后台"
                     >
-                      <Settings2 className="w-3.5 h-3.5 text-orange-500" />
+                      <Settings2 className="w-3.5 h-3.5 text-sky-500" />
                       <span className="hidden xl:inline text-slate-700 font-bold">后台</span>
                     </button>
 
                     {license.isVip ? (
-                      <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-xs shadow-orange-500/20 shrink-0 whitespace-nowrap">
+                      <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white text-xs font-bold shadow-xs shadow-sky-500/20 shrink-0 whitespace-nowrap">
                         <Crown className="w-3.5 h-3.5 shrink-0" />
                         <span className="whitespace-nowrap">{license.planName || 'VIP 终身卡'}</span>
                       </div>
                     ) : (
                       <button
                         onClick={onOpenVipModal}
-                        className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs font-bold shadow-xs shadow-orange-500/20 active:scale-98 transition shrink-0 whitespace-nowrap cursor-pointer"
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-white text-xs font-bold shadow-xs shadow-sky-500/20 active:scale-98 transition shrink-0 whitespace-nowrap cursor-pointer"
                       >
                         <KeyRound className="w-3.5 h-3.5 shrink-0" />
                         <span className="whitespace-nowrap">激活</span>
@@ -263,11 +263,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onClick={() => setActiveTab(item.id)}
                       className={`w-full flex items-center justify-center gap-1 py-1.5 px-0.5 rounded-lg text-xs lg:text-[13px] font-bold transition-all whitespace-nowrap select-none cursor-pointer ${
                         isActive
-                          ? 'bg-white text-orange-600 shadow-2xs shadow-slate-200/90 font-black'
+                          ? 'bg-white text-sky-600 shadow-2xs shadow-slate-200/90 font-black'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                       }`}
                     >
-                      <Icon className={`w-3.5 h-3.5 shrink-0 hidden lg:inline ${isActive ? 'text-orange-500' : 'text-slate-400'}`} />
+                      <Icon className={`w-3.5 h-3.5 shrink-0 hidden lg:inline ${isActive ? 'text-sky-500' : 'text-slate-400'}`} />
                       <span>{item.label}</span>
                     </button>
                   );
@@ -287,11 +287,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onClick={() => setActiveTab(item.id)}
                         className={`min-w-0 w-full flex items-center justify-center gap-0.5 py-1.5 px-0.5 rounded-xl text-[10.5px] font-bold transition whitespace-nowrap cursor-pointer select-none ${
                           isActive
-                            ? 'bg-white text-orange-600 shadow-xs font-black'
+                            ? 'bg-white text-sky-600 shadow-xs font-black'
                             : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
-                        <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-orange-500' : 'text-slate-400'}`} />
+                        <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-sky-500' : 'text-slate-400'}`} />
                         <span className="truncate">{item.shortLabel || item.label}</span>
                       </button>
                     );
@@ -309,11 +309,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onClick={() => setActiveTab(item.id)}
                         className={`min-w-0 w-full flex items-center justify-center gap-0.5 py-1.5 px-0.5 rounded-xl text-[10.5px] font-bold transition whitespace-nowrap cursor-pointer select-none ${
                           isActive
-                            ? 'bg-white text-orange-600 shadow-xs font-black'
+                            ? 'bg-white text-sky-600 shadow-xs font-black'
                             : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
-                        <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-orange-500' : 'text-slate-400'}`} />
+                        <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-sky-500' : 'text-slate-400'}`} />
                         <span className="truncate">{item.shortLabel || item.label}</span>
                       </button>
                     );
@@ -344,22 +344,22 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div 
               onClick={handleLogoClick}
               className="flex items-center gap-2 cursor-pointer select-none shrink-0 group"
-              title="韩语研习社 (点击返回首页)"
+              title="日语研习社 (点击返回首页)"
             >
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-orange-500 via-amber-500 to-orange-600 flex items-center justify-center text-white shadow-sm shadow-orange-500/20 font-black text-base sm:text-lg tracking-tight group-hover:scale-105 transition shrink-0">
-                KR
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-sky-500 via-indigo-500 to-teal-500 flex items-center justify-center text-white shadow-sm shadow-sky-500/20 font-black text-base sm:text-lg tracking-tight group-hover:scale-105 transition shrink-0">
+                JP
               </div>
               <div className="flex items-center gap-1.5 whitespace-nowrap shrink-0">
                 <span className="font-black text-sm sm:text-base tracking-tight text-slate-900">
-                  韩语研习社
+                  日语研习社
                 </span>
-                <span className="text-[10px] font-black px-1.5 py-0.2 rounded-full bg-orange-50 text-orange-600 border border-orange-200/80 hidden sm:inline">
-                  TOPIK
+                <span className="text-[10px] font-black px-1.5 py-0.2 rounded-full bg-sky-50 text-sky-600 border border-sky-200/80 hidden sm:inline">
+                  JLPT
                 </span>
                 {currentActiveItem && currentActiveItem.id !== 'home' && (
                   <div className="hidden lg:flex items-center gap-1.5 pl-2.5 ml-2 border-l border-slate-200">
                     <span className="text-xs text-slate-400 font-medium">当前模块:</span>
-                    <span className="px-2 py-0.5 rounded-lg bg-orange-50 text-orange-600 font-bold text-xs border border-orange-200/60">
+                    <span className="px-2 py-0.5 rounded-lg bg-sky-50 text-sky-600 font-bold text-xs border border-sky-200/60">
                       {currentActiveItem.label}
                     </span>
                   </div>
@@ -371,8 +371,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0 whitespace-nowrap">
               <button
                 onClick={onOpenExamModal}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white text-xs font-bold transition shrink-0 cursor-pointer shadow-2xs"
-                title="查看 TOPIK 官方考期全景与避坑指南"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 hover:from-sky-700 hover:to-indigo-700 text-white text-xs font-bold transition shrink-0 cursor-pointer shadow-2xs"
+                title="查看 JLPT 官方考期全景与避坑指南"
               >
                 <span>📅</span>
                 <span className="hidden sm:inline">官方考期</span>
@@ -395,7 +395,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className="p-1.5 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition border border-slate-200/80 shrink-0 cursor-pointer flex items-center gap-1 text-xs font-bold"
                     title="店主管理后台（卡密生成与多语种管理）"
                   >
-                    <Settings2 className="w-3.5 h-3.5 text-orange-500" />
+                    <Settings2 className="w-3.5 h-3.5 text-sky-500" />
                     <span className="hidden sm:inline text-slate-700 font-bold">管理后台</span>
                   </button>
 
@@ -411,14 +411,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* VIP Status or Activation Button */}
               {license.isVip ? (
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold shadow-xs shadow-orange-500/20 shrink-0 whitespace-nowrap">
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white text-xs font-bold shadow-xs shadow-sky-500/20 shrink-0 whitespace-nowrap">
                   <Crown className="w-3.5 h-3.5 shrink-0" />
                   <span className="whitespace-nowrap">{license.planName || 'VIP 终身卡'}</span>
                 </div>
               ) : (
                 <button
                   onClick={onOpenVipModal}
-                  className="flex items-center gap-1 px-3 py-1 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs font-bold shadow-xs shadow-orange-500/20 active:scale-98 transition shrink-0 whitespace-nowrap cursor-pointer"
+                  className="flex items-center gap-1 px-3 py-1 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 text-white text-xs font-bold shadow-xs shadow-sky-500/20 active:scale-98 transition shrink-0 whitespace-nowrap cursor-pointer"
                 >
                   <KeyRound className="w-3.5 h-3.5 shrink-0" />
                   <span className="whitespace-nowrap">卡密激活</span>
@@ -439,11 +439,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => setActiveTab(item.id)}
                   className={`w-full flex items-center justify-center gap-1.5 py-2 px-1 rounded-xl text-xs lg:text-[13px] font-bold transition-all whitespace-nowrap select-none cursor-pointer ${
                     isActive
-                      ? 'bg-white text-orange-600 shadow-2xs shadow-slate-200/90 font-black ring-1 ring-orange-500/20'
+                      ? 'bg-white text-sky-600 shadow-2xs shadow-slate-200/90 font-black ring-1 ring-sky-500/20'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-white/70'
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-orange-500' : 'text-slate-400'}`} />
+                  <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-sky-500' : 'text-slate-400'}`} />
                   <span>{item.label}</span>
                 </button>
               );
@@ -463,11 +463,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setActiveTab(item.id)}
                     className={`min-w-0 w-full flex items-center justify-center gap-0.5 py-1.5 px-0.5 rounded-lg transition whitespace-nowrap text-[10.5px] font-bold cursor-pointer select-none ${
                       isActive
-                        ? 'text-orange-600 font-black bg-orange-50 border border-orange-200/70 shadow-2xs'
+                        ? 'text-sky-600 font-black bg-sky-50 border border-sky-200/70 shadow-2xs'
                         : 'text-slate-600 hover:text-slate-900 bg-slate-50'
                     }`}
                   >
-                    <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-orange-500' : 'text-slate-400'}`} />
+                    <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-sky-500' : 'text-slate-400'}`} />
                     <span className="truncate">{item.shortLabel || item.label}</span>
                   </button>
                 );
@@ -485,11 +485,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setActiveTab(item.id)}
                     className={`min-w-0 w-full flex items-center justify-center gap-0.5 py-1.5 px-0.5 rounded-lg transition whitespace-nowrap text-[10.5px] font-bold cursor-pointer select-none ${
                       isActive
-                        ? 'text-orange-600 font-black bg-orange-50 border border-orange-200/70 shadow-2xs'
+                        ? 'text-sky-600 font-black bg-sky-50 border border-sky-200/70 shadow-2xs'
                         : 'text-slate-600 hover:text-slate-900 bg-slate-50'
                     }`}
                   >
-                    <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-orange-500' : 'text-slate-400'}`} />
+                    <Icon className={`w-3 h-3 shrink-0 ${isActive ? 'text-sky-500' : 'text-slate-400'}`} />
                     <span className="truncate">{item.shortLabel || item.label}</span>
                   </button>
                 );
