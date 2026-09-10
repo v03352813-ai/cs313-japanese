@@ -32,12 +32,12 @@ interface JlptExamViewProps {
   onNavigateToWriting?: () => void;
 }
 
-type MainExamMode = 'marathon_full' | 'full_paper' | 'special_drill';
+type MainExamMode = 'marathon_full' | 'full_paper' | 'special_drill' | 'all_papers';
 type LevelFilterType = 'all' | 'n1' | 'n2' | 'n3' | 'n4' | 'n5';
 
 export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModal, onNavigateToWriting }) => {
   const [mainMode, setMainMode] = useState<MainExamMode>('marathon_full');
-  const [selectedPaperId, setSelectedPaperId] = useState<string>('jlpt-n2-2025-dec');
+  const [selectedPaperId, setSelectedPaperId] = useState<string>('marathon-jlpt-n1-2025-12');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -49,9 +49,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
   // Filter papers
   const filteredPapers = useMemo(() => {
     return JAPANESE_JLPT_EXAMS.filter((paper) => {
-      if (mainMode === 'marathon_full' && paper.mode !== 'marathon_full') return false;
-      if (mainMode === 'full_paper' && paper.mode !== 'full_paper') return false;
-      if (mainMode === 'special_drill' && paper.mode !== 'special_drill') return false;
+      if (mainMode !== 'all_papers' && paper.mode !== mainMode) return false;
 
       if (levelFilter !== 'all') {
         const lvlMap: Record<string, string> = {
@@ -77,12 +75,14 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
     });
   }, [mainMode, levelFilter, selectedCategory, searchQuery]);
 
+  const totalCount = useMemo(() => JAPANESE_JLPT_EXAMS.length, []);
   const marathonCount = useMemo(() => JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'marathon_full').length, []);
   const fullPaperCount = useMemo(() => JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'full_paper').length, []);
   const drillCount = useMemo(() => JAPANESE_JLPT_EXAMS.filter(p => p.mode === 'special_drill').length, []);
 
   // Filtered by current mode (before level/cat/search)
   const currentModePapers = useMemo(() => {
+    if (mainMode === 'all_papers') return JAPANESE_JLPT_EXAMS;
     return JAPANESE_JLPT_EXAMS.filter(p => p.mode === mainMode);
   }, [mainMode]);
 
@@ -406,28 +406,28 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               每年 7月 / 12月 考后官方考期同步入库
             </span>
             <span className="text-slate-300">|</span>
-            <span className="text-sky-600 font-extrabold">N1~N5 历届考期全覆盖</span>
+            <span className="text-sky-600 font-extrabold">{marathonCount}套官方全真大卷 · 全库共{totalCount}套真题</span>
           </div>
         </div>
 
-        {/* Row 1: 3大核心考试模式分段器 (独立整排，3等分网格，大气清晰) */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-1.5 bg-slate-100/90 rounded-2xl">
+        {/* Row 1: 4大核心考试模式分段器 (独立整排，4等分网格，大气清晰) */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 p-1.5 bg-slate-100/90 rounded-2xl">
           <button
             onClick={() => {
               setMainMode('marathon_full');
               setLevelFilter('all');
               setSelectedCategory('全部');
             }}
-            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+            className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
               mainMode === 'marathon_full'
                 ? 'bg-white text-sky-600 shadow-xs font-black'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
-            <Timer className="w-3.5 h-3.5 text-sky-500" />
-            <span>🏛️ 官方历届考期全真卷</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${mainMode === 'marathon_full' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
-              7月/12月大考
+            <Timer className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+            <span className="truncate">🏛️ 官方考期全真卷</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${mainMode === 'marathon_full' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
+              {marathonCount}套大考
             </span>
           </button>
 
@@ -437,16 +437,16 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               setLevelFilter('all');
               setSelectedCategory('全部');
             }}
-            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+            className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
               mainMode === 'full_paper'
                 ? 'bg-white text-sky-600 shadow-xs font-black'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
-            <FileCheck2 className="w-3.5 h-3.5 text-sky-500" />
-            <span>⚡ 考前高频精选卷</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${mainMode === 'full_paper' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
-              高频冲刺
+            <FileCheck2 className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+            <span className="truncate">⚡ 考前高频精选卷</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${mainMode === 'full_paper' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
+              {fullPaperCount}套冲刺
             </span>
           </button>
 
@@ -456,16 +456,35 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               setLevelFilter('all');
               setSelectedCategory('全部');
             }}
-            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+            className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
               mainMode === 'special_drill'
                 ? 'bg-white text-sky-600 shadow-xs font-black'
                 : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
             }`}
           >
-            <Target className="w-3.5 h-3.5 text-sky-500" />
-            <span>🎯 四大核心题型专项突破</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${mainMode === 'special_drill' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
-              题型专项
+            <Target className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+            <span className="truncate">🎯 四大题型专项</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${mainMode === 'special_drill' ? 'bg-sky-100 text-sky-700' : 'bg-slate-200 text-slate-600'}`}>
+              {drillCount}套突破
+            </span>
+          </button>
+
+          <button
+            onClick={() => {
+              setMainMode('all_papers');
+              setLevelFilter('all');
+              setSelectedCategory('全部');
+            }}
+            className={`py-2 px-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+              mainMode === 'all_papers'
+                ? 'bg-white text-indigo-600 shadow-xs font-black'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
+            <span className="truncate">🌟 全部真题综合库</span>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold shrink-0 ${mainMode === 'all_papers' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-200 text-slate-600'}`}>
+              全{totalCount}套
             </span>
           </button>
         </div>
@@ -500,12 +519,12 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
             <div className="flex items-center gap-1.5 flex-wrap">
               {(['all', 'n1', 'n2', 'n3', 'n4', 'n5'] as LevelFilterType[]).map((lvl) => {
                 const labelMap: Record<string, string> = {
-                  all: '全部级别',
-                  n1: 'N1 (高级)',
-                  n2: 'N2 (中高级)',
-                  n3: 'N3 (中级)',
-                  n4: 'N4 (初中级)',
-                  n5: 'N5 (入门)'
+                  all: `全部级别 (${levelCounts.all})`,
+                  n1: `N1 (${levelCounts.n1})`,
+                  n2: `N2 (${levelCounts.n2})`,
+                  n3: `N3 (${levelCounts.n3})`,
+                  n4: `N4 (${levelCounts.n4})`,
+                  n5: `N5 (${levelCounts.n5})`
                 };
                 const isSelected = levelFilter === lvl;
                 return (
@@ -531,7 +550,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
               <FileCheck2 className="w-4 h-4 text-sky-500" />
-              <span>选择作答试卷 (每年7月与12月考后持续同步收录新考期):</span>
+              <span>选择作答试卷 (当前库共 {filteredPapers.length} 套 · 全库共 {totalCount} 套):</span>
             </div>
 
             <div className="relative flex-1 min-w-0 max-w-2xl">
