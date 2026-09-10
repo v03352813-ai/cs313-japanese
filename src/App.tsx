@@ -292,7 +292,7 @@ export function App() {
           <div className="bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 text-white py-2.5 px-4 sm:px-6 rounded-2xl text-xs font-semibold shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 border border-sky-400/30 min-w-0">
             <div className="flex items-start sm:items-center gap-2 min-w-0">
               <Sparkles className="w-4 h-4 shrink-0 text-sky-200 mt-0.5 sm:mt-0" />
-              <span className="leading-snug break-words min-w-0">当前为【免费试学模式】· 拍下激活码即享 JLPT 官方历届考期真题机考（每年7月/12月考后持续同步更新）、6,500+ 核心词库与经典动漫名场面原声精听</span>
+              <span className="leading-snug break-words min-w-0">当前为【免费试学模式】· 拍下激活码即享 JLPT 官方历届考期真题机考（每年7月/12月考后持续同步更新）、6,500+ 核心词库与影视高光名台词原声精听</span>
             </div>
             <button
               onClick={() => setIsVipModalOpen(true)}

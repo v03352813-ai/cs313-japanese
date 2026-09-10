@@ -412,7 +412,7 @@ export const AdminKeyGeneratorModal: React.FC<AdminKeyGeneratorModalProps> = ({
                     {accessPolicy === 'freemium' && <Check className="w-3.5 h-3.5 text-sky-600" />}
                   </div>
                   <p className="text-[11px] text-slate-500 leading-relaxed">
-                    开放部分词汇与前3部动漫名场面供买家免费试学。遇到重磅VIP模块（全量动漫、AI对练、JLPT真题考场）自动弹窗引导拍卡密激活，自然转化率极高！
+                    开放部分词汇与前3部原声名台词供买家免费试学。遇到重磅VIP模块（全量原声精听、AI对练、JLPT真题考场）自动弹窗引导拍卡密激活，自然转化率极高！
                   </p>
                 </button>
 

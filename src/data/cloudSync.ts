@@ -22,7 +22,7 @@ export interface ContentUpdateLog {
   id: string;
   date: string;
   version: string;
-  tag: '真题上新' | '经典动漫' | '考纲扩充' | '功能升级';
+  tag: '真题上新' | '原声精听' | '考纲扩充' | '功能升级';
   title: string;
   description: string;
 }
@@ -33,7 +33,7 @@ export const CONTENT_UPDATE_LOGS: ContentUpdateLog[] = [
     id: 'up-001',
     date: '本周最新',
     version: 'v2.6',
-    tag: '经典动漫',
+    tag: '原声精听',
     title: '上新《葬送的芙莉莲》欣梅尔名台词精析与影子跟读',
     description: '新增辛梅尔与芙莉莲名场面台词精析，包含地道口语与常体接续拆解。'
   },
@@ -57,7 +57,7 @@ export const CONTENT_UPDATE_LOGS: ContentUpdateLog[] = [
     id: 'up-004',
     date: '2026-08',
     version: 'v2.3',
-    tag: '经典动漫',
+    tag: '原声精听',
     title: '上新《非自然死亡》法医解剖室经典法医学名台词',
     description: '三澄美琴经典台词解析，攻克动词使役被动态与高频敬语表达。'
   },
@@ -113,7 +113,7 @@ export const DAILY_QUOTES_POOL: DailyQuote[] = [
     ko: '大事なのは、何を選んだかじゃなくて、選んだ後どう生きるかだ。',
     zh: '重要的不是选择了什么，而是做出选择之后如何活下去。',
     roman: 'Daiji na no wa, nani o eranda ka ja nakute, eranda ato dou ikiru ka da.',
-    source: '经典日剧励志名言 · 每日自律',
+    source: '经典影视励志名言 · 每日自律',
     keyGrammar: '大事なのは〜だ (重点提示) + 〜じゃなくて (不是...而是...) + 〜後 (之后)',
     audioText: '大事なのは、何を選んだかじゃなくて、選んだ後どう生きるかだ。'
   }

@@ -673,7 +673,7 @@ export const AISpeakingView: React.FC<AISpeakingViewProps> = ({ isVip, onOpenVip
               </h2>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              JLPT 实用会话对练 · 东京生活实操 · 日企商务面试 · 经典动漫名场面对戏
+              JLPT 实用会话对练 · 东京生活实操 · 日企商务面试 · 经典影视名场面对戏
             </p>
           </div>
         </div>
@@ -722,7 +722,7 @@ export const AISpeakingView: React.FC<AISpeakingViewProps> = ({ isVip, onOpenVip
           { key: 'jlpt_speaking', label: 'JLPT 实用会话', count: AI_SCENARIOS_DATA.filter(s => s.category === 'jlpt_speaking').length },
           { key: 'daily_life', label: '生活实用', count: AI_SCENARIOS_DATA.filter(s => s.category === 'daily_life').length },
           { key: 'business_work', label: '职场与面试', count: AI_SCENARIOS_DATA.filter(s => s.category === 'business_work').length },
-          { key: 'drama_roleplay', label: '动漫名场面对戏', count: AI_SCENARIOS_DATA.filter(s => s.category === 'drama_roleplay').length }
+          { key: 'drama_roleplay', label: '影视角色对戏', count: AI_SCENARIOS_DATA.filter(s => s.category === 'drama_roleplay').length }
         ].map((tab) => (
           <button
             key={tab.key}
@@ -768,7 +768,7 @@ export const AISpeakingView: React.FC<AISpeakingViewProps> = ({ isVip, onOpenVip
                   key={sc.id}
                   onClick={() => {
                     if (isLocked) {
-                      onOpenVipModal?.(`🔒【${sc.title}】为 VIP 专属口语实训场景！升级 VIP 终身卡（仅 ¥49.9），即可畅享 JLPT 实战会话、东京生活实操、外企面试与经典动漫名场面对戏！`);
+                      onOpenVipModal?.(`🔒【${sc.title}】为 VIP 专属口语实训场景！升级 VIP 终身卡（仅 ¥49.9），即可畅享 JLPT 实战会话、东京生活实操、外企面试与经典影视名场面对戏！`);
                       return;
                     }
                     setActiveScenarioId(sc.id);

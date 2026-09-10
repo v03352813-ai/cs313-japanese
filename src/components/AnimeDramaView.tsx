@@ -409,7 +409,7 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="space-y-0.5">
             <h2 className="text-xl font-black text-slate-900 flex items-center gap-2 flex-wrap">
-              <span>经典动漫与日剧 · 原声台词精听</span>
+              <span>原声名台词精听研习室</span>
               <span className="text-xs font-bold text-sky-700 bg-sky-100 border border-sky-200/80 px-2.5 py-0.5 rounded-full">
                 🔥 每周持续扩充更新 (每周+6部)
               </span>
@@ -421,7 +421,7 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
               <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold">
                 🎧 原声名台词音频 · 逐句盲听与影子跟读 · 非视频流媒体
               </span>
-              <span>吉卜力·新海诚·高分日剧名台词精析，逐句盲听、影子跟读与考点拆解！</span>
+              <span>经典高光名台词原声音频精析，逐句盲听、影子跟读与考点拆解！</span>
             </p>
           </div>
 
@@ -473,7 +473,7 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="搜索动漫、日剧名或台词..."
+                placeholder="搜索剧目名或台词关键词..."
                 className="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs bg-white focus:outline-hidden focus:ring-2 focus:ring-sky-500/20 focus:border-sky-500"
               />
             </div>

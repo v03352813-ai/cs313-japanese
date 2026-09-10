@@ -125,7 +125,7 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
                 </span>
               </div>
               <p className="text-xs text-slate-600 mt-0.5 font-medium">
-                JLPT N5~N1全真考场 + 6,500+分级词库 + 420+文法宝典 + 30部动漫精听 + 2台设备授权
+                JLPT N5~N1全真考场 + 6,500+分级词库 + 420+文法宝典 + 30部原声名台词精听 + 2台设备授权
               </p>
             </div>
           </div>
@@ -201,7 +201,7 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                    <span>30 部经典动漫日剧精听</span>
+                    <span>30 部原声名台词精听</span>
                   </div>
                 </div>
               </div>

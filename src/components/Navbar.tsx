@@ -151,11 +151,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
 
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-slate-900">
-                  日语备考与追番，从未如此简单
+                  日语备考与口语听力，从未如此简单
                 </h1>
 
                 <p className="text-xs text-slate-500 font-medium leading-snug">
-                  AI 口语考级陪练 + JLPT 官方全真机考 + 6,500+ 高频考纲词库 + 420+ 核心文法宝典 + 动漫日剧原声精听
+                  AI 口语考级陪练 + JLPT 官方全真机考 + 6,500+ 高频考纲词库 + 420+ 核心文法宝典 + 原声名台词精听
                 </p>
               </div>
 

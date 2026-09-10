@@ -128,23 +128,23 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
   },
   speaking: {
     id: 'speaking',
-    name: '兴趣日常 / 动漫日剧实战',
-    targetAudience: '无字幕追番 · 突破哑巴日语',
+    name: '日常会话 / 原声名台词精听',
+    targetAudience: '高光台词原声盲听 · 突破哑巴日语',
     tag: '沉浸开口',
     icon: '🎙️',
     activeBorder: 'border-violet-500',
     activeBg: 'bg-violet-50/70 border-violet-400 text-violet-950',
     activeRing: 'ring-2 ring-violet-500/20 shadow-md',
-    desc: '告别死板背诵！经典动漫日剧原声名台词精听（每周+6部持续扩充更新） ➔ 麦克风连线 24h AI 角色语伴对练 ➔ 艾宾浩斯易错会话复盘！',
+    desc: '告别死板背诵！经典影视名台词逐句原声精听（每周+6部持续扩充更新） ➔ 麦克风连线 24h AI 角色语伴对练 ➔ 艾宾浩斯日常会话复盘！',
     steps: [
       {
         stepNum: '01',
         stepLabel: '第 1 步 · 原声精听',
-        title: '经典动漫与日剧 · 原声台词精听',
+        title: '原声名台词 · 逐句精听与跟读',
         targetBadge: '原声磨耳朵 · 考点精析',
         badgeBg: 'bg-sky-100 text-sky-800 border border-sky-200/70',
-        desc: '精选《千与千寻》《你的名字》《非自然死亡》《半泽直树》等名场面，逐句盲听、影子跟读与考点拆解（每周持续扩充）。',
-        actionText: '进入动漫日剧精听',
+        desc: '精选《千与千寻》《你的名字》《非自然死亡》《半泽直树》等高光名场面台词音频，逐句盲听、影子跟读与考点拆解（每周持续扩充）。',
+        actionText: '进入原声名台词精听',
         targetTab: 'kdrama',
         icon: Headphones,
         buttonBg: 'bg-sky-500 hover:bg-sky-600 text-white shadow-xs'
@@ -628,7 +628,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
 
       </div>
 
-      {/* --- 5. 经典动漫与日剧名台词研习室 (精选 4 部 + 30部全库直达) --- */}
+      {/* --- 5. 原声名台词精听研习室 (精选 4 部 + 30部全库直达) --- */}
       <div
         onClick={() => onSelectModule('kdrama')}
         className="group bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/80 shadow-md shadow-slate-200/40 hover:shadow-xl hover:border-sky-300 transition-all duration-300 cursor-pointer overflow-hidden space-y-4 relative"
@@ -640,17 +640,17 @@ export const HomePortal: React.FC<HomePortalProps> = ({
                 <Headphones className="w-4 h-4" />
               </span>
               <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition">
-                经典动漫与日剧 · 名场面台词研习室
+                原声名台词精听研习室
               </h3>
               <span className="px-2.5 py-0.5 rounded-md bg-sky-50 text-sky-600 text-xs font-bold border border-sky-200/60">
-                🎧 原声磨耳朵 · 影子跟读
+                🎧 原声音频精听 · 影子跟读
               </span>
             </div>
             <p className="text-xs text-slate-500 font-medium flex items-center gap-1.5 flex-wrap">
               <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded-md bg-sky-100 text-sky-700 text-[10px] font-bold">
                 每周持续扩充更新
               </span>
-              <span>精选《千与千寻》《你的名字》《非自然死亡》等 {ANIME_DRAMA_SCENES.length}+ 部名场面，逐句盲听、影子跟读与考点拆解！</span>
+              <span>精选《千与千寻》《你的名字》《非自然死亡》等 {ANIME_DRAMA_SCENES.length}+ 部名场面原声音频，逐句盲听、影子跟读与考点拆解！</span>
             </p>
           </div>
 
@@ -678,7 +678,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
                 key={sceneItem.id}
                 onClick={() => {
                   if (isSceneLocked) {
-                    onOpenVipModal(`🔒《${sceneItem.title}》(${sceneItem.sceneTitle})为 VIP 会员专属原声台词精听！升级 VIP 终身卡（仅 ¥49.9），即可解锁全部 ${ANIME_DRAMA_SCENES.length}+ 部动漫日剧沉浸台词跟读与每周持续更新！`);
+                    onOpenVipModal(`🔒《${sceneItem.title}》(${sceneItem.sceneTitle})为 VIP 会员专属原声台词精听！升级 VIP 终身卡（仅 ¥49.9），即可解锁全部 ${ANIME_DRAMA_SCENES.length}+ 部经典影视原声台词沉浸精听与每周持续更新！`);
                     return;
                   }
                   onSelectModule('kdrama', sceneItem.id);
@@ -690,7 +690,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
                   koreanDramaTitle={sceneItem.japaneseTitle}
                   sceneTitle={sceneItem.sceneTitle}
                   levelTag={sceneItem.level}
-                  category="动漫名场面"
+                  category="原声台词精听"
                   genre={sceneItem.genre}
                   actionText="▶ 立即精学"
                   className="min-h-[160px] sm:min-h-[170px]"
@@ -716,49 +716,14 @@ export const HomePortal: React.FC<HomePortalProps> = ({
             }}
             className="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-slate-50 via-sky-50/60 to-slate-50 hover:from-sky-100 hover:to-sky-50 border border-slate-200/80 hover:border-sky-300 text-slate-700 hover:text-sky-700 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition duration-200 shadow-2xs group cursor-pointer"
           >
-            <span>🎬 查看全部 {ANIME_DRAMA_SCENES.length}+ 部经典动漫与日剧原声研习库（每周持续扩充 · 包含《千与千寻》《你的名字》《非自然死亡》《半泽直树》等）</span>
+            <span>🎬 查看全部 {ANIME_DRAMA_SCENES.length}+ 部经典原声台词研习库（每周持续扩充 · 包含《千与千寻》《你的名字》《非自然死亡》《半泽直树》等高光台词音频）</span>
             <ArrowRight className="w-4 h-4 text-sky-500 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
 
       </div>
 
-      {/* --- 6. 进阶拓展 · EJU 日本留学考试小论文与商务写作工坊 --- */}
-      <div 
-        onClick={() => onSelectModule('writing')}
-        className="bg-gradient-to-r from-slate-900 via-sky-950 to-indigo-950 rounded-3xl p-5 sm:p-6 text-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 border border-sky-900/50 group"
-      >
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[11px] font-black">
-              进阶选修 · 赴日升学与日企实战
-            </span>
-            <span className="text-[11px] text-slate-300">
-              📌 注：JLPT 官方考纲为纯客观选择题无作文，此工坊专为留考与商务设计
-            </span>
-          </div>
-          <h3 className="text-lg sm:text-xl font-black tracking-tight text-white group-hover:text-sky-300 transition">
-            EJU 日本留学考试小论文 · 日企商务邮件 · 官方原稿纸 AI 批改
-          </h3>
-          <p className="text-xs text-slate-300 leading-relaxed font-medium">
-            突破「常体（だ・である）」与「敬体（です・ます）」混用致命雷区，支持 400 字官方原稿纸排版规则诊断、高级学术句式升级与名校小论文满分范文！
-          </p>
-        </div>
-
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelectModule('writing');
-          }}
-          className="px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs shrink-0 flex items-center justify-center gap-1.5 shadow-sm transition active:scale-98 cursor-pointer self-start md:self-auto"
-        >
-          <PenTool className="w-3.5 h-3.5" />
-          <span>进入写作工坊</span>
-          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-        </button>
-      </div>
-
-      {/* --- 7. 学员美学福利 · 一子一木 4K 伴学治愈壁纸屋横幅 --- */}
+      {/* --- 6. 学员美学福利 · 一子一木 4K 伴学治愈壁纸屋横幅 --- */}
       <WallpaperBanner onOpenWallpaperModal={onOpenWallpaperModal} />
 
     </div>

@@ -84,7 +84,7 @@ export const CS313_LANGUAGES: Record<LanguageCode, LanguageProfile> = {
       vocabCount: '6,500+ JLPT 核心高频词',
       grammarCount: '420+ 经典句型与句尾接续',
       examCount: 'N1~N5 历届官方考期真题库（每年7月/12月考后持续同步扩充）',
-      mediaTheme: '吉卜力动漫金句 & 经典日剧对白精学（每周持续扩充更新）'
+      mediaTheme: '经典影视名台词 & 原声对白精听（每周持续扩充更新）'
     },
     status: 'ONLINE'
   },
