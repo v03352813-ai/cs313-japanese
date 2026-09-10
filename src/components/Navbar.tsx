@@ -41,17 +41,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const examCountdown = getJlptExamCountdown();
 
-  // 首页 + 8 大核心模块直接平铺 (共 9 项)
+  // 首页 + 8 大核心模块根据学员学习进阶 1-8 顺序排列
   const navItems = [
     { id: 'home' as ActiveTab, label: '首页', shortLabel: '首页', icon: LayoutGrid },
-    { id: 'speaking' as ActiveTab, label: 'AI口语', shortLabel: '口语', icon: Mic, isHero: true },
-    { id: 'exam' as ActiveTab, label: 'JLPT机考', shortLabel: '机考', icon: FileCheck2 },
-    { id: 'writing' as ActiveTab, label: '听解精听', shortLabel: '听解', icon: PenTool },
     { id: 'phonetics' as ActiveTab, label: '五十音图', shortLabel: '五十音', icon: Sparkles },
-    { id: 'mistakes' as ActiveTab, label: '错题本', shortLabel: '错题', icon: BookMarked },
-    { id: 'kdrama' as ActiveTab, label: '动漫剧场', shortLabel: '动漫', icon: Headphones },
     { id: 'vocab' as ActiveTab, label: 'JLPT词库', shortLabel: '词库', icon: Layers },
+    { id: 'mistakes' as ActiveTab, label: '错题本', shortLabel: '错题', icon: BookMarked },
     { id: 'grammar' as ActiveTab, label: '文法宝典', shortLabel: '文法', icon: BookOpenCheck },
+    { id: 'kdrama' as ActiveTab, label: '动漫剧场', shortLabel: '动漫', icon: Headphones },
+    { id: 'speaking' as ActiveTab, label: 'AI口语', shortLabel: '口语', icon: Mic, isHero: true },
+    { id: 'writing' as ActiveTab, label: '听解精听', shortLabel: '听解', icon: PenTool },
+    { id: 'exam' as ActiveTab, label: 'JLPT机考', shortLabel: '机考', icon: FileCheck2 },
   ];
 
   // 管理员视图控制（默认学员完全隐藏，管理员可通过专属暗号唤醒）
