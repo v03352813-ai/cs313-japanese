@@ -189,27 +189,99 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
     }));
   };
 
-  // Submit and calculate 180-point scale score
+  // Submit and calculate 180-point scale score with official JLPT section benchmarks
   const scoreReport = useMemo(() => {
     if (!currentPaper || !isSubmitted) return null;
     let totalScore = 0;
     let earnedScore = 0;
     let correctCount = 0;
 
+    let vocabTotal = 0, vocabEarned = 0, vocabCorrect = 0, vocabCount = 0;
+    let readingTotal = 0, readingEarned = 0, readingCorrect = 0, readingCount = 0;
+    let listeningTotal = 0, listeningEarned = 0, listeningCorrect = 0, listeningCount = 0;
+
     currentPaper.questions.forEach((q, idx) => {
       totalScore += q.score;
-      if (answers[idx] === q.correctAnswer) {
+      const isCorrect = answers[idx] === q.correctAnswer;
+      if (isCorrect) {
         earnedScore += q.score;
         correctCount += 1;
       }
+
+      const isReading = q.questionType === '读解分析' || q.categoryTag.includes('读解');
+      const isListening = q.questionType === '听解理解' || q.categoryTag.includes('听解');
+
+      if (isReading) {
+        readingTotal += q.score;
+        readingCount += 1;
+        if (isCorrect) {
+          readingEarned += q.score;
+          readingCorrect += 1;
+        }
+      } else if (isListening) {
+        listeningTotal += q.score;
+        listeningCount += 1;
+        if (isCorrect) {
+          listeningEarned += q.score;
+          listeningCorrect += 1;
+        }
+      } else {
+        vocabTotal += q.score;
+        vocabCount += 1;
+        if (isCorrect) {
+          vocabEarned += q.score;
+          vocabCorrect += 1;
+        }
+      }
     });
 
-    // Scaled to JLPT 180 total
-    const scaledScore = totalScore > 0 ? Math.round((earnedScore / totalScore) * 180) : 0;
+    const isMultiSectionPaper = (vocabCount > 0 ? 1 : 0) + (readingCount > 0 ? 1 : 0) + (listeningCount > 0 ? 1 : 0) > 1;
+
+    let scaledVocab = 0;
+    let scaledReading = 0;
+    let scaledListening = 0;
+    let scaledScore = 0;
+
+    if (isMultiSectionPaper) {
+      scaledVocab = vocabTotal > 0 ? Math.round((vocabEarned / vocabTotal) * 60) : 0;
+      scaledReading = readingTotal > 0 ? Math.round((readingEarned / readingTotal) * 60) : 0;
+      scaledListening = listeningTotal > 0 ? Math.round((listeningEarned / listeningTotal) * 60) : 0;
+      scaledScore = scaledVocab + scaledReading + scaledListening;
+    } else {
+      scaledScore = totalScore > 0 ? Math.round((earnedScore / totalScore) * 180) : 0;
+      if (vocabCount > 0) scaledVocab = Math.round(scaledScore / 3);
+      if (readingCount > 0) scaledReading = Math.round(scaledScore / 3);
+      if (listeningCount > 0) scaledListening = Math.round(scaledScore / 3);
+    }
     
-    // Pass threshold: N1: 100, N2: 90, N3: 95, N4: 90, N5: 80
+    // Official JLPT passing score: N1: 100, N2: 90, N3: 95, N4: 90, N5: 80
     const passThreshold = currentPaper.level.includes('N1') ? 100 : currentPaper.level.includes('N3') ? 95 : currentPaper.level.includes('N5') ? 80 : 90;
-    const isPassed = scaledScore >= passThreshold;
+    
+    // Official JLPT section passing threshold: each section must be >= 19 (for N1~N3)
+    const vocabPass = vocabTotal === 0 || scaledVocab >= 19;
+    const readingPass = readingTotal === 0 || scaledReading >= 19;
+    const listeningPass = listeningTotal === 0 || scaledListening >= 19;
+    const allSectionsPass = vocabPass && readingPass && listeningPass;
+
+    const isTotalScorePass = scaledScore >= passThreshold;
+    const isPassed = isMultiSectionPaper ? (isTotalScorePass && allSectionsPass) : isTotalScorePass;
+
+    let verdictType: 'pass' | 'section_fail' | 'total_fail' = 'total_fail';
+    let failReason = '';
+
+    if (isPassed) {
+      verdictType = 'pass';
+    } else if (isTotalScorePass && !allSectionsPass) {
+      verdictType = 'section_fail';
+      const failedNames: string[] = [];
+      if (!vocabPass) failedNames.push(`言语知识(${scaledVocab}分)`);
+      if (!readingPass) failedNames.push(`读解(${scaledReading}分)`);
+      if (!listeningPass) failedNames.push(`听解(${scaledListening}分)`);
+      failReason = `总分已达到 ${scaledScore} 分，但【${failedNames.join('、')}】未达到单项 19 分基准点，触发 JLPT 官方单科否决制！`;
+    } else {
+      verdictType = 'total_fail';
+      failReason = `总分 ${scaledScore} 分未达到本级别合格线（${passThreshold} 分），仍需巩固拔高！`;
+    }
 
     return {
       earnedScore,
@@ -218,7 +290,13 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
       totalQuestions: currentPaper.questions.length,
       scaledScore,
       isPassed,
-      passThreshold
+      passThreshold,
+      isMultiSectionPaper,
+      verdictType,
+      failReason,
+      vocab: { score: scaledVocab, earned: vocabEarned, total: vocabTotal, count: vocabCount, correct: vocabCorrect, pass: vocabPass },
+      reading: { score: scaledReading, earned: readingEarned, total: readingTotal, count: readingCount, correct: readingCorrect, pass: readingPass },
+      listening: { score: scaledListening, earned: listeningEarned, total: listeningTotal, count: listeningCount, correct: listeningCorrect, pass: listeningPass }
     };
   }, [currentPaper, isSubmitted, answers]);
 
@@ -287,15 +365,26 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           </div>
         </div>
 
-        {onNavigateToWriting && (
+        <div className="flex items-center gap-2 shrink-0 flex-wrap">
           <button
-            onClick={onNavigateToWriting}
+            onClick={() => {
+              setMainMode('special_drill');
+              setSelectedCategory('全部');
+            }}
             className="px-3.5 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs shrink-0 flex items-center justify-center gap-1.5 shadow-xs transition active:scale-98 cursor-pointer"
           >
-            <span>✍️ 前往 AI 日语写作工坊</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <span>🎯 刷四大核心题型专项</span>
           </button>
-        )}
+          {onNavigateToWriting && (
+            <button
+              onClick={onNavigateToWriting}
+              className="px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs shrink-0 flex items-center justify-center gap-1 border border-slate-200 transition cursor-pointer"
+              title="JLPT官方无写作，此工坊专为EJU留考/商务邮件设计"
+            >
+              <span>✍️ 选修: 留考/商务写作</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Main Mode Switcher & Level Filter */}
@@ -303,23 +392,23 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
         
         {/* 全真题库架构与总量导航说明 */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-slate-100 text-xs">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="w-2 h-2 rounded-full bg-sky-500 shrink-0" />
             <span className="font-black text-slate-800">
-              📚 全真题库总计 56+ 套
+              📚 JLPT 官方历届考期真题与全真机考题库
             </span>
             <span className="text-slate-500 hidden sm:inline">
-              (包含 3 大实战训练模式，每届考后持续扩充，点击下方模式切换分库):
+              (覆盖 N1~N5 五大等级，每年 7月 / 12月 考后持续同步更新收录):
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/70">
-            <span className="text-sky-600 font-extrabold">{marathonCount}套马拉松大考</span>
+            <span className="text-sky-600 font-extrabold">{marathonCount}套官方考期大卷</span>
             <span>+</span>
-            <span className="text-sky-600 font-extrabold">{fullPaperCount}套历届冲刺</span>
+            <span className="text-sky-600 font-extrabold">{fullPaperCount}套高频冲刺</span>
             <span>+</span>
-            <span className="text-sky-600 font-extrabold">{drillCount}套专项突破</span>
+            <span className="text-sky-600 font-extrabold">{drillCount}套题型专项</span>
             <span>=</span>
-            <span className="text-slate-900 font-black">全库 56+ 套</span>
+            <span className="text-slate-900 font-black">持续扩充更新</span>
           </div>
         </div>
 
@@ -338,7 +427,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
             }`}
           >
             <Timer className="w-3.5 h-3.5 text-sky-500" />
-            <span>🏛️ 官方马拉松大考</span>
+            <span>🏛️ 官方历届考期全真卷</span>
             <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'marathon_full' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
               {marathonCount}套
             </span>
@@ -357,7 +446,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
             }`}
           >
             <FileCheck2 className="w-3.5 h-3.5 text-sky-500" />
-            <span>⚡ 历届高频冲刺卷</span>
+            <span>⚡ 考前高频精选卷</span>
             <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'full_paper' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
               {fullPaperCount}套
             </span>
@@ -376,7 +465,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
             }`}
           >
             <Target className="w-3.5 h-3.5 text-sky-500" />
-            <span>🎯 4大分类专项突破</span>
+            <span>🎯 四大核心题型专项突破</span>
             <span className={`text-[10px] px-2 py-0.5 rounded-full ${mainMode === 'special_drill' ? 'bg-sky-100 text-sky-700 font-black' : 'bg-slate-200 text-slate-600 font-bold'}`}>
               {drillCount}套
             </span>
@@ -448,7 +537,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
               <FileCheck2 className="w-4 h-4 text-sky-500" />
-              <span>选择试卷 (当前模式 {filteredPapers.length} 套 / 全库共 56+ 套):</span>
+              <span>选择试卷 (当前筛选收录 {filteredPapers.length} 套 · 每年7月与12月考后持续同步更新):</span>
             </div>
 
             <div className="relative flex-1 min-w-0 max-w-2xl">
@@ -460,7 +549,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                   const pIdx = filteredPapers.findIndex(p => p.id === targetId);
                   const isLockedPaper = !isVip && !targetPaper?.isFreePreview && pIdx !== 0;
                   if (isLockedPaper) {
-                    onOpenVipModal(`🔒《${targetPaper?.title}》为 VIP 专属真题考场！升级 VIP 终身卡（仅 ¥49.9），即可无限畅刷 56+ 套官方真题大卷（每届考后持续同步更新）！`);
+                    onOpenVipModal(`🔒《${targetPaper?.title}》为 VIP 专属真题考场！升级 VIP 终身卡（仅 ¥49.9），即可无限畅刷 JLPT 历届官方考期真题大卷与四大题型专项突破（每年7月/12月考后持续同步更新）！`);
                     return;
                   }
                   setSelectedPaperId(targetId);
@@ -803,26 +892,121 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
 
           {/* Score Card when submitted */}
           {scoreReport && (
-            <div className={`rounded-3xl p-5 border shadow-sm space-y-3 ${
-              scoreReport.isPassed ? 'bg-emerald-50/70 border-emerald-300' : 'bg-amber-50/70 border-amber-300'
+            <div className={`rounded-3xl p-5 border shadow-sm space-y-4 ${
+              scoreReport.verdictType === 'pass'
+                ? 'bg-emerald-50/80 border-emerald-300'
+                : scoreReport.verdictType === 'section_fail'
+                ? 'bg-amber-50/80 border-amber-300'
+                : 'bg-rose-50/80 border-rose-300'
             }`}>
+              {/* Card Header */}
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-700">
-                  JLPT 官方 180 分评级
+                <span className="text-xs font-black uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+                  <Award className="w-4 h-4 text-sky-600" />
+                  <span>JLPT 官方 180 分成绩单</span>
                 </span>
-                <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
-                  scoreReport.isPassed ? 'bg-emerald-600 text-white' : 'bg-amber-600 text-white'
+                <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                  scoreReport.verdictType === 'pass'
+                    ? 'bg-emerald-600 text-white'
+                    : scoreReport.verdictType === 'section_fail'
+                    ? 'bg-amber-600 text-white'
+                    : 'bg-rose-600 text-white'
                 }`}>
-                  {scoreReport.isPassed ? '🎉 达到合格线' : '⚠️ 需重点补强'}
+                  {scoreReport.verdictType === 'pass'
+                    ? '🎉 官方判定：合格 (Pass)'
+                    : scoreReport.verdictType === 'section_fail'
+                    ? '⚠️ 单科否决 (单项未过线)'
+                    : '❌ 官方判定：未合格'}
                 </span>
               </div>
 
-              <div className="text-center py-2 space-y-1">
+              {/* Total Score */}
+              <div className="text-center py-2 space-y-1 bg-white/70 rounded-2xl p-3 border border-slate-100">
                 <p className="text-4xl font-black text-slate-900">
                   {scoreReport.scaledScore} <span className="text-sm font-normal text-slate-500">/ 180 分</span>
                 </p>
                 <p className="text-xs text-slate-600 font-medium">
-                  答对 {scoreReport.correctCount} / {scoreReport.totalQuestions} 题（合格线为 {scoreReport.passThreshold} 分）
+                  答对 {scoreReport.correctCount} / {scoreReport.totalQuestions} 题 · 本级别合格线为 <strong className="text-slate-800">{scoreReport.passThreshold} 分</strong>
+                </p>
+              </div>
+
+              {/* 3-Section Breakdown (Authentic JLPT Structure) */}
+              <div className="space-y-2 pt-1">
+                <div className="text-[11px] font-black text-slate-700 flex items-center justify-between">
+                  <span>三大官方得分区分 (满分各60分)</span>
+                  <span className="text-[10px] text-slate-500">单项基准点: ≥19分</span>
+                </div>
+
+                <div className="space-y-1.5 text-xs">
+                  {/* 言语知识 */}
+                  <div className="p-2.5 rounded-xl bg-white/80 border border-slate-200/80 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm">🈳</span>
+                      <div>
+                        <div className="font-bold text-slate-800 text-[11px]">言語知識 (文字·語彙·文法)</div>
+                        <div className="text-[10px] text-slate-400 font-mono">答对 {scoreReport.vocab.correct}/{scoreReport.vocab.count} 题</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-black text-slate-900 text-sm">{scoreReport.vocab.score}</span>
+                      <span className="text-[10px] text-slate-400">/60分</span>
+                      <div className={`text-[10px] font-bold ${scoreReport.vocab.pass ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        {scoreReport.vocab.pass ? '✓ 达标(≥19)' : '✗ 未达标(<19)'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 读解 */}
+                  <div className="p-2.5 rounded-xl bg-white/80 border border-slate-200/80 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm">📖</span>
+                      <div>
+                        <div className="font-bold text-slate-800 text-[11px]">読解 (长中短篇阅读)</div>
+                        <div className="text-[10px] text-slate-400 font-mono">答对 {scoreReport.reading.correct}/{scoreReport.reading.count} 题</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-black text-slate-900 text-sm">{scoreReport.reading.score}</span>
+                      <span className="text-[10px] text-slate-400">/60分</span>
+                      <div className={`text-[10px] font-bold ${scoreReport.reading.pass ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        {scoreReport.reading.pass ? '✓ 达标(≥19)' : '✗ 未达标(<19)'}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 听解 */}
+                  <div className="p-2.5 rounded-xl bg-white/80 border border-slate-200/80 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm">🎧</span>
+                      <div>
+                        <div className="font-bold text-slate-800 text-[11px]">聴解 (原声场景听力)</div>
+                        <div className="text-[10px] text-slate-400 font-mono">答对 {scoreReport.listening.correct}/{scoreReport.listening.count} 题</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="font-black text-slate-900 text-sm">{scoreReport.listening.score}</span>
+                      <span className="text-[10px] text-slate-400">/60分</span>
+                      <div className={`text-[10px] font-bold ${scoreReport.listening.pass ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        {scoreReport.listening.pass ? '✓ 达标(≥19)' : '✗ 未达标(<19)'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Diagnosis Alert */}
+              <div className="pt-2 border-t border-slate-200/60 text-xs">
+                {scoreReport.verdictType === 'pass' ? (
+                  <p className="text-emerald-800 font-medium leading-relaxed">
+                    🌟 <strong>恭喜合格！</strong>您的总分与三大单项均已达到 JLPT 日本官方合格标准，具备冲击更高等级的扎实实力！
+                  </p>
+                ) : (
+                  <p className={`${scoreReport.verdictType === 'section_fail' ? 'text-amber-900' : 'text-rose-800'} font-medium leading-relaxed`}>
+                    📌 <strong>官方诊断：</strong>{scoreReport.failReason}
+                  </p>
+                )}
+                <p className="text-[10px] text-slate-500 mt-1.5 leading-relaxed bg-white/50 p-2 rounded-lg">
+                  ℹ️ <strong>JLPT 官方合格规则提示：</strong>总分达到及格线且言语知识、读解、听解三大板块得分各自<strong>均须 ≥19分</strong>。单项低于 19 分无论总分多高均判定不合格。
                 </p>
               </div>
             </div>

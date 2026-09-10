@@ -18,7 +18,8 @@ import {
   Compass, 
   Mic, 
   PenTool, 
-  ArrowRight
+  ArrowRight,
+  Target
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import type { ActiveTab } from './Navbar';
@@ -134,15 +135,15 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
     activeBorder: 'border-violet-500',
     activeBg: 'bg-violet-50/70 border-violet-400 text-violet-950',
     activeRing: 'ring-2 ring-violet-500/20 shadow-md',
-    desc: '告别死板背诵！30 部经典动漫日剧原声名台词精听 ➔ 麦克风连线 24h AI 角色语伴对练 ➔ 艾宾浩斯易错会话复盘！',
+    desc: '告别死板背诵！经典动漫日剧原声名台词精听（每周+6部持续扩充更新） ➔ 麦克风连线 24h AI 角色语伴对练 ➔ 艾宾浩斯易错会话复盘！',
     steps: [
       {
         stepNum: '01',
-        stepLabel: '第 1 步 · 影视精听',
-        title: '30 部经典动漫日剧台词精听',
+        stepLabel: '第 1 步 · 原声精听',
+        title: '经典动漫与日剧 · 原声台词精听',
         targetBadge: '原声磨耳朵 · 考点精析',
         badgeBg: 'bg-sky-100 text-sky-800 border border-sky-200/70',
-        desc: '《千与千寻》《你的名字》《非自然死亡》《半泽直树》等 30 部名场面逐句盲听、影子跟读与考点拆解。',
+        desc: '精选《千与千寻》《你的名字》《非自然死亡》《半泽直树》等名场面，逐句盲听、影子跟读与考点拆解（每周持续扩充）。',
         actionText: '进入动漫日剧精听',
         targetTab: 'kdrama',
         icon: Headphones,
@@ -183,16 +184,16 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
     activeBorder: 'border-sky-500',
     activeBg: 'bg-sky-50/70 border-sky-400 text-sky-950',
     activeRing: 'ring-2 ring-sky-500/20 shadow-md',
-    desc: '专为 JLPT N5~N1 考生打造的高分闭环：全真机考模考 ➔ 错题遗忘曲线复盘 ➔ 日文小论文与商务邮件 AI 智能精批！',
+    desc: '专为 JLPT N5~N1 考生打造的高分闭环：官方历届考期机考 ➔ 错题遗忘曲线复盘 ➔ 四大核心题型与原声听解专项突破（攻克★排词与即时应答）！',
     steps: [
       {
         stepNum: '01',
         stepLabel: '第 1 步 · 模考查漏',
-        title: '56+套 JLPT 历届全真机考模考',
+        title: 'JLPT 历届官方考期真题机考',
         targetBadge: '摸清 180 分水位',
         badgeBg: 'bg-sky-100 text-sky-800 border border-sky-200/70',
-        desc: '分屏沉浸答题、言语知识与读解原卷、即时判分，精准测出真实水平与各大题型薄弱项。',
-        actionText: '进入 56+ 套真题考场',
+        desc: '官方标准 180 分评分、言语知识/读解/听解原卷作答、单项19分基准线诊断，精准测出真实水平与各大板块薄弱项。',
+        actionText: '进入历届真题考场',
         targetTab: 'exam',
         icon: FileCheck2,
         buttonBg: 'bg-sky-500 hover:bg-sky-600 text-white shadow-sky-500/20'
@@ -211,15 +212,15 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
       },
       {
         stepNum: '03',
-        stepLabel: '第 3 步 · 写作提分',
-        title: '日文小论文与商务写作 AI 精批',
-        targetBadge: '400字原稿纸·敬语突破',
-        badgeBg: 'bg-sky-100 text-sky-800 border border-sky-200/70',
-        desc: '攻克小论文与商务邮件！AI 智能纠正「です/ます」与「だ/である」混用，提供高级学术词汇升级与官方满分范文。',
-        actionText: '开启 AI 写作批改',
-        targetTab: 'writing',
-        icon: PenTool,
-        buttonBg: 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs'
+        stepLabel: '第 3 步 · 专项攻坚',
+        title: '四大核心题型与原声听解专项突破',
+        targetBadge: '听解原声 · ★排词攻坚',
+        badgeBg: 'bg-amber-100 text-amber-800 border border-amber-200/70',
+        desc: '攻克 JLPT 最大失分雷区：听解即时应答与课题理解磨耳朵、文法★号排词破题拆解、长篇读解信息检索靶向集训！',
+        actionText: '进入四大题型专项考场',
+        targetTab: 'exam',
+        icon: Target,
+        buttonBg: 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'
       }
     ]
   }
@@ -722,7 +723,42 @@ export const HomePortal: React.FC<HomePortalProps> = ({
 
       </div>
 
-      {/* --- 6. 学员美学福利 · 一子一木 4K 伴学治愈壁纸屋横幅 --- */}
+      {/* --- 6. 进阶拓展 · EJU 日本留学考试小论文与商务写作工坊 --- */}
+      <div 
+        onClick={() => onSelectModule('writing')}
+        className="bg-gradient-to-r from-slate-900 via-sky-950 to-indigo-950 rounded-3xl p-5 sm:p-6 text-white shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4 border border-sky-900/50 group"
+      >
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="px-2.5 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/30 text-[11px] font-black">
+              进阶选修 · 赴日升学与日企实战
+            </span>
+            <span className="text-[11px] text-slate-300">
+              📌 注：JLPT 官方考纲为纯客观选择题无作文，此工坊专为留考与商务设计
+            </span>
+          </div>
+          <h3 className="text-lg sm:text-xl font-black tracking-tight text-white group-hover:text-sky-300 transition">
+            EJU 日本留学考试小论文 · 日企商务邮件 · 官方原稿纸 AI 批改
+          </h3>
+          <p className="text-xs text-slate-300 leading-relaxed font-medium">
+            突破「常体（だ・である）」与「敬体（です・ます）」混用致命雷区，支持 400 字官方原稿纸排版规则诊断、高级学术句式升级与名校小论文满分范文！
+          </p>
+        </div>
+
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelectModule('writing');
+          }}
+          className="px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-white font-bold text-xs shrink-0 flex items-center justify-center gap-1.5 shadow-sm transition active:scale-98 cursor-pointer self-start md:self-auto"
+        >
+          <PenTool className="w-3.5 h-3.5" />
+          <span>进入写作工坊</span>
+          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+        </button>
+      </div>
+
+      {/* --- 7. 学员美学福利 · 一子一木 4K 伴学治愈壁纸屋横幅 --- */}
       <WallpaperBanner onOpenWallpaperModal={onOpenWallpaperModal} />
 
     </div>

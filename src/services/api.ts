@@ -1,5 +1,5 @@
 /**
- * CS313 韩语学习平台 · 前端统一云端 API 数据服务层
+ * CS313 日语研习社 · 前端统一云端 API 数据服务层
  * 支持【Local-First 双模架构】：优先连云端 API，离线/弱网自动使用本地缓存兜底
  */
 import type { LicenseInfo } from '../data/auth/cardKeys';

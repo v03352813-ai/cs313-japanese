@@ -50,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'grammar' as ActiveTab, label: '文法宝典', shortLabel: '文法', icon: BookOpenCheck },
     { id: 'kdrama' as ActiveTab, label: '原声精听', shortLabel: '精听', icon: Headphones },
     { id: 'speaking' as ActiveTab, label: 'AI口语', shortLabel: '口语', icon: Mic, isHero: true },
-    { id: 'writing' as ActiveTab, label: 'AI写作', shortLabel: '写作', icon: PenTool },
+    { id: 'writing' as ActiveTab, label: '留考/商务写作', shortLabel: '写作', icon: PenTool },
     { id: 'exam' as ActiveTab, label: 'JLPT真题', shortLabel: '真题', icon: FileCheck2 },
   ];
 
@@ -175,10 +175,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setActiveTab('exam')}
                     className="min-w-0 w-full sm:w-auto overflow-hidden flex flex-col items-center justify-center px-1 sm:px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-center cursor-pointer hover:bg-slate-100 transition active:scale-98"
                   >
-                    <span className="hidden sm:block text-sm font-black text-slate-900 whitespace-nowrap">56+套</span>
-                    <span className="block sm:hidden text-[10px] font-black text-slate-900 truncate w-full">56+套</span>
-                    <span className="hidden sm:block text-[9px] text-slate-500 font-medium whitespace-nowrap">历届真题</span>
-                    <span className="block sm:hidden text-[8px] text-slate-500 font-medium truncate w-full">真题</span>
+                    <span className="hidden sm:block text-sm font-black text-slate-900 whitespace-nowrap">历届考期</span>
+                    <span className="block sm:hidden text-[10px] font-black text-slate-900 truncate w-full">历届</span>
+                    <span className="hidden sm:block text-[9px] text-slate-500 font-medium whitespace-nowrap">全真机考</span>
+                    <span className="block sm:hidden text-[8px] text-slate-500 font-medium truncate w-full">机考</span>
                   </button>
                   <button 
                     onClick={() => setActiveTab('vocab')}

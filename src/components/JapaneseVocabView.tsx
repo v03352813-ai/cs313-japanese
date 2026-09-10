@@ -172,7 +172,7 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
   return (
     <div className="max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-in fade-in duration-300">
       
-      {/* 1. 顶部步骤导引条 (直观告知学习主线与词库目标，对齐韩语规格) */}
+      {/* 1. 顶部步骤导引条 (直观告知学习主线与词库目标，官方 JLPT 词汇分级体系) */}
       <div className="bg-white rounded-2xl px-4 py-3 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white flex items-center justify-center font-black text-sm shrink-0 shadow-xs">

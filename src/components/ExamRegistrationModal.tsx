@@ -46,7 +46,7 @@ export const ExamRegistrationModal: React.FC<ExamRegistrationModalProps> = ({
   // 判定是否及格
   const totalScore = inputVocab + inputReading + inputListening;
   const isSectionPass = inputVocab >= 19 && inputReading >= 19 && inputListening >= 19;
-  const passThreshold = calcLevel === 'N1' ? 100 : calcLevel === 'N2' ? 90 : calcLevel === 'N3' ? 95 : 90;
+  const passThreshold = calcLevel === 'N1' ? 100 : calcLevel === 'N3' ? 95 : calcLevel === 'N5' ? 80 : 90;
   const isPassed = totalScore >= passThreshold && isSectionPass;
 
   return (
