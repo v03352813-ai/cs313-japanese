@@ -48,10 +48,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'vocab' as ActiveTab, label: 'JLPT词库', shortLabel: '词库', icon: Layers },
     { id: 'mistakes' as ActiveTab, label: '错题本', shortLabel: '错题', icon: BookMarked },
     { id: 'grammar' as ActiveTab, label: '文法宝典', shortLabel: '文法', icon: BookOpenCheck },
-    { id: 'kdrama' as ActiveTab, label: '动漫剧场', shortLabel: '动漫', icon: Headphones },
+    { id: 'kdrama' as ActiveTab, label: '原声精听', shortLabel: '精听', icon: Headphones },
     { id: 'speaking' as ActiveTab, label: 'AI口语', shortLabel: '口语', icon: Mic, isHero: true },
     { id: 'writing' as ActiveTab, label: 'AI写作', shortLabel: '写作', icon: PenTool },
-    { id: 'exam' as ActiveTab, label: '56+套真题', shortLabel: '56+套', icon: FileCheck2 },
+    { id: 'exam' as ActiveTab, label: 'JLPT真题', shortLabel: '真题', icon: FileCheck2 },
   ];
 
   // 管理员视图控制（默认学员完全隐藏，管理员可通过专属暗号唤醒）

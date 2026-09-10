@@ -409,16 +409,19 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="space-y-0.5">
             <h2 className="text-xl font-black text-slate-900 flex items-center gap-2 flex-wrap">
-              <span>经典动漫与日剧剧场</span>
+              <span>经典动漫与日剧 · 原声台词精听</span>
               <span className="text-xs font-bold text-sky-700 bg-sky-100 border border-sky-200/80 px-2.5 py-0.5 rounded-full">
                 🔥 每周持续扩充更新 (每周+6部)
               </span>
               <span className="text-xs font-normal text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
-                已收录 {allScenes.length}+ 部经典高光
+                已收录 {allScenes.length}+ 部名场面
               </span>
             </h2>
-            <p className="text-xs text-slate-500">
-              吉卜力·新海诚·高分日剧名台词精析，逐句盲听、影子跟读与考点拆解！
+            <p className="text-xs text-slate-500 flex items-center gap-2 flex-wrap">
+              <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold">
+                🎧 原声名台词音频 · 逐句盲听与影子跟读 · 非视频流媒体
+              </span>
+              <span>吉卜力·新海诚·高分日剧名台词精析，逐句盲听、影子跟读与考点拆解！</span>
             </p>
           </div>
 
@@ -432,7 +435,7 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
                     ? 'bg-white text-sky-700 shadow-2xs font-black'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
-                title="上下滑动列表 (手机习惯，精选展示+可展开)"
+                title="紧凑精选列表 (前6部展示+支持展开)"
               >
                 <List className="w-3.5 h-3.5" />
                 <span>列表</span>
@@ -502,10 +505,10 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
           })}
         </div>
 
-        {/* --- 模式 1: 原生上下滑动列表视图 (List View - 全部 30 部完整呈现) --- */}
+        {/* --- 模式 1: 原生上下滑动列表视图 (紧凑精选 6 部 + 可展开全部) --- */}
         {viewMode === 'list' && (
-          <div className="space-y-3">
-            {filteredScenes.map((s, idx) => {
+          <div className="space-y-2.5">
+            {(isListExpanded ? filteredScenes : filteredScenes.slice(0, 6)).map((s) => {
               const isSelected = s.id === selectedSceneId;
               const isLocked = !isVip && !s.isFreePreview;
               const firstLine = s.dialogues[0];
@@ -514,27 +517,28 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
                 <div
                   key={s.id}
                   onClick={() => handleSelectScene(s.id)}
-                  className={`group bg-white rounded-2xl border transition-all duration-200 p-3.5 sm:p-4 cursor-pointer relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:border-sky-400 hover:shadow-md ${
+                  className={`group bg-white rounded-2xl border transition-all duration-200 p-2.5 sm:p-3 cursor-pointer relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:border-sky-400 hover:shadow-md ${
                     isSelected
                       ? 'border-sky-500 ring-2 ring-sky-500/20 bg-sky-50/20 shadow-xs'
                       : 'border-slate-200/90 shadow-2xs hover:bg-slate-50/50'
                   }`}
                 >
-                  {/* Left: Thumbnail Poster */}
-                  <div className="flex items-center gap-3.5 w-full sm:w-auto">
+                  {/* Left: Thumbnail Poster (Compact) */}
+                  <div className="flex items-center gap-3 w-full sm:w-auto">
                     <div 
-                      className="relative w-28 sm:w-36 md:w-44 aspect-16/10 rounded-xl overflow-hidden shrink-0 border border-slate-100 shadow-2xs flex items-center justify-center p-2 text-white font-black text-center text-xs"
+                      className="relative w-20 sm:w-24 md:w-28 h-14 sm:h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100 shadow-2xs flex flex-col items-center justify-center p-1 text-white font-black text-center text-[11px]"
                       style={{ background: s.posterBg }}
                     >
-                      <span className="drop-shadow-sm line-clamp-2">《{s.title}》</span>
+                      <span className="drop-shadow-sm line-clamp-1">《{s.title}》</span>
+                      <span className="text-[9px] font-medium text-white/80 line-clamp-1">{s.episode}</span>
                       {isSelected && (
-                        <div className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-md bg-sky-600 text-white text-[10px] font-black shadow-md flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        <div className="absolute top-1 left-1 px-1.5 py-0.2 rounded-md bg-sky-600 text-white text-[9px] font-black shadow-md flex items-center gap-0.5">
+                          <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
                           <span>精学中</span>
                         </div>
                       )}
                       {isLocked && (
-                        <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md bg-black/75 backdrop-blur-xs text-amber-300 text-[10px] font-bold border border-amber-400/40 shadow-sm flex items-center gap-1">
+                        <div className="absolute top-1 right-1 px-1 py-0.2 rounded-md bg-black/75 backdrop-blur-xs text-amber-300 text-[9px] font-bold border border-amber-400/40 shadow-sm flex items-center gap-0.5">
                           <Lock className="w-2.5 h-2.5 text-amber-400" />
                           <span>VIP</span>
                         </div>
@@ -550,58 +554,53 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
                   </div>
 
                   {/* Middle: Content Info */}
-                  <div className="flex-1 min-w-0 space-y-1.5 w-full sm:w-auto">
+                  <div className="flex-1 min-w-0 space-y-1 w-full sm:w-auto">
                     <div className="hidden sm:flex items-center gap-2 flex-wrap">
-                      <span className="font-extrabold text-sm sm:text-base text-slate-900 group-hover:text-sky-600 transition">
+                      <span className="font-extrabold text-sm sm:text-base text-slate-900 group-hover:text-sky-600 transition truncate">
                         《{s.title}》
                       </span>
-                      <span className="text-xs text-slate-400 font-mono font-medium">
+                      <span className="text-xs text-slate-400 font-mono font-medium hidden md:inline truncate">
                         {s.japaneseTitle}
                       </span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-md border bg-sky-50 text-sky-700 border-sky-200">
+                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-md border bg-sky-50 text-sky-700 border-sky-200">
                         {s.levelTag}
                       </span>
-                      <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
+                      <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded-md">
                         {s.category}
                       </span>
                     </div>
 
-                    <h3 className="hidden sm:block font-bold text-sm text-slate-800 group-hover:text-sky-600 transition line-clamp-1">
+                    <p className="hidden sm:block font-bold text-xs text-slate-800 group-hover:text-sky-600 transition truncate">
                       {s.sceneTitle}
-                    </h3>
+                    </p>
 
-                    {/* First Dialogue Preview */}
+                    {/* First Dialogue Preview (Compact 1-liner) */}
                     {firstLine && (
-                      <div className="bg-slate-50/80 hover:bg-sky-50/40 p-2 sm:p-2.5 rounded-xl border border-slate-100/90 transition text-xs space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-sky-100 text-sky-700 shrink-0">
-                            {firstLine.speaker}
-                          </span>
-                          <span className="font-semibold text-slate-800 truncate font-sans text-xs sm:text-sm">
-                            “{firstLine.ja}”
-                          </span>
-                        </div>
-                        <p className="text-slate-500 text-[11px] sm:text-xs truncate pl-1">
-                          {firstLine.zh}
-                        </p>
+                      <div className="bg-slate-50/90 group-hover:bg-sky-50/40 px-2.5 py-1 rounded-lg border border-slate-100/90 transition text-xs flex items-center gap-2 overflow-hidden">
+                        <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-sky-100 text-sky-700 shrink-0">
+                          {firstLine.speaker}
+                        </span>
+                        <span className="font-medium text-slate-700 truncate font-sans text-xs">
+                          “{firstLine.ja}” <span className="text-slate-400 font-normal">({firstLine.zh})</span>
+                        </span>
                       </div>
                     )}
                   </div>
 
                   {/* Right: Enter Button */}
-                  <div className="shrink-0 flex items-center justify-between sm:flex-col sm:items-end sm:justify-center gap-2 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                  <div className="shrink-0 flex items-center justify-between sm:flex-col sm:items-end sm:justify-center gap-2 w-full sm:w-auto pt-1 sm:pt-0 border-t sm:border-t-0 border-slate-100">
                     {isSelected ? (
-                      <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-sky-600 text-white font-bold text-xs shadow-xs">
-                        <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-600 text-white font-bold text-xs shadow-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                         <span>正在精学</span>
                       </div>
                     ) : isLocked ? (
-                      <button className="flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold transition shadow-2xs">
+                      <button className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold transition shadow-2xs">
                         <Lock className="w-3 h-3 text-amber-600" />
                         <span>VIP 专享</span>
                       </button>
                     ) : (
-                      <button className="flex items-center gap-1 px-3.5 py-1.5 rounded-xl bg-white hover:bg-sky-600 text-sky-700 hover:text-white border border-sky-200 hover:border-sky-600 text-xs font-bold transition shadow-2xs group-hover:bg-sky-600 group-hover:text-white">
+                      <button className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-sky-600 text-sky-700 hover:text-white border border-sky-200 hover:border-sky-600 text-xs font-bold transition shadow-2xs group-hover:bg-sky-600 group-hover:text-white">
                         <span>进入精学</span>
                         <ChevronRight className="w-3.5 h-3.5" />
                       </button>
@@ -611,7 +610,27 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
               );
             })}
 
-
+            {/* Expand / Collapse Action Bar */}
+            {filteredScenes.length > 6 && (
+              <div className="pt-2 text-center">
+                <button
+                  onClick={() => setIsListExpanded(!isListExpanded)}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-sky-600 text-xs font-bold transition shadow-xs cursor-pointer"
+                >
+                  {isListExpanded ? (
+                    <>
+                      <ChevronUp className="w-4 h-4 text-slate-400" />
+                      <span>收起剧目列表 (当前显示全部 {filteredScenes.length} 部 · 点击收起)</span>
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDown className="w-4 h-4 text-sky-600" />
+                      <span>展开更多剧目 (还有 {filteredScenes.length - 6} 部 · 每周+6部持续更新)</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         )}
 

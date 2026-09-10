@@ -245,17 +245,17 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
         <div className="space-y-1.5 z-10">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs text-white text-xs font-black">
-              JLPT 日本語能力試験 · 56+ 套全真机考
+              JLPT 日本語能力試験 · 历届考期真题机考
             </span>
             <span className="text-xs text-sky-100 font-bold">
-              180分标准评分 · 言语知识/读解/听解 · 每届考后同步收录
+              180分官方标准评分 · 言语知识/读解/听解 · 每年7月/12月考后同步收录
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-            JLPT 56+ 套历届官方真题全真机考系统
+            JLPT 历届官方考期真题与全真机考系统
           </h2>
           <p className="text-xs text-sky-100 font-medium">
-            全真还原官方考试作答流程，配备答案深度解析、高频词汇表与星号排序题技巧拆解！每届考后持续扩充！
+            全真还原官方考试作答流程，覆盖 N1~N5 历年官方 7月/12月 考期全真卷与题型专项强化，每年考后持续同步扩充！
           </p>
         </div>
 

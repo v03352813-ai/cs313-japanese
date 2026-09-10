@@ -661,7 +661,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
               }}
               className="text-xs font-bold text-sky-600 hover:text-sky-700 bg-sky-50 hover:bg-sky-100 px-3.5 py-1.5 rounded-xl border border-sky-200/80 flex items-center gap-1 group-hover:translate-x-0.5 transition shadow-xs cursor-pointer"
             >
-              <span>进入影视剧场</span>
+              <span>进入原声精听</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -677,7 +677,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
                 key={sceneItem.id}
                 onClick={() => {
                   if (isSceneLocked) {
-                    onOpenVipModal(`🔒《${sceneItem.title}》(${sceneItem.sceneTitle})为 VIP 会员专属原声剧场！升级 VIP 终身卡（仅 ¥49.9），即可解锁全部 ${ANIME_DRAMA_SCENES.length}+ 部动漫日剧沉浸台词跟读与每周持续更新！`);
+                    onOpenVipModal(`🔒《${sceneItem.title}》(${sceneItem.sceneTitle})为 VIP 会员专属原声台词精听！升级 VIP 终身卡（仅 ¥49.9），即可解锁全部 ${ANIME_DRAMA_SCENES.length}+ 部动漫日剧沉浸台词跟读与每周持续更新！`);
                     return;
                   }
                   onSelectModule('kdrama', sceneItem.id);
