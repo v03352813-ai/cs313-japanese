@@ -262,34 +262,34 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
   };
 
   return (
-    <div className="bg-slate-900 text-white rounded-3xl p-5 sm:p-7 border border-slate-800 shadow-2xl space-y-5 overflow-hidden relative">
+    <div className="bg-white text-slate-900 rounded-3xl p-5 sm:p-7 border border-slate-200/90 shadow-xs space-y-5 overflow-hidden relative">
       
       {/* Background Grid Pattern & Ambient Glow */}
       <div 
-        className="absolute inset-0 opacity-15 pointer-events-none" 
+        className="absolute inset-0 opacity-40 pointer-events-none" 
         style={{ 
-          backgroundImage: 'radial-gradient(#0ea5e9 1px, transparent 1px), radial-gradient(#6366f1 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px), radial-gradient(#e2e8f0 1px, transparent 1px)',
           backgroundSize: '24px 24px',
           backgroundPosition: '0 0, 12px 12px'
         }} 
       />
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-sky-100/50 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-indigo-100/40 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header Controls Bar */}
-      <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+      <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-md shadow-sky-500/20">
             <Network className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-black text-white flex items-center gap-2 flex-wrap">
+            <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center gap-2 flex-wrap">
               <span>日本语全景文法可视化思维导图 (Visual Tree Graph)</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30 font-extrabold">
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-200 font-extrabold">
                 SVG 树状拓扑图
               </span>
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               点按各级主干自由展开/收折，点击叶子节点秒级穿梭卡片/变形表并高亮定位
             </p>
           </div>
@@ -298,27 +298,27 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
         {/* Action Buttons */}
         <div className="flex items-center gap-2 shrink-0 flex-wrap">
           {/* Zoom Controls */}
-          <div className="flex items-center bg-slate-800/80 rounded-xl border border-slate-700/80 p-1">
+          <div className="flex items-center bg-slate-100 rounded-xl border border-slate-200 p-1">
             <button
               onClick={() => handleZoom(-10)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition cursor-pointer"
+              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white transition cursor-pointer"
               title="缩小视图"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
-            <span className="text-[11px] font-mono font-bold px-2 text-slate-300 select-none">
+            <span className="text-[11px] font-mono font-bold px-2 text-slate-700 select-none">
               {zoomLevel}%
             </span>
             <button
               onClick={() => handleZoom(10)}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition cursor-pointer"
+              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white transition cursor-pointer"
               title="放大视图"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={resetZoom}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition ml-0.5 cursor-pointer"
+              className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white transition ml-0.5 cursor-pointer"
               title="重置缩放"
             >
               <RotateCcw className="w-3 h-3" />
@@ -326,16 +326,16 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
           </div>
 
           {/* Expand / Collapse All */}
-          <div className="flex items-center bg-slate-800/80 rounded-xl border border-slate-700/80 p-1 text-xs">
+          <div className="flex items-center bg-slate-100 rounded-xl border border-slate-200 p-1 text-xs">
             <button
               onClick={expandAllBranches}
-              className="px-2.5 py-1 rounded-lg font-medium text-slate-300 hover:text-white hover:bg-slate-700 transition cursor-pointer"
+              className="px-2.5 py-1 rounded-lg font-medium text-slate-700 hover:text-slate-900 hover:bg-white transition cursor-pointer"
             >
               展开全部
             </button>
             <button
               onClick={collapseAllBranches}
-              className="px-2.5 py-1 rounded-lg font-medium text-slate-300 hover:text-white hover:bg-slate-700 transition cursor-pointer"
+              className="px-2.5 py-1 rounded-lg font-medium text-slate-700 hover:text-slate-900 hover:bg-white transition cursor-pointer"
             >
               收起分支
             </button>
@@ -364,14 +364,14 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
           
           {/* 1. Central Root Node (中心总根节点 - 垂直居中) */}
           <div className="shrink-0 flex flex-col items-center justify-center my-auto z-10 w-[200px] sm:w-[230px]">
-            <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-sky-600 via-indigo-600 to-sky-700 text-white shadow-2xl shadow-sky-500/30 border border-sky-400/40 text-center w-full space-y-1.5 select-none ring-4 ring-sky-500/20 relative">
+            <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-sky-500 via-indigo-600 to-sky-600 text-white shadow-xl shadow-sky-500/25 border border-sky-400 text-center w-full space-y-1.5 select-none ring-4 ring-sky-100 relative">
               <div className="w-10 h-10 mx-auto rounded-2xl bg-white/20 flex items-center justify-center text-xl font-bold backdrop-blur-md shadow-inner">
                 🌳
               </div>
               <h2 className="text-sm sm:text-base font-black tracking-tight">
                 {JAPANESE_MIND_MAP_TREE_DATA.label}
               </h2>
-              <p className="text-[10px] text-sky-100 font-medium opacity-90 leading-tight">
+              <p className="text-[10px] text-sky-100 font-medium opacity-95 leading-tight">
                 {JAPANESE_MIND_MAP_TREE_DATA.subLabel}
               </p>
               <div className="pt-1">
@@ -381,19 +381,16 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
               </div>
 
               {/* Root Node Right Branch Port Anchor Dot */}
-              <div className="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-sky-400 border-2 border-slate-900 shadow-md shadow-sky-400/50 ring-4 ring-sky-400/30 flex items-center justify-center">
+              <div className="absolute -right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-sky-500 border-2 border-white shadow-md shadow-sky-500/40 ring-2 ring-sky-300 flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               </div>
             </div>
           </div>
 
-          {/* 2. Middle Connector Gutter (纯净间距与根节点水平引出线) */}
+          {/* 2. Middle Connector Gutter (纯净间距与根节点水平引出线，直接汇入右侧主树主干) */}
           <div className="shrink-0 w-10 sm:w-12 relative flex items-center justify-center self-stretch pointer-events-none">
-            {/* Horizontal Stem Line emerging from Root Node */}
-            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-gradient-to-r from-sky-400 via-indigo-500 to-sky-500 rounded-full shadow-md shadow-sky-500/40" />
-            
-            {/* Junction Central Glowing Dot */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-3.5 h-3.5 rounded-full bg-sky-300 border-2 border-slate-900 shadow-lg shadow-sky-300/50 ring-4 ring-sky-500/40 z-20" />
+            {/* Horizontal Stem Line emerging from Root Node directly into Tree Spine */}
+            <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-1 bg-gradient-to-r from-sky-400 via-indigo-400 to-sky-500 rounded-full shadow-xs" />
           </div>
 
           {/* 3. 4 Primary Branches Container with Exact-Terminating Tree Spine Lines */}
@@ -405,61 +402,73 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
               
               const themeStyles = 
                 branch.color === 'sky' ? {
-                  border: 'border-sky-500/40',
-                  bg: 'bg-sky-950/40 hover:bg-sky-950/60',
-                  headerBg: 'from-sky-500/30 to-indigo-500/20',
-                  pill: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
-                  nodeBg: 'bg-sky-950/70 hover:bg-sky-500/20 text-sky-100 hover:text-white border-sky-500/30 hover:border-sky-400',
+                  border: 'border-sky-200',
+                  bg: 'bg-white hover:border-sky-300',
+                  headerBg: 'from-sky-50 via-sky-50/70 to-indigo-50/40',
+                  headerTitle: 'text-slate-900',
+                  pill: 'bg-sky-100 text-sky-700 border-sky-200',
+                  cardBg: 'bg-slate-50/80 border-slate-200/90',
+                  nodeBg: 'bg-white hover:bg-sky-50 text-slate-800 hover:text-sky-900 border-slate-200 hover:border-sky-300',
+                  nodeText: 'text-slate-900',
                   badge: 'bg-sky-500 text-white',
-                  stemColor: 'border-sky-500/40 group-hover/sub:border-sky-400',
-                  branchLine: 'bg-sky-500',
-                  spineSegment: 'from-sky-500 to-indigo-500',
-                  dot: 'bg-sky-400',
-                  dotRing: 'ring-sky-500/30'
+                  stemColor: 'border-sky-300 group-hover/sub:border-sky-400',
+                  branchLine: 'bg-sky-400',
+                  spineSegment: 'from-sky-400 to-indigo-400',
+                  dot: 'bg-sky-500',
+                  dotRing: 'ring-sky-100'
                 } :
                 branch.color === 'indigo' ? {
-                  border: 'border-indigo-500/40',
-                  bg: 'bg-indigo-950/40 hover:bg-indigo-950/60',
-                  headerBg: 'from-indigo-500/30 to-sky-500/20',
-                  pill: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
-                  nodeBg: 'bg-indigo-950/70 hover:bg-indigo-500/20 text-indigo-100 hover:text-white border-indigo-500/30 hover:border-indigo-400',
+                  border: 'border-indigo-200',
+                  bg: 'bg-white hover:border-indigo-300',
+                  headerBg: 'from-indigo-50 via-indigo-50/70 to-sky-50/40',
+                  headerTitle: 'text-slate-900',
+                  pill: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+                  cardBg: 'bg-slate-50/80 border-slate-200/90',
+                  nodeBg: 'bg-white hover:bg-indigo-50 text-slate-800 hover:text-indigo-900 border-slate-200 hover:border-indigo-300',
+                  nodeText: 'text-slate-900',
                   badge: 'bg-indigo-500 text-white',
-                  stemColor: 'border-indigo-500/40 group-hover/sub:border-indigo-400',
-                  branchLine: 'bg-indigo-500',
-                  spineSegment: 'from-indigo-500 to-emerald-500',
-                  dot: 'bg-indigo-400',
-                  dotRing: 'ring-indigo-500/30'
+                  stemColor: 'border-indigo-300 group-hover/sub:border-indigo-400',
+                  branchLine: 'bg-indigo-400',
+                  spineSegment: 'from-indigo-400 to-emerald-400',
+                  dot: 'bg-indigo-500',
+                  dotRing: 'ring-indigo-100'
                 } :
                 branch.color === 'emerald' ? {
-                  border: 'border-emerald-500/40',
-                  bg: 'bg-emerald-950/40 hover:bg-emerald-950/60',
-                  headerBg: 'from-emerald-500/30 to-teal-500/20',
-                  pill: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-                  nodeBg: 'bg-emerald-950/70 hover:bg-emerald-500/20 text-emerald-100 hover:text-white border-emerald-500/30 hover:border-emerald-400',
+                  border: 'border-emerald-200',
+                  bg: 'bg-white hover:border-emerald-300',
+                  headerBg: 'from-emerald-50 via-emerald-50/70 to-teal-50/40',
+                  headerTitle: 'text-slate-900',
+                  pill: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                  cardBg: 'bg-slate-50/80 border-slate-200/90',
+                  nodeBg: 'bg-white hover:bg-emerald-50 text-slate-800 hover:text-emerald-900 border-slate-200 hover:border-emerald-300',
+                  nodeText: 'text-slate-900',
                   badge: 'bg-emerald-500 text-white',
-                  stemColor: 'border-emerald-500/40 group-hover/sub:border-emerald-400',
-                  branchLine: 'bg-emerald-500',
-                  spineSegment: 'from-emerald-500 to-amber-500',
-                  dot: 'bg-emerald-400',
-                  dotRing: 'ring-emerald-500/30'
+                  stemColor: 'border-emerald-300 group-hover/sub:border-emerald-400',
+                  branchLine: 'bg-emerald-400',
+                  spineSegment: 'from-emerald-400 to-amber-400',
+                  dot: 'bg-emerald-500',
+                  dotRing: 'ring-emerald-100'
                 } : {
-                  border: 'border-amber-500/40',
-                  bg: 'bg-amber-950/40 hover:bg-amber-950/60',
-                  headerBg: 'from-amber-500/30 to-orange-500/20',
-                  pill: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-                  nodeBg: 'bg-amber-950/70 hover:bg-amber-500/20 text-amber-100 hover:text-white border-amber-500/30 hover:border-amber-400',
+                  border: 'border-amber-200',
+                  bg: 'bg-white hover:border-amber-300',
+                  headerBg: 'from-amber-50 via-amber-50/70 to-orange-50/40',
+                  headerTitle: 'text-slate-900',
+                  pill: 'bg-amber-100 text-amber-800 border-amber-200',
+                  cardBg: 'bg-slate-50/80 border-slate-200/90',
+                  nodeBg: 'bg-white hover:bg-amber-50 text-slate-800 hover:text-amber-900 border-slate-200 hover:border-amber-300',
+                  nodeText: 'text-slate-900',
                   badge: 'bg-amber-500 text-white',
-                  stemColor: 'border-amber-500/40 group-hover/sub:border-amber-400',
-                  branchLine: 'bg-amber-500',
-                  spineSegment: 'from-amber-500 to-amber-400',
-                  dot: 'bg-amber-400',
-                  dotRing: 'ring-amber-500/30'
+                  stemColor: 'border-amber-300 group-hover/sub:border-amber-400',
+                  branchLine: 'bg-amber-400',
+                  spineSegment: 'from-amber-400 to-amber-500',
+                  dot: 'bg-amber-500',
+                  dotRing: 'ring-amber-100'
                 };
 
               return (
                 <div 
                   key={branch.id}
-                  className={`rounded-2xl border ${themeStyles.border} ${themeStyles.bg} transition-all duration-300 shadow-lg relative`}
+                  className={`rounded-2xl border ${themeStyles.border} ${themeStyles.bg} transition-all duration-300 shadow-xs relative`}
                 >
                   {/* Vertical Tree Spine Segment (精准停留在最后一个主干处) */}
                   <div 
@@ -481,20 +490,20 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
                   {/* Primary Branch Header (Click to collapse/expand) */}
                   <div 
                     onClick={(e) => toggleCollapse(branch.id, e)}
-                    className={`p-3.5 sm:p-4 bg-gradient-to-r ${themeStyles.headerBg} flex items-center justify-between cursor-pointer select-none transition hover:opacity-90 rounded-t-2xl`}
+                    className={`p-3.5 sm:p-4 bg-gradient-to-r ${themeStyles.headerBg} border-b border-slate-100 flex items-center justify-between cursor-pointer select-none transition hover:opacity-95 rounded-t-2xl`}
                   >
                     <div className="flex items-center gap-3">
-                      <button className="p-1 rounded-lg bg-white/10 text-white transition">
+                      <button className="p-1 rounded-lg bg-white/80 text-slate-700 shadow-2xs border border-slate-200/60 transition">
                         {isBranchCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                       </button>
                       <div>
-                        <h4 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2 flex-wrap">
+                        <h4 className="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2 flex-wrap">
                           <span>{branch.label}</span>
-                          <span className={`text-[10px] px-2 py-0.2 rounded-full border ${themeStyles.pill}`}>
+                          <span className={`text-[10px] px-2 py-0.2 rounded-full border font-bold ${themeStyles.pill}`}>
                             {branch.children?.reduce((acc, c) => acc + (c.children?.length || 0), 0)} 个核心考点
                           </span>
                         </h4>
-                        <p className="text-[11px] text-slate-300">
+                        <p className="text-[11px] text-slate-500 font-medium">
                           {branch.subLabel}
                         </p>
                       </div>
@@ -513,15 +522,15 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
                           return (
                             <div 
                               key={subCat.id}
-                              className="bg-slate-950/70 rounded-2xl p-4 border border-slate-800/90 shadow-md space-y-3 flex flex-col justify-between group/sub"
+                              className="bg-slate-50/70 rounded-2xl p-4 border border-slate-200/80 shadow-2xs space-y-3 flex flex-col justify-between group/sub hover:bg-slate-50 transition"
                             >
                               {/* Subcategory Header Label */}
-                              <div className="flex items-center justify-between border-b border-slate-800/80 pb-2">
+                              <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
                                 <div className="flex items-center gap-2">
                                   <span className={`w-2 h-2 rounded-full ${themeStyles.dot} ring-4 ${themeStyles.dotRing}`} />
-                                  <span className="text-xs font-bold text-slate-100">{subCat.label}</span>
+                                  <span className="text-xs font-bold text-slate-800">{subCat.label}</span>
                                 </div>
-                                <span className="text-[10px] text-slate-400 font-mono px-2 py-0.5 rounded-full bg-slate-800/80 border border-slate-700">
+                                <span className="text-[10px] text-slate-500 font-mono px-2 py-0.5 rounded-full bg-white border border-slate-200 font-semibold shadow-2xs">
                                   {subCat.children?.length || 0} 考点
                                 </span>
                               </div>
@@ -536,18 +545,18 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
                                     {/* Leaf Node Button */}
                                     <button
                                       onClick={() => handleLeafClick(leaf)}
-                                      className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all duration-200 flex items-center justify-between gap-2 cursor-pointer shadow-xs active:scale-[0.98] group/leaf ${themeStyles.nodeBg}`}
+                                      className={`w-full text-left px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all duration-200 flex items-center justify-between gap-2 cursor-pointer shadow-2xs active:scale-[0.98] group/leaf ${themeStyles.nodeBg}`}
                                       title={`点击跳转查看：${leaf.label} (${leaf.subLabel || ''})`}
                                     >
                                       <div className="flex items-center gap-1.5 min-w-0">
-                                        <span className="font-bold text-white tracking-wide shrink-0">{leaf.label}</span>
+                                        <span className="font-bold text-slate-900 group-hover/leaf:text-sky-700 tracking-wide shrink-0">{leaf.label}</span>
                                         {leaf.subLabel && (
-                                          <span className="text-[11px] text-slate-400 group-hover/leaf:text-slate-200 truncate font-normal">
+                                          <span className="text-[11px] text-slate-500 group-hover/leaf:text-slate-700 truncate font-normal">
                                             · {leaf.subLabel}
                                           </span>
                                         )}
                                       </div>
-                                      <ArrowRight className="w-3 h-3 text-slate-500 opacity-0 group-hover/leaf:opacity-100 group-hover/leaf:text-white group-hover/leaf:translate-x-0.5 transition shrink-0" />
+                                      <ArrowRight className="w-3 h-3 text-slate-400 opacity-0 group-hover/leaf:opacity-100 group-hover/leaf:text-sky-600 group-hover/leaf:translate-x-0.5 transition shrink-0" />
                                     </button>
                                   </div>
                                 ))}
@@ -568,12 +577,12 @@ export const JapaneseGrammarVisualMindMap: React.FC<JapaneseGrammarVisualMindMap
       </div>
 
       {/* Bottom Hint Footer */}
-      <div className="relative z-10 pt-2 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-slate-400 gap-2">
+      <div className="relative z-10 pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-slate-500 gap-2">
         <div className="flex items-center gap-2 flex-wrap">
-          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+          <Sparkles className="w-3.5 h-3.5 text-sky-500" />
           <span>全体系覆盖：品词基石 (10) · 动词活用与态 (14) · 助词与终助语气 (14) · 假定/因果/转折/授受/敬语 (34)</span>
         </div>
-        <span className="text-slate-500">点击任意知识气泡即可直达语法卡片或变形矩阵</span>
+        <span className="text-slate-400">点击任意知识气泡即可直达语法卡片或变形矩阵</span>
       </div>
 
     </div>
