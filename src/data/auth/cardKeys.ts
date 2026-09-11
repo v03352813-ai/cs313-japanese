@@ -134,13 +134,16 @@ export function verifyCardKey(
     return { success: false, message: '请输入激活卡密' };
   }
 
-  // 1. 第一道防线：数学级数字防伪签名校验（杜绝假码、瞎填）
-  const sigResult = verifyKeySignature(cleanKey);
-  if (!sigResult.valid) {
-    return {
-      success: false,
-      message: sigResult.reason || '激活码无效或已被篡改，请核对后重试。'
-    };
+  // 1. 第一道防线：官方特权示范卡直接通行，其余卡执行数学级数字防伪签名校验
+  const isPresetDemo = Boolean(PRESET_VIP_KEYS[cleanKey]);
+  if (!isPresetDemo) {
+    const sigResult = verifyKeySignature(cleanKey);
+    if (!sigResult.valid) {
+      return {
+        success: false,
+        message: sigResult.reason || '激活码无效或已被篡改，请核对后重试。'
+      };
+    }
   }
 
   // 2. 第二道防线：官方正版出库库比对（杜绝未售出或伪造号码）

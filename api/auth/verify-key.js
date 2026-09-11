@@ -1,11 +1,24 @@
 import crypto from 'node:crypto';
 import { bindDeviceToLicense, checkRateLimit, recordFailedAttempt, getUserProgress } from '../lib/db.js';
 
-const SIGNATURE_SECRET_SALT = 'CS313_KR_2026_PRODUCTION_AUTH_KEY_V9X_TOP_SECRET';
+const JP_SECRET_SALT = 'CS313_JP_2026_PRODUCTION_AUTH_KEY_V9X_TOP_SECRET';
+const KR_SECRET_SALT = 'CS313_KR_2026_PRODUCTION_AUTH_KEY_V9X_TOP_SECRET';
 const SAFE_CHARSET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
-function computeKeySignature(type, serial) {
-  const payload = `${SIGNATURE_SECRET_SALT}:${type}:${serial.toUpperCase()}`;
+// 官方特权/母卡白名单（永久有效）
+const PRESET_VIP_KEYS = {
+  'CS313-ALL-VIP8-87GT': { tier: 'all_lang', planName: '全球小语种黑金终身通卡' },
+  'CS313-ALL-GOLD-7U7R': { tier: 'all_lang', planName: '全球小语种黑金终身通卡' },
+  'CS313-JP-8888-HL3Y': { tier: 'jp_lifetime', planName: '日语单语种终身VIP' },
+  'CS313-JP-9999-DVCG': { tier: 'jp_lifetime', planName: '日语单语种终身VIP' },
+  'CS313-JP-5200-Q2NH': { tier: 'jp_lifetime', planName: '日语单语种终身VIP' },
+  'CS313-JP-6666-9575': { tier: 'jp_lifetime', planName: '日语单语种终身VIP' },
+  'CS313-JP-7777-UU7Z': { tier: 'jp_lifetime', planName: '日语单语种终身VIP' },
+  'CS313-KR-8888-A1B2': { tier: 'kr_lifetime', planName: '韩语单语种终身VIP' },
+};
+
+function computeKeySignature(type, serial, salt = JP_SECRET_SALT) {
+  const payload = `${salt}:${type}:${serial.toUpperCase()}`;
   const rawHash = crypto.createHash('sha256').update(payload).digest('hex');
   let sig = '';
   for (let i = 0; i < 4; i++) {
@@ -49,32 +62,45 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, message: '请输入激活卡密' });
     }
 
-    // 2. 严禁任意 16 位字符随意通过，必须严格符合 CS313 密码学防伪格式
-    const match = cleanKey.match(/^CS313-(KR|ALL)-([2-9A-HJ-NP-Z]{4})-([2-9A-HJ-NP-Z]{4})$/);
-    if (!match) {
-      await recordFailedAttempt(clientIp);
-      return res.status(400).json({
-        success: false,
-        message: '激活码格式无效（标准格式示例：CS313-KR-8888-A1B2）。'
-      });
+    let tier = 'jp_lifetime';
+    let planName = 'CS313 日语单语种终身VIP';
+
+    // 2. 优先检查是否命中官方特权/母卡白名单
+    if (PRESET_VIP_KEYS[cleanKey]) {
+      tier = PRESET_VIP_KEYS[cleanKey].tier;
+      planName = PRESET_VIP_KEYS[cleanKey].planName;
+    } else {
+      // 3. 严格正则匹配标准格式: CS313-(JP|KR|ALL)-[4位序号]-[4位签名]
+      const match = cleanKey.match(/^CS313-(JP|KR|ALL)-([0-9A-Z]{4})-([0-9A-Z]{4})$/);
+      if (!match) {
+        await recordFailedAttempt(clientIp);
+        return res.status(400).json({
+          success: false,
+          message: '激活码格式无效（标准格式示例：CS313-JP-8888-HL3Y 或 CS313-ALL-VIP8-87GT）。'
+        });
+      }
+
+      const type = match[1];
+      const serial = match[2];
+      const providedSig = match[3];
+
+      // 4. 密码学数学签名校验（同时适配 JP 盐与 KR 盐）
+      const expectedSigJP = computeKeySignature(type, serial, JP_SECRET_SALT);
+      const expectedSigKR = computeKeySignature(type, serial, KR_SECRET_SALT);
+
+      if (providedSig !== expectedSigJP && providedSig !== expectedSigKR) {
+        await recordFailedAttempt(clientIp);
+        return res.status(400).json({
+          success: false,
+          message: '激活码防伪签名校验失败！此码为伪造代码，无法激活。'
+        });
+      }
+
+      tier = type === 'ALL' ? 'all_lang' : (type === 'JP' ? 'jp_lifetime' : 'kr_lifetime');
+      planName = type === 'ALL' ? '全球小语种黑金终身通卡' : (type === 'JP' ? '日语单语种终身VIP' : '韩语单语种终身VIP');
     }
 
-    const type = match[1];
-    const serial = match[2];
-    const providedSig = match[3];
-
-    // 3. 密码学数学签名校验
-    const expectedSig = computeKeySignature(type, serial);
-    if (providedSig !== expectedSig) {
-      await recordFailedAttempt(clientIp);
-      return res.status(400).json({
-        success: false,
-        message: '激活码防伪签名校验失败！此码为伪造代码，无法激活。'
-      });
-    }
-
-    // 4. 云数据库持久化 & 设备绑定与找回逻辑
-    const tier = type === 'ALL' ? 'all_lang' : 'kr_lifetime';
+    // 5. 云数据库持久化 & 设备绑定与找回逻辑
     const dbResult = await bindDeviceToLicense(cleanKey, device, tier);
 
     if (!dbResult.success) {
