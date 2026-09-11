@@ -35,7 +35,7 @@ interface JlptExamViewProps {
 type LevelFilterType = 'all' | 'n1' | 'n2' | 'n3' | 'n4' | 'n5';
 
 export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModal, onNavigateToWriting }) => {
-  const [selectedPaperId, setSelectedPaperId] = useState<string>('marathon-jlpt-n1-2025-12');
+  const [selectedPaperId, setSelectedPaperId] = useState<string>('jlpt-n1-2025-12');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -43,7 +43,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showInstantExplanation, setShowInstantExplanation] = useState<boolean>(true);
 
-  // Filter papers purely by level and search query across the complete 80-paper repository
+  // Filter papers purely by level and search query across the complete 155-paper repository (2010-2025)
   const filteredPapers = useMemo(() => {
     return JAPANESE_JLPT_EXAMS.filter((paper) => {
       if (levelFilter !== 'all') {
@@ -358,7 +358,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               📚 JLPT 官方历届考期真题全真机考题库
             </span>
             <span className="text-slate-500 hidden sm:inline">
-              (N1~N5 严格各收录 16 套真题，全库共 80 套，每年 7月 / 12月 考后持续同步更新):
+              (收录 2010~2025 官方新大纲改革以来全量 31 大考期，每级各 31 套，全库共 155 套，每年 7月 / 12月 考后持续同步更新):
             </span>
           </div>
           <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70">
@@ -367,11 +367,11 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               每年 7月 / 12月 考后官方考期同步入库
             </span>
             <span className="text-slate-300">|</span>
-            <span className="text-sky-600 font-extrabold">全真题库严格收录 80 套</span>
+            <span className="text-sky-600 font-extrabold">全真题库严格收录 155 套</span>
           </div>
         </div>
 
-        {/* 等级快速筛选 (全部 80 套，各级别各 16 套) */}
+        {/* 等级快速筛选 (全部 155 套，各级别各 31 套) */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
             <span className="w-1.5 h-3.5 bg-sky-500 rounded-full" />
@@ -428,7 +428,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                   const pIdx = filteredPapers.findIndex(p => p.id === targetId);
                   const isLockedPaper = !isVip && !targetPaper?.isFreePreview && pIdx !== 0;
                   if (isLockedPaper) {
-                    onOpenVipModal(`🔒《${targetPaper?.title}》为 VIP 专属真题考场！升级 VIP 终身卡（仅 ¥49.9），即可无限畅刷 JLPT 历届官方考期真题大卷（每年7月/12月考后持续同步更新）！`);
+                    onOpenVipModal(`🔒《${targetPaper?.title}》为 VIP 专属真题考场！升级 VIP 终身卡（仅 ¥49.9），即可无限畅刷 2010~2025 全量 31 大官方考期真题大卷（每年7月/12月考后持续同步更新）！`);
                     return;
                   }
                   setSelectedPaperId(targetId);
