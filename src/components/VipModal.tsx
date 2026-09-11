@@ -39,7 +39,7 @@ export const VipModal: React.FC<VipModalProps> = ({ isOpen, onClose, onActivated
   const [copiedXianyu, setCopiedXianyu] = useState<boolean>(false);
   const [currentDevice] = useState<DeviceInfo>(() => getDeviceFingerprint());
 
-  const XIANYU_ITEM_ID = '1082513349743';
+  const XIANYU_ITEM_ID = '1083031561914';
   const XIANYU_ITEM_URL = `https://h5.m.goofish.com/item?id=${XIANYU_ITEM_ID}`;
 
   const copyXianyuLink = async () => {
