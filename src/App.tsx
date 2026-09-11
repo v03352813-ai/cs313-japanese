@@ -53,7 +53,7 @@ const ExamRegistrationModal = resilientLazy(() => import('./components/ExamRegis
 import { WallpaperBanner } from './components/WallpaperBanner';
 import { getSavedLicense, saveLicense, clearLicense } from './data/auth/cardKeys';
 import { getDeviceFingerprint } from './utils/fingerprint';
-import { Shield, Sparkles, ChevronLeft, Tablet, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Shield, Sparkles, ChevronLeft, Tablet, AlertTriangle, CheckCircle2, Home, ArrowUp } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { api } from './services/api';
 
@@ -244,6 +244,17 @@ export function App() {
 
   const [selectedDramaSceneId, setSelectedDramaSceneId] = useState<string | undefined>();
 
+  // 监听页面向下滚动距离，超过 200px 时在右下角优雅浮现快捷控制（回到顶部 / 返回首页）
+  const [showScrollControls, setShowScrollControls] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollControls(window.scrollY > 200);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleTabChange = (tab: ActiveTab, sceneId?: string) => {
     setActiveTab(tab);
     if (sceneId) {
@@ -304,18 +315,6 @@ export function App() {
         </div>
       )}
 
-      {/* Breadcrumb / Back button when not on Home */}
-      {activeTab !== 'home' && (
-        <div className="max-w-6xl mx-auto px-4 pt-4 w-full">
-          <button
-            onClick={() => handleTabChange('home')}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200/90 text-xs font-bold text-slate-600 hover:text-sky-600 hover:bg-sky-50/50 hover:border-sky-200 transition shadow-2xs"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            <span>返回首页</span>
-          </button>
-        </div>
-      )}
 
       {/* Main Learning Content Area */}
       <main className="flex-1 pb-6">
@@ -489,6 +488,37 @@ export function App() {
           />
         )}
       </React.Suspense>
+
+      {/* 右下角智能悬浮快捷控制（向下滚动 > 200px 后优雅浮现） */}
+      <div
+        className={`fixed bottom-6 right-4 sm:right-6 z-40 flex flex-col items-end gap-2.5 transition-all duration-300 ${
+          showScrollControls
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
+      >
+        {/* 回到顶部按钮 */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          title="回到顶部"
+          aria-label="回到顶部"
+          className="w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-slate-200 shadow-md hover:shadow-lg text-slate-500 hover:text-sky-600 hover:border-sky-300 flex items-center justify-center transition active:scale-95 cursor-pointer group"
+        >
+          <ArrowUp className="w-4 h-4 group-hover:-translate-y-0.5 transition-transform" />
+        </button>
+
+        {/* 非首页状态：一键返回首页 */}
+        {activeTab !== 'home' && (
+          <button
+            onClick={() => handleTabChange('home')}
+            title="返回首页"
+            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 shadow-md hover:shadow-lg hover:border-sky-300 text-slate-700 hover:text-sky-600 text-xs font-bold transition active:scale-95 cursor-pointer group"
+          >
+            <Home className="w-4 h-4 text-sky-500 group-hover:scale-110 transition-transform" />
+            <span>返回首页</span>
+          </button>
+        )}
+      </div>
 
     </div>
   );
