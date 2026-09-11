@@ -329,7 +329,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               </span>
             </div>
             <p className="text-slate-600 leading-relaxed font-medium">
-              日本语能力测试（JLPT N1~N5）官方大纲全卷为客观四选一（机读涂卡），<strong>官方不设主观写作（作文）题型</strong>。本机考题库严格对齐官方大纲，完整覆盖<strong>【言语知识】、【文法排词★】、【读解长文分析】与【听解原声】</strong>四大核心板块。
+              日本语能力测试（JLPT N1~N5）官方全卷为 <strong>100% 客观四选一（官方不考作文）</strong>，完整覆盖【言语知识】、【文法排词★】、【读解分析】与【听解原声】四大板块。若您需备考 <strong>EJU 留考小论文、J-TEST 记述或商务邮件</strong>，可点击右侧按钮进入专属工坊练习。
             </p>
           </div>
         </div>
@@ -338,8 +338,8 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-2 shrink-0 flex-wrap">
             <button
               onClick={onNavigateToWriting}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs shrink-0 flex items-center justify-center gap-1 border border-slate-200 transition cursor-pointer shadow-2xs"
-              title="JLPT官方无写作，此工坊专为EJU留考/商务邮件设计"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs shrink-0 flex items-center justify-center gap-1 border border-slate-200 transition cursor-pointer shadow-2xs whitespace-nowrap"
+              title="JLPT 官方无写作；此工坊专为备考 EJU 留考小论文、J-TEST 记述与商务邮件设计"
             >
               <span>✍️ 选修: 留考/商务写作</span>
             </button>
