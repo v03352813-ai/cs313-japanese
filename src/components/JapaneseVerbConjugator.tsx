@@ -10,10 +10,10 @@ import {
   Layers,
   ChevronDown,
   ChevronUp,
-  RotateCcw,
   Zap,
   CheckCircle2,
-  HelpCircle
+  HelpCircle,
+  Play
 } from 'lucide-react';
 import {
   VERB_CONJUGATOR_DATABASE,
@@ -177,31 +177,33 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
       </div>
 
       {/* ========================================================================= */}
-      {/* 模式 1：交互推导工作台 (Interactive Workbench) */}
+      {/* 模式 1：交互推导工作台 (全新居中对称架构 · 凸显推导核心焦点) */}
       {/* ========================================================================= */}
       {viewMode === 'workbench' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        <div className="space-y-4 sm:space-y-5">
           
-          {/* 左侧栏 (4 cols): 动词库选择器 */}
-          <div className="lg:col-span-4 space-y-3">
-            {/* 搜索与分类 */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-3.5 space-y-3">
-              {/* 搜索输入框 */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          {/* ========================================================================= */}
+          {/* ① 顶部动词选控中心 (Symmetrical Verb Selection Deck) */}
+          {/* ========================================================================= */}
+          <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-4 sm:p-5 space-y-3.5">
+            {/* 上排：搜索与分类对称排布 */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
                   type="text"
-                  placeholder="搜索动词 (如 書く, 食べる, 飲む)..."
+                  placeholder="搜索动词 (如 書く, 食べる, 飲む, 行く, する)..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:outline-hidden focus:ring-2 focus:ring-sky-500/20 focus:bg-white transition"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs sm:text-sm font-medium focus:outline-hidden focus:ring-2 focus:ring-sky-500/20 focus:bg-white transition text-slate-800"
                 />
               </div>
 
-              {/* 动词分类药丸过滤 */}
-              <div className="flex items-center gap-1 flex-wrap text-xs">
+              {/* 分类药丸组 */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs font-bold text-slate-400 mr-1 hidden sm:inline">动词分类：</span>
                 {[
-                  { key: 'all', label: '全部动词' },
+                  { key: 'all', label: '全部核心词' },
                   { key: 'group1_godan', label: '1类五段' },
                   { key: 'group2_ichidan', label: '2类一段' },
                   { key: 'group3_irregular', label: '3类不规则' },
@@ -209,9 +211,9 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
                   <button
                     key={tab.key}
                     onClick={() => setSelectedGroup(tab.key as any)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                       selectedGroup === tab.key
-                        ? 'bg-sky-500 text-white shadow-2xs'
+                        ? 'bg-slate-900 text-white shadow-2xs'
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
                     }`}
                   >
@@ -221,8 +223,8 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
               </div>
             </div>
 
-            {/* 动词列表 */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-2 space-y-1.5 max-h-[520px] overflow-y-auto">
+            {/* 下排：动词选择卡片胶囊网格 (整齐对称排列) */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 pt-1">
               {filteredVerbs.map(verb => {
                 const isSelected = selectedVerb.id === verb.id;
                 const isLocked = !isVip && !verb.isFree;
@@ -231,52 +233,35 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
                   <button
                     key={verb.id}
                     onClick={() => handleSelectVerb(verb)}
-                    className={`w-full p-3 rounded-2xl flex items-center justify-between text-left transition cursor-pointer group ${
+                    className={`p-2.5 rounded-2xl border text-left transition cursor-pointer flex flex-col justify-between gap-1 group relative overflow-hidden ${
                       isSelected
-                        ? 'bg-sky-500 text-white shadow-sm ring-2 ring-sky-500/30'
-                        : 'hover:bg-slate-50 border border-transparent text-slate-800'
+                        ? 'bg-sky-500 text-white border-sky-500 shadow-md ring-2 ring-sky-300'
+                        : 'bg-slate-50/70 hover:bg-slate-100 border-slate-200/80 text-slate-800'
                     }`}
                   >
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <span className={`text-base font-black tracking-tight ${isSelected ? 'text-white' : 'text-slate-900'}`}>
-                          {verb.kanji}
-                        </span>
-                        <span className={`text-xs font-mono ${isSelected ? 'text-sky-100' : 'text-slate-400'}`}>
-                          {verb.hiragana}
-                        </span>
-                        {verb.specialFeatureBadge && (
-                          <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
-                            isSelected ? 'bg-white/20 text-white' : 'bg-amber-50 text-amber-800 border border-amber-200'
-                          }`}>
-                            {verb.specialFeatureBadge}
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 text-xs">
-                        <span className={isSelected ? 'text-sky-100 font-medium' : 'text-slate-500'}>
-                          {verb.meaning}
-                        </span>
-                        <span className={`text-[10px] px-1.5 py-0.2 rounded ${
-                          isSelected ? 'bg-sky-600 text-white' : 'bg-slate-100 text-slate-600'
-                        }`}>
-                          {verb.groupLabel.split(' ')[0]}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="shrink-0">
+                    <div className="flex items-center justify-between gap-1">
+                      <span className={`text-base font-black tracking-tight ${isSelected ? 'text-white' : 'text-slate-900'}`}>
+                        {verb.kanji}
+                      </span>
                       {isLocked ? (
-                        <span className="px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-black flex items-center gap-0.5">
+                        <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 text-[9px] font-black flex items-center gap-0.5">
                           <Lock className="w-2.5 h-2.5" /> VIP
                         </span>
                       ) : (
-                        <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${
-                          isSelected ? 'bg-white text-sky-700 font-black' : 'text-slate-400'
+                        <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded ${
+                          isSelected ? 'bg-white/20 text-white' : 'bg-slate-200/70 text-slate-600'
                         }`}>
                           {verb.jlptLevel}
                         </span>
                       )}
+                    </div>
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className={`font-mono truncate ${isSelected ? 'text-sky-100' : 'text-slate-400'}`}>
+                        {verb.hiragana}
+                      </span>
+                      <span className={`font-medium ${isSelected ? 'text-white' : 'text-slate-600'}`}>
+                        {verb.meaning}
+                      </span>
                     </div>
                   </button>
                 );
@@ -284,61 +269,63 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
             </div>
           </div>
 
-          {/* 右侧栏 (8 cols): 交互推导演练主舞台 */}
-          <div className="lg:col-span-8 space-y-4">
+          {/* ========================================================================= */}
+          {/* ② 选中的动词标头栏 + 10 大活用形态对称切换矩阵 */}
+          {/* ========================================================================= */}
+          <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 sm:p-6 space-y-4">
             
-            {/* 动词详情标头卡 */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="text-2xl sm:text-3xl font-black text-slate-900">
-                    {selectedVerb.kanji}
-                  </span>
-                  <span className="text-sm sm:text-base font-bold text-sky-600 font-mono">
-                    [{selectedVerb.hiragana} · {selectedVerb.romaji}]
-                  </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold">
-                    {selectedVerb.groupLabel}
-                  </span>
-                  <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">
-                    JLPT {selectedVerb.jlptLevel}
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm text-slate-500 font-medium">
-                  基础释义：<strong>{selectedVerb.meaning}</strong>
-                  {selectedVerb.specialFeatureBadge && (
-                    <span className="ml-2 text-amber-600 font-bold">
-                      • {selectedVerb.specialFeatureBadge}
+            {/* 动词大标头 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+                  {selectedVerb.kanji}
+                </span>
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold text-sky-600 font-mono">
+                      【{selectedVerb.hiragana} · {selectedVerb.romaji}】
                     </span>
-                  )}
-                </p>
+                    <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-extrabold">
+                      {selectedVerb.groupLabel}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 text-xs font-bold">
+                      JLPT {selectedVerb.jlptLevel}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium">
+                    核心原意：<strong>{selectedVerb.meaning}</strong>
+                    {selectedVerb.specialFeatureBadge && (
+                      <span className="ml-2 text-amber-600 font-bold">
+                        • {selectedVerb.specialFeatureBadge}
+                      </span>
+                    )}
+                  </p>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => speakJapanese(selectedVerb.kanji)}
-                  className="px-3 py-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                  title="朗读辞书形原形"
-                >
-                  <Volume2 className="w-4 h-4 text-sky-600" />
-                  <span>朗读原形</span>
-                </button>
-              </div>
+              <button
+                onClick={() => speakJapanese(selectedVerb.kanji)}
+                className="px-4 py-2 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 text-xs font-black transition flex items-center gap-1.5 cursor-pointer shadow-2xs self-start sm:self-auto"
+                title="朗读辞书形原形"
+              >
+                <Volume2 className="w-4 h-4 text-sky-600" />
+                <span>朗读原型发音</span>
+              </button>
             </div>
 
-            {/* 10 大活用形态切换条 (Tabs) */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-3 space-y-2">
-              <div className="flex items-center justify-between px-2">
-                <span className="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+            {/* 10 大活用形态切换条 (5x2 完美对称网格) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-sky-500" />
-                  选择目标活用变形形态（点击即刻触发推导）
+                  切换目标活用形态（点击即刻执行推导）
                 </span>
-                <span className="text-[11px] text-sky-600 font-bold">
+                <span className="text-xs text-sky-600 font-black">
                   当前形态：{currentFormMeta.name}
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 {CONJUGATION_FORMS_META.map(form => {
                   const isCurrent = form.key === selectedFormKey;
                   return (
@@ -348,19 +335,19 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
                         setSelectedFormKey(form.key);
                         speakJapanese(selectedVerb.forms[form.key].result);
                       }}
-                      className={`p-2.5 rounded-2xl text-left transition cursor-pointer flex flex-col justify-between gap-1 border ${
+                      className={`p-3 rounded-2xl text-left transition cursor-pointer flex flex-col justify-between gap-1 border ${
                         isCurrent
-                          ? 'bg-sky-500 text-white border-sky-500 shadow-xs ring-2 ring-sky-500/20'
-                          : 'bg-slate-50 hover:bg-slate-100 border-slate-200/80 text-slate-700'
+                          ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white border-transparent shadow-md ring-2 ring-sky-400/30'
+                          : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className={`text-xs font-black ${isCurrent ? 'text-white' : 'text-slate-900'}`}>
                           {form.shortName}
                         </span>
-                        {isCurrent && <CheckCircle2 className="w-3.5 h-3.5 text-sky-100" />}
+                        {isCurrent && <CheckCircle2 className="w-3.5 h-3.5 text-sky-200" />}
                       </div>
-                      <span className={`text-[10px] line-clamp-1 ${isCurrent ? 'text-sky-100' : 'text-slate-400'}`}>
+                      <span className={`text-[10px] line-clamp-1 ${isCurrent ? 'text-sky-100 font-medium' : 'text-slate-400'}`}>
                         {form.formulaTag}
                       </span>
                     </button>
@@ -369,221 +356,234 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
               </div>
             </div>
 
-            {/* ========================================================================= */}
-            {/* 🎯 独家核心推导演练舞台 (The Visual Derivation Pipeline Stage) */}
-            {/* ========================================================================= */}
-            <div className="bg-white rounded-3xl border-2 border-sky-400/70 shadow-md p-5 sm:p-6 space-y-5 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-sky-100/60 to-transparent pointer-events-none rounded-bl-full" />
+          </div>
 
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-lg bg-sky-100 text-sky-800 text-xs font-black">
-                    推导进行中
-                  </span>
-                  <h3 className="text-base font-black text-slate-900">
-                    【{selectedVerb.kanji}】➔【{currentFormMeta.name}】动态推导全过程
-                  </h3>
+          {/* ========================================================================= */}
+          {/* ③ 🎯 独家核心推导演练大舞台 (The High-Impact Derivation Stage · 重点极大凸显！) */}
+          {/* ========================================================================= */}
+          <div className="bg-white rounded-3xl border-2 border-sky-400 shadow-xl p-5 sm:p-7 space-y-6 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-sky-100/50 to-transparent pointer-events-none rounded-bl-full" />
+
+            {/* 顶栏信息 */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <span className="px-3 py-1 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white text-xs font-black shadow-xs">
+                  ⚡ 核心推导中
+                </span>
+                <h3 className="text-base sm:text-lg font-black text-slate-900">
+                  【{selectedVerb.kanji}】➔【{currentFormMeta.name}】推导演变轨迹
+                </h3>
+              </div>
+              <span className="text-xs text-slate-500 font-bold bg-slate-50 px-3 py-1 rounded-full border border-slate-200 self-start sm:self-auto">
+                {currentFormMeta.meaningTag}
+              </span>
+            </div>
+
+            {/* 核心三步流可视化拆解 (3-Stage Symmetrical Pipeline) */}
+            <div className="grid grid-cols-1 md:grid-cols-11 gap-3 items-center">
+              
+              {/* Step 1: 锁定词干 (3 cols) */}
+              <div className="md:col-span-3 p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/90 text-center space-y-1.5 shadow-2xs">
+                <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                  STEP 01 · 锁定词干
+                </span>
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
+                  {currentDerivation.stem}
                 </div>
-                <span className="text-xs text-slate-500 font-medium hidden sm:inline">
-                  {currentFormMeta.meaningTag}
+                <span className="text-xs text-slate-500 font-medium block">
+                  保持不变的词基
                 </span>
               </div>
 
-              {/* 4 步可视化拆解推导流 (Visual Derivation Pipeline) */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
-                
-                {/* Step 1: 锁定词干 (Stem) */}
-                <div className="sm:col-span-3 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-1">
-                  <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">
-                    第 1 步 · 锁定词干
-                  </span>
-                  <div className="text-xl sm:text-2xl font-black text-slate-800 font-mono">
-                    {currentDerivation.stem}
-                  </div>
-                  <span className="text-[11px] text-slate-500 font-medium block">
-                    保持不变的词基
-                  </span>
-                </div>
-
-                {/* Arrow 1 */}
-                <div className="sm:col-span-1 flex justify-center text-sky-400">
-                  <ArrowRight className="w-5 h-5" />
-                </div>
-
-                {/* Step 2: 词尾跃迁/音便规则 (Transition Rule) */}
-                <div className="sm:col-span-4 p-3.5 rounded-2xl bg-sky-50/80 border border-sky-200 text-center space-y-1">
-                  <span className="text-[10px] font-extrabold text-sky-700 uppercase tracking-wider block">
-                    第 2 步 · 假名段位跃迁 / 音便
-                  </span>
-                  <div className="text-xs font-black text-sky-950 leading-relaxed px-1">
-                    {currentDerivation.stepExplanation}
-                  </div>
-                  {currentDerivation.soundEffectTag && (
-                    <span className="inline-block px-2 py-0.5 rounded-full bg-white text-sky-700 border border-sky-200 text-[10px] font-extrabold shadow-2xs">
-                      ⚡ {currentDerivation.soundEffectTag}
-                    </span>
-                  )}
-                </div>
-
-                {/* Arrow 2 */}
-                <div className="sm:col-span-1 flex justify-center text-sky-400">
-                  <ArrowRight className="w-5 h-5" />
-                </div>
-
-                {/* Step 3: 最终变形结果 (Final Result) */}
-                <div
-                  onClick={() => speakJapanese(currentDerivation.result)}
-                  className="sm:col-span-3 p-3.5 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white text-center space-y-1 shadow-md cursor-pointer hover:scale-102 transition duration-200 group"
-                  title="点击朗读变形后发音"
-                >
-                  <span className="text-[10px] font-extrabold text-sky-200 uppercase tracking-wider flex items-center justify-center gap-1">
-                    <span>最终变形</span>
-                    <Volume2 className="w-3 h-3 group-hover:animate-pulse" />
-                  </span>
-                  <div className="text-xl sm:text-2xl font-black font-mono">
-                    {currentDerivation.result}
-                  </div>
-                  <span className="text-[11px] text-sky-100 font-bold block">
-                    {currentDerivation.meaning}
-                  </span>
-                </div>
-
+              {/* Arrow 1 */}
+              <div className="md:col-span-1 flex justify-center text-sky-400">
+                <ArrowRight className="w-6 h-6 stroke-[2.5]" />
               </div>
 
-              {/* 变形后全拼读与释义 */}
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <span className="text-xs font-bold text-slate-400">推导形态：</span>
-                  <span className="text-base font-black text-sky-700">
-                    {currentDerivation.result}
-                  </span>
-                  <span className="text-xs text-slate-500 font-mono">
-                    【{currentDerivation.furigana} · {currentDerivation.romaji}】
-                  </span>
-                  <span className="text-xs font-bold text-slate-700">
-                    ➔ 释义：{currentDerivation.meaning}
-                  </span>
+              {/* Step 2: 假名段位跃迁 / 音便演变 (4 cols - 核心放大) */}
+              <div className="md:col-span-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-sky-50 via-indigo-50/40 to-sky-50 border border-sky-300 text-center space-y-2 shadow-xs">
+                <span className="text-[10px] font-extrabold text-sky-700 uppercase tracking-wider block">
+                  STEP 02 · 假名段位跃迁 / 音便
+                </span>
+                <div className="text-xs sm:text-sm font-black text-sky-950 leading-relaxed px-1">
+                  {currentDerivation.stepExplanation}
                 </div>
-
-                <button
-                  onClick={() => speakJapanese(currentDerivation.result)}
-                  className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-sky-50 text-sky-600 border border-slate-200 text-xs font-black flex items-center gap-1.5 transition cursor-pointer shadow-2xs self-start sm:self-auto"
-                >
-                  <Volume2 className="w-3.5 h-3.5" />
-                  <span>播放东京腔原声</span>
-                </button>
+                {currentDerivation.soundEffectTag && (
+                  <span className="inline-block px-3 py-1 rounded-full bg-white text-sky-700 border border-sky-300 text-[11px] font-extrabold shadow-xs">
+                    ⚡ {currentDerivation.soundEffectTag}
+                  </span>
+                )}
               </div>
 
-              {/* 考点避坑提示 (如果有) */}
-              {currentDerivation.trapNotes && (
-                <div className="p-4 rounded-2xl bg-amber-50/90 border border-amber-200/80 text-amber-950 space-y-1">
-                  <div className="flex items-center gap-1.5 font-black text-xs text-amber-900">
+              {/* Arrow 2 */}
+              <div className="md:col-span-1 flex justify-center text-sky-400">
+                <ArrowRight className="w-6 h-6 stroke-[2.5]" />
+              </div>
+
+              {/* Step 3: 最终变形结果 (3 cols) */}
+              <div
+                onClick={() => speakJapanese(currentDerivation.result)}
+                className="md:col-span-2 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-sky-500 via-indigo-600 to-sky-600 text-white text-center space-y-1.5 shadow-lg cursor-pointer hover:scale-103 transition duration-200 group"
+                title="点击朗读变形发音"
+              >
+                <span className="text-[10px] font-extrabold text-sky-200 uppercase tracking-wider flex items-center justify-center gap-1">
+                  <span>STEP 03 · 最终变形</span>
+                  <Volume2 className="w-3 h-3 group-hover:animate-pulse" />
+                </span>
+                <div className="text-2xl sm:text-3xl font-black font-mono tracking-wide">
+                  {currentDerivation.result}
+                </div>
+                <span className="text-xs text-sky-100 font-bold block truncate">
+                  {currentDerivation.meaning}
+                </span>
+              </div>
+
+            </div>
+
+            {/* 结果大字播报栏 */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="text-xs font-bold text-slate-400">推导成果：</span>
+                <span className="text-xl font-black text-sky-700 font-mono">
+                  {currentDerivation.result}
+                </span>
+                <span className="text-xs sm:text-sm text-slate-500 font-mono">
+                  【{currentDerivation.furigana} · {currentDerivation.romaji}】
+                </span>
+                <span className="text-xs sm:text-sm font-bold text-slate-800">
+                  ➔ 意为：{currentDerivation.meaning}
+                </span>
+              </div>
+
+              <button
+                onClick={() => speakJapanese(currentDerivation.result)}
+                className="px-4 py-2 rounded-xl bg-white hover:bg-sky-50 text-sky-600 border border-slate-200 text-xs font-black flex items-center gap-2 transition cursor-pointer shadow-2xs self-start sm:self-auto shrink-0"
+              >
+                <Volume2 className="w-4 h-4 text-sky-500" />
+                <span>播放东京标准音</span>
+              </button>
+            </div>
+
+            {/* 下排：左右 50:50 严格对称双子卡片 (避坑预警 vs 真题例句) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              
+              {/* 左卡 (50%)：考点避坑高能预警 */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/80 border border-amber-200/90 text-amber-950 space-y-2 flex flex-col justify-between">
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2 font-black text-xs sm:text-sm text-amber-900">
                     <Lightbulb className="w-4 h-4 text-amber-600 shrink-0" />
-                    <span>JLPT 考点避坑高能预警：</span>
+                    <span>JLPT 考点避坑高能预警</span>
                   </div>
-                  <p className="text-xs font-medium text-amber-900/90 leading-relaxed pl-5">
-                    {currentDerivation.trapNotes}
+                  <p className="text-xs font-medium text-amber-900/90 leading-relaxed pl-6">
+                    {currentDerivation.trapNotes || '💡 掌握此类动词的变化规律与接续助词搭配，重点关注长音与促音书写规范，牢记假名跳段法则！'}
                   </p>
                 </div>
-              )}
+                <div className="pt-2 border-t border-amber-200/60 text-[10px] text-amber-700 font-bold pl-6">
+                  ⚠️ 备考必记 · 谨防混淆
+                </div>
+              </div>
 
-              {/* 经典真题例句实战 */}
-              <div className="space-y-2 pt-1">
-                <span className="text-xs font-extrabold text-slate-400 uppercase tracking-wider block flex items-center gap-1">
-                  <BookOpen className="w-3.5 h-3.5 text-sky-500" />
-                  历届真题语境实战例句
-                </span>
-                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-sky-300 transition space-y-2">
+              {/* 右卡 (50%)：历届真题例句实战 */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 flex flex-col justify-between">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm sm:text-base font-black text-slate-900 tracking-wide">
-                      {currentDerivation.exampleJa}
-                    </p>
+                    <span className="flex items-center gap-1.5 text-xs sm:text-sm font-black text-slate-900">
+                      <BookOpen className="w-4 h-4 text-sky-600 shrink-0" />
+                      <span>历届真题语境实战例句</span>
+                    </span>
                     <button
                       onClick={() => speakJapanese(currentDerivation.exampleJa)}
-                      className="p-1.5 rounded-full bg-slate-50 hover:bg-sky-50 text-sky-600 border border-slate-200 shadow-2xs cursor-pointer transition shrink-0"
+                      className="p-1.5 rounded-full bg-white hover:bg-sky-50 text-sky-600 border border-slate-200 shadow-2xs cursor-pointer transition shrink-0"
                       title="朗读真题例句"
                     >
-                      <Volume2 className="w-4 h-4" />
+                      <Volume2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                  <p className="text-xs text-slate-600 font-medium">
+                  <p className="text-xs sm:text-sm font-black text-slate-900 leading-snug pl-6">
+                    {currentDerivation.exampleJa}
+                  </p>
+                  <p className="text-xs text-slate-600 font-medium pl-6">
                     {currentDerivation.exampleZh}
                   </p>
                 </div>
+                <div className="pt-2 border-t border-slate-200 text-[10px] text-slate-400 font-bold pl-6">
+                  📚 JLPT 原真语境沉浸
+                </div>
               </div>
 
-            </div>
-
-            {/* ========================================================================= */}
-            {/* 📑 当前动词全部 10 大变形全览矩阵 (Cheat Sheet Matrix) */}
-            {/* ========================================================================= */}
-            <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 space-y-4">
-              <div
-                onClick={() => setShowFullMatrix(!showFullMatrix)}
-                className="flex items-center justify-between cursor-pointer group"
-              >
-                <div className="flex items-center gap-2">
-                  <Layers className="w-4 h-4 text-sky-500" />
-                  <h4 className="text-sm sm:text-base font-black text-slate-900 group-hover:text-sky-600 transition">
-                    【{selectedVerb.kanji}】全部 10 大活用形态全览对照表
-                  </h4>
-                  <span className="text-xs text-slate-400 font-medium hidden sm:inline">
-                    (涵盖辞书形、ます形、て形、た形、ない形、ば形、可能态、被动态、使役态、意志形)
-                  </span>
-                </div>
-                <button className="p-1.5 rounded-xl bg-slate-50 text-slate-500 group-hover:bg-sky-50 group-hover:text-sky-600 transition">
-                  {showFullMatrix ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
-              </div>
-
-              {showFullMatrix && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 pt-1">
-                  {CONJUGATION_FORMS_META.map(meta => {
-                    const detail = selectedVerb.forms[meta.key];
-                    const isCurrent = meta.key === selectedFormKey;
-
-                    return (
-                      <div
-                        key={meta.key}
-                        onClick={() => {
-                          setSelectedFormKey(meta.key);
-                          speakJapanese(detail.result);
-                        }}
-                        className={`p-3 rounded-2xl border transition cursor-pointer space-y-1.5 ${
-                          isCurrent
-                            ? 'bg-sky-50 border-sky-400 ring-2 ring-sky-400/20'
-                            : 'bg-slate-50/70 hover:bg-slate-50 border-slate-200/70'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-black text-slate-700">
-                            {meta.shortName}
-                          </span>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              speakJapanese(detail.result);
-                            }}
-                            className="text-slate-400 hover:text-sky-600"
-                            title="朗读"
-                          >
-                            <Volume2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                        <div className="text-sm font-black text-sky-700 font-mono">
-                          {detail.result}
-                        </div>
-                        <p className="text-[10px] text-slate-400 leading-tight">
-                          {detail.meaning}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
             </div>
 
           </div>
+
+          {/* ========================================================================= */}
+          {/* ④ 📑 当前动词全部 10 大活用形态全览速查矩阵 (5x2 对称排布) */}
+          {/* ========================================================================= */}
+          <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 space-y-4">
+            <div
+              onClick={() => setShowFullMatrix(!showFullMatrix)}
+              className="flex items-center justify-between cursor-pointer group"
+            >
+              <div className="flex items-center gap-2">
+                <Layers className="w-4 h-4 text-sky-500" />
+                <h4 className="text-sm sm:text-base font-black text-slate-900 group-hover:text-sky-600 transition">
+                  【{selectedVerb.kanji}】全部 10 大活用形态速查对照表 (全览速记)
+                </h4>
+                <span className="text-xs text-slate-400 font-medium hidden sm:inline">
+                  (辞书形、ます形、て形、た形、ない形、ば形、可能态、被动态、使役态、意志形)
+                </span>
+              </div>
+              <button className="p-1.5 rounded-xl bg-slate-50 text-slate-500 group-hover:bg-sky-50 group-hover:text-sky-600 transition">
+                {showFullMatrix ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              </button>
+            </div>
+
+            {showFullMatrix && (
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
+                {CONJUGATION_FORMS_META.map(meta => {
+                  const detail = selectedVerb.forms[meta.key];
+                  const isCurrent = meta.key === selectedFormKey;
+
+                  return (
+                    <div
+                      key={meta.key}
+                      onClick={() => {
+                        setSelectedFormKey(meta.key);
+                        speakJapanese(detail.result);
+                      }}
+                      className={`p-3 rounded-2xl border transition cursor-pointer space-y-1.5 ${
+                        isCurrent
+                          ? 'bg-sky-50 border-sky-400 ring-2 ring-sky-400/20 shadow-xs'
+                          : 'bg-slate-50/70 hover:bg-slate-50 border-slate-200/70'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-black text-slate-700">
+                          {meta.shortName}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speakJapanese(detail.result);
+                          }}
+                          className="text-slate-400 hover:text-sky-600"
+                          title="朗读"
+                        >
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <div className="text-sm font-black text-sky-700 font-mono">
+                        {detail.result}
+                      </div>
+                      <p className="text-[10px] text-slate-400 leading-tight truncate">
+                        {detail.meaning}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
         </div>
       )}
 
