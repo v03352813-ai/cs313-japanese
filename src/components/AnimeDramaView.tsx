@@ -24,7 +24,8 @@ import {
   ChevronUp,
   SlidersHorizontal,
   List,
-  LayoutGrid
+  LayoutGrid,
+  Music2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { 
@@ -62,6 +63,12 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
   const [viewMode, setViewMode] = useState<'list' | 'slider' | 'grid'>('list');
   const [isListExpanded, setIsListExpanded] = useState<boolean>(false);
 
+  // 连播与语速状态 (对齐法国原声舞台与剧场体验)
+  const [isPlayingAll, setIsPlayingAll] = useState<boolean>(false);
+  const [playbackRate, setPlaybackRate] = useState<number>(1.0);
+  const autoPlayIndexRef = useRef<number>(0);
+  const autoPlayTimerRef = useRef<any>(null);
+
   // 轮播滑块引用
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState<boolean>(false);
@@ -89,6 +96,13 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
   // 当前激活的场景
   const currentScene = allScenes.find(s => s.id === selectedSceneId) || allScenes[0];
 
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+    };
+  }, []);
+
   const handleSelectScene = (sceneId: string) => {
     const target = allScenes.find(s => s.id === sceneId);
     if (!target) return;
@@ -96,6 +110,9 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
       onOpenVipModal(`解锁《${target.title}》完整台词精析`);
       return;
     }
+    stopSpeaking();
+    if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+    setIsPlayingAll(false);
     setSelectedSceneId(sceneId);
     setActiveLineId(null);
     setQuizAnswers({});
@@ -103,8 +120,53 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
   };
 
   const handlePlayLine = (line: AnimeDialogueLine) => {
+    if (isPlayingAll) {
+      stopSpeaking();
+      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+      setIsPlayingAll(false);
+    }
     setActiveLineId(line.id);
-    speakJapanese(line.ja);
+    speakJapanese(line.ja, playbackRate);
+  };
+
+  const handleTogglePlayAll = () => {
+    if (isPlayingAll) {
+      stopSpeaking();
+      if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
+      setIsPlayingAll(false);
+      return;
+    }
+    setIsPlayingAll(true);
+    autoPlayIndexRef.current = 0;
+    playNextSequentialLine();
+  };
+
+  const playNextSequentialLine = () => {
+    const dialogues = currentScene?.dialogues || [];
+    if (autoPlayIndexRef.current >= dialogues.length) {
+      setIsPlayingAll(false);
+      setActiveLineId(null);
+      return;
+    }
+
+    const line = dialogues[autoPlayIndexRef.current];
+    if (!line) return;
+    setActiveLineId(line.id);
+    speakJapanese(line.ja, playbackRate);
+
+    const speechTimeMs = Math.max(3000, Math.min(8000, (line.ja.length * 280 + 1200) / playbackRate));
+    autoPlayTimerRef.current = setTimeout(() => {
+      autoPlayIndexRef.current += 1;
+      playNextSequentialLine();
+    }, speechTimeMs);
+  };
+
+  const handlePlaySentence = (index: number) => {
+    const dialogues = currentScene?.dialogues || [];
+    const line = dialogues[index] || dialogues[0];
+    if (line) {
+      handlePlayLine(line);
+    }
   };
 
   const scrollSlider = (direction: 'left' | 'right') => {
@@ -120,50 +182,118 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
       
-      {/* 1. 顶部当前场景播放器舞台 */}
+      {/* 1. 顶部当前场景播放器舞台 (1:1 像素级复刻法国原声电影大片质感) */}
       {currentScene && (
         <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
           
-          {/* Header Banner */}
-          <div 
-            className="p-6 sm:p-8 text-white relative flex flex-col justify-between min-h-[180px] sm:min-h-[220px]"
-            style={{ background: currentScene.posterBg }}
-          >
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white font-black text-xs">
-                  {currentScene.levelTag}
-                </span>
-                <span className="px-3 py-1 rounded-full bg-black/20 backdrop-blur-md text-white/90 text-xs font-semibold">
-                  {currentScene.genre}
-                </span>
+          {/* Cover + Poster Header with Atmospheric Cinematic Mood */}
+          <div className="relative min-h-[210px] sm:min-h-[250px] bg-slate-950 overflow-hidden flex flex-col justify-between p-5 sm:p-7 text-white">
+            <div 
+              className="absolute inset-0 w-full h-full opacity-30 mix-blend-luminosity scale-105 transition-transform duration-700 hover:scale-100"
+              style={{ background: currentScene.posterBg }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/85 to-slate-900/40"></div>
+            
+            <div className="relative z-10 space-y-3">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white font-black text-xs border border-white/20">
+                    {currentScene.levelTag}
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-sky-600/80 backdrop-blur-md text-sky-100 text-xs font-bold border border-sky-300/30">
+                    {currentScene.genre}
+                  </span>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-black/40 backdrop-blur-sm text-slate-300">
+                    {currentScene.year}年 · {currentScene.episode || '经典名场面'}
+                  </span>
+                </div>
+
+                {/* 正在播放提示药丸 */}
+                {isPlayingAll && (
+                  <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-sky-600 border border-sky-300/40 text-white text-xs font-bold backdrop-blur-md animate-pulse">
+                    <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <Music2 className="w-3.5 h-3.5" />
+                    <span>正在播放原声...</span>
+                  </div>
+                )}
               </div>
-              <span className="text-xs text-white/80 font-mono">
-                {currentScene.year}年 · {currentScene.episode}
-              </span>
-            </div>
 
-            <div className="space-y-1 my-auto pt-4">
-              <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white drop-shadow-sm">
-                《{currentScene.title}》
-              </h1>
-              <p className="text-sm sm:text-base font-semibold text-white/90 font-mono">
-                {currentScene.japaneseTitle} · {currentScene.sceneTitle}
-              </p>
-            </div>
+              <div className="space-y-1">
+                <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white font-serif drop-shadow-sm flex items-center gap-3 flex-wrap">
+                  <span>《{currentScene.title}》</span>
+                  <span className="text-base sm:text-lg font-normal text-sky-200/90 font-serif italic">
+                    ({currentScene.japaneseTitle})
+                  </span>
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-200 line-clamp-2 max-w-3xl leading-relaxed font-medium">
+                  {currentScene.sceneTitle}
+                </p>
+              </div>
 
-            {/* Quick action bar */}
-            <div className="flex items-center gap-2 pt-2">
-              <button
-                onClick={() => {
-                  const firstLine = currentScene.dialogues[0];
-                  if (firstLine) handlePlayLine(firstLine);
-                }}
-                className="px-4 py-2 rounded-2xl bg-white text-slate-900 text-xs font-black flex items-center gap-1.5 hover:bg-white/90 shadow-md transition cursor-pointer"
-              >
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>从头听原声</span>
-              </button>
+              {/* Action Toolbar */}
+              <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-3">
+                <button
+                  onClick={handleTogglePlayAll}
+                  className={`px-4 sm:px-5 py-2.5 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all cursor-pointer ${
+                    isPlayingAll
+                      ? 'bg-amber-400 hover:bg-amber-500 text-slate-900 ring-4 ring-amber-400/30 font-black'
+                      : 'bg-sky-600 hover:bg-sky-700 text-white hover:scale-105 active:scale-95 shadow-sky-600/40 font-black'
+                  }`}
+                >
+                  {isPlayingAll ? (
+                    <>
+                      <Pause className="w-4 h-4 fill-current" />
+                      <span>⏸ 暂停播放</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-4 h-4 fill-current ml-0.5" />
+                      <span>▶ 播放全片名场面原声 (连播)</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => handlePlaySentence(0)}
+                  className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs sm:text-sm flex items-center gap-1.5 backdrop-blur-md border border-white/20 transition cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>从头听原声</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    const activeIdx = currentScene.dialogues.findIndex(d => d.id === activeLineId);
+                    handlePlaySentence(activeIdx >= 0 ? activeIdx : 0);
+                  }}
+                  className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs sm:text-sm flex items-center gap-1.5 backdrop-blur-md border border-white/20 transition cursor-pointer"
+                  title="重新播放当前句"
+                >
+                  <Volume2 className="w-3.5 h-3.5" />
+                  <span>重听当前句</span>
+                </button>
+
+                {/* Speed Selector */}
+                <div className="flex items-center gap-1 bg-black/40 backdrop-blur-md border border-white/15 p-1 rounded-xl text-xs">
+                  <span className="text-[11px] text-slate-300 px-1.5 font-medium flex items-center gap-1">
+                    <SlidersHorizontal className="w-3 h-3 text-sky-400" />
+                    <span>语速:</span>
+                  </span>
+                  {[0.8, 1.0, 1.2].map((rate) => (
+                    <button
+                      key={rate}
+                      onClick={() => setPlaybackRate(rate)}
+                      className={`px-2 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
+                        playbackRate === rate
+                          ? 'bg-sky-600 text-white shadow-xs'
+                          : 'text-slate-300 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      {rate === 0.8 ? '0.8x 慢速' : rate === 1.0 ? '1.0x 标准' : '1.2x 快速'}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
