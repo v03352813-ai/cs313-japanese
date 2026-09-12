@@ -243,7 +243,7 @@ export function App() {
   }, []);
 
   const [selectedDramaSceneId, setSelectedDramaSceneId] = useState<string | undefined>();
-  const [selectedGrammarTab, setSelectedGrammarTab] = useState<'library' | 'conjugation' | 'particles' | undefined>();
+  const [selectedGrammarTab, setSelectedGrammarTab] = useState<'library' | 'conjugation' | 'particles' | undefined>('conjugation');
 
   // 监听页面向下滚动距离，超过 200px 时在右下角优雅浮现快捷控制（回到顶部 / 返回首页）
   const [showScrollControls, setShowScrollControls] = useState(false);
@@ -262,10 +262,10 @@ export function App() {
       setSelectedDramaSceneId(sceneId);
     }
     if (tab === 'grammar') {
-      if (sceneId === 'conjugation' || sceneId === 'particles') {
+      if (sceneId === 'library' || sceneId === 'particles') {
         setSelectedGrammarTab(sceneId);
       } else {
-        setSelectedGrammarTab('library');
+        setSelectedGrammarTab('conjugation');
       }
     }
     window.location.hash = tab === 'home' ? '' : tab;
