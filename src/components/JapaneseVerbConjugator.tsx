@@ -40,6 +40,112 @@ const speakJapanese = (text: string) => {
   window.speechSynthesis.speak(utterance);
 };
 
+const KANA_ELEVATOR_FAMILIES: Record<string, { family: string; kanas: Record<number, { kana: string; romaji: string }> }> = {
+  'く': {
+    family: 'か行',
+    kanas: {
+      1: { kana: 'か', romaji: 'ka' },
+      2: { kana: 'き', romaji: 'ki' },
+      3: { kana: 'く', romaji: 'ku' },
+      4: { kana: 'け', romaji: 'ke' },
+      5: { kana: 'こ', romaji: 'ko' }
+    }
+  },
+  'ぐ': {
+    family: 'が行',
+    kanas: {
+      1: { kana: 'が', romaji: 'ga' },
+      2: { kana: 'ぎ', romaji: 'gi' },
+      3: { kana: 'ぐ', romaji: 'gu' },
+      4: { kana: 'げ', romaji: 'ge' },
+      5: { kana: 'ご', romaji: 'go' }
+    }
+  },
+  'す': {
+    family: 'さ行',
+    kanas: {
+      1: { kana: 'さ', romaji: 'sa' },
+      2: { kana: 'し', romaji: 'shi' },
+      3: { kana: 'す', romaji: 'su' },
+      4: { kana: 'せ', romaji: 'se' },
+      5: { kana: 'そ', romaji: 'so' }
+    }
+  },
+  'つ': {
+    family: 'た行',
+    kanas: {
+      1: { kana: 'た', romaji: 'ta' },
+      2: { kana: 'ち', romaji: 'chi' },
+      3: { kana: 'つ', romaji: 'tsu' },
+      4: { kana: 'て', romaji: 'te' },
+      5: { kana: 'と', romaji: 'to' }
+    }
+  },
+  'ぬ': {
+    family: 'な行',
+    kanas: {
+      1: { kana: 'な', romaji: 'na' },
+      2: { kana: 'に', romaji: 'ni' },
+      3: { kana: 'ぬ', romaji: 'nu' },
+      4: { kana: 'ね', romaji: 'ne' },
+      5: { kana: 'の', romaji: 'no' }
+    }
+  },
+  'ぶ': {
+    family: 'ば行',
+    kanas: {
+      1: { kana: 'ば', romaji: 'ba' },
+      2: { kana: 'び', romaji: 'bi' },
+      3: { kana: 'ぶ', romaji: 'bu' },
+      4: { kana: 'べ', romaji: 'be' },
+      5: { kana: 'ぼ', romaji: 'bo' }
+    }
+  },
+  'む': {
+    family: 'ま行',
+    kanas: {
+      1: { kana: 'ま', romaji: 'ma' },
+      2: { kana: 'み', romaji: 'mi' },
+      3: { kana: 'む', romaji: 'mu' },
+      4: { kana: 'め', romaji: 'me' },
+      5: { kana: 'も', romaji: 'mo' }
+    }
+  },
+  'る': {
+    family: 'ら行',
+    kanas: {
+      1: { kana: 'ら', romaji: 'ra' },
+      2: { kana: 'り', romaji: 'ri' },
+      3: { kana: 'る', romaji: 'ru' },
+      4: { kana: 'れ', romaji: 're' },
+      5: { kana: 'ろ', romaji: 'ro' }
+    }
+  },
+  'う': {
+    family: 'あ行',
+    kanas: {
+      1: { kana: 'わ', romaji: 'wa' },
+      2: { kana: 'い', romaji: 'i' },
+      3: { kana: 'う', romaji: 'u' },
+      4: { kana: 'え', romaji: 'e' },
+      5: { kana: 'お', romaji: 'o' }
+    }
+  }
+};
+
+const FORM_FLOOR_MAP: Record<ConjugationFormKey, { targetFloor?: number; floorName: string; elevatorHint: string }> = {
+  dict: { targetFloor: 3, floorName: '3 楼 (u段)', elevatorHint: '原形停留 3 楼 (u段)' },
+  masu: { targetFloor: 2, floorName: '2 楼 (い段)', elevatorHint: '🛗 降2楼(い段)+ます' },
+  te: { elevatorHint: '音便 (促/拨/イ便)' },
+  ta: { elevatorHint: '过去完成 (同て形)' },
+  nai: { targetFloor: 1, floorName: '1 楼 (あ段)', elevatorHint: '🛗 降1楼(あ段)+ない' },
+  ba: { targetFloor: 4, floorName: '4 楼 (え段)', elevatorHint: '🛗 升4楼(え段)+ば' },
+  potential: { targetFloor: 4, floorName: '4 楼 (え段)', elevatorHint: '🛗 升4楼(え段)+る' },
+  passive: { targetFloor: 1, floorName: '1 楼 (あ段)', elevatorHint: '🛗 降1楼(あ段)+れる' },
+  causative: { targetFloor: 1, floorName: '1 楼 (あ段)', elevatorHint: '🛗 降1楼(あ段)+せる' },
+  volitional: { targetFloor: 5, floorName: '5 楼 (お段)', elevatorHint: '🛗 升5楼(お段)+う' },
+};
+
 interface JapaneseVerbConjugatorProps {
   isVip?: boolean;
   onOpenVipModal?: (reason?: string) => void;
@@ -53,6 +159,7 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
   initialVerbId = 'kaku',
   initialFormKey = 'potential'
 }) => {
+  const [showElevatorGuide, setShowElevatorGuide] = useState<boolean>(true);
   // 当前视图模式：'workbench' (交互演练工作台) vs 'rules' (10大全局法则库)
   const [viewMode, setViewMode] = useState<'workbench' | 'rules'>('workbench');
 
@@ -174,6 +281,78 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
             </p>
           </div>
         </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 🛗 独家自研教学法 · 动词变形【坐电梯法则】1分钟秒懂速成看板 (核心心法置顶) */}
+      {/* ========================================================================= */}
+      <div className="bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 text-white rounded-3xl p-5 sm:p-6 shadow-md space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="p-1.5 rounded-xl bg-white/20 text-amber-200 text-base">
+                🛗
+              </span>
+              <h2 className="text-lg sm:text-xl font-black tracking-tight flex items-center gap-2">
+                <span>独家自研教学法 · 动词变形【坐电梯法则】</span>
+              </h2>
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950 font-black text-xs shadow-2xs">
+                彻底告别晦涩术语 · 1分钟秒懂
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-sky-100 font-medium">
+              核心心法：<strong>所有日语动词原形，尾巴全住在 3 楼（u段）！所谓变形，就是词尾坐电梯上下楼，再贴个新尾巴！</strong>
+            </p>
+          </div>
+
+          <button
+            onClick={() => setShowElevatorGuide(!showElevatorGuide)}
+            className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition flex items-center gap-1 shrink-0 self-start sm:self-auto cursor-pointer border border-white/20"
+          >
+            {showElevatorGuide ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            <span>{showElevatorGuide ? '收起法则说明' : '展开法则说明'}</span>
+          </button>
+        </div>
+
+        {showElevatorGuide && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-white/20 animate-in fade-in duration-300">
+            {/* Card 1 */}
+            <div className="bg-white/10 backdrop-blur-xs p-4 rounded-2xl border border-white/15 space-y-1.5">
+              <div className="flex items-center gap-2 font-black text-sm text-amber-300">
+                <span>🏢 1. 为什么叫【坐电梯】？</span>
+              </div>
+              <p className="text-xs text-sky-100 leading-relaxed font-medium">
+                看五十音图的纵向 5 个假名（あ/い/う/え/お），就像一栋 <strong>5 层的电梯楼</strong>！
+                查字典的原形词尾（如 <strong className="text-white">書く、飲む、話す</strong>），其尾巴<strong>全都住在 3 楼（u段）</strong>，这是所有变形的始发站。
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div className="bg-white/10 backdrop-blur-xs p-4 rounded-2xl border border-white/15 space-y-1.5">
+              <div className="flex items-center gap-2 font-black text-sm text-sky-200">
+                <span>🛗 2. 去哪一层变什么形态？</span>
+              </div>
+              <ul className="text-xs text-sky-100 space-y-1 font-medium leading-relaxed">
+                <li>• <strong className="text-white">升4楼 (え段) + る</strong> ➔ 【可能态：能写/会喝】</li>
+                <li>• <strong className="text-white">降1楼 (あ段) + ない</strong> ➔ 【否定形：不写/不喝】</li>
+                <li>• <strong className="text-white">降1楼 (あ段) + れる</strong> ➔ 【被动态：被写/被喝】</li>
+                <li>• <strong className="text-white">升5楼 (お段) + う</strong> ➔ 【意志形：写吧/喝吧】</li>
+                <li>• <strong className="text-white">降2楼 (い段) + ます</strong> ➔ 【礼貌形：敬语客气】</li>
+              </ul>
+            </div>
+
+            {/* Card 3 */}
+            <div className="bg-white/10 backdrop-blur-xs p-4 rounded-2xl border border-white/15 space-y-1.5">
+              <div className="flex items-center gap-2 font-black text-sm text-emerald-300">
+                <span>🪄 3. 一段动词与不规则</span>
+              </div>
+              <p className="text-xs text-sky-100 leading-relaxed font-medium">
+                • <strong>一段动词（食べる/見る）</strong>：最省心！<strong>不坐电梯</strong>，直接摘掉尾巴「る」，贴上对应新尾巴！<br />
+                • <strong>不规则（する/来る）</strong>：超级变色龙，全语系就这两个，直接当独立单词熟记。
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ========================================================================= */}
@@ -348,7 +527,7 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
                         {isCurrent && <CheckCircle2 className="w-3.5 h-3.5 text-sky-200" />}
                       </div>
                       <span className={`text-[10px] line-clamp-1 ${isCurrent ? 'text-sky-100 font-medium' : 'text-slate-400'}`}>
-                        {form.formulaTag}
+                        {FORM_FLOOR_MAP[form.key]?.elevatorHint || form.formulaTag}
                       </span>
                     </button>
                   );
@@ -403,7 +582,7 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
               {/* Step 2: 假名段位跃迁 / 音便演变 (4 cols - 核心放大) */}
               <div className="md:col-span-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-sky-50 via-indigo-50/40 to-sky-50 border border-sky-300 text-center space-y-2 shadow-xs">
                 <span className="text-[10px] font-extrabold text-sky-700 uppercase tracking-wider block">
-                  STEP 02 · 假名段位跃迁 / 音便
+                  STEP 02 · 假名段位跃迁 (🛗 坐电梯)
                 </span>
                 <div className="text-xs sm:text-sm font-black text-sky-950 leading-relaxed px-1">
                   {currentDerivation.stepExplanation}
@@ -439,6 +618,170 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
               </div>
 
             </div>
+
+            {/* ========================================================================= */}
+            {/* 🛗 【坐电梯法则】实时推演舱 (The Interactive Elevator Visualizer) */}
+            {/* ========================================================================= */}
+            {(() => {
+              const endingChar = selectedVerb.forms.dict.originalEnding;
+              const currentFamily = endingChar ? KANA_ELEVATOR_FAMILIES[endingChar] : undefined;
+              const currentFloorMeta = FORM_FLOOR_MAP[selectedFormKey];
+
+              if (selectedVerb.group === 'group1_godan' && currentFamily && currentFloorMeta) {
+                return (
+                  <div className="bg-gradient-to-r from-sky-50/90 via-indigo-50/50 to-sky-50/90 rounded-2xl p-4 sm:p-5 border border-sky-200 shadow-xs space-y-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-sky-100 pb-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className="p-1.5 rounded-lg bg-sky-500 text-white font-black text-xs">
+                          🛗
+                        </span>
+                        <h4 className="text-sm font-black text-slate-900">
+                          【坐电梯法则】现场推演：动词尾巴「{endingChar}」的 5 楼升降轨迹
+                        </h4>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span>点击任意楼层假名即时收听标准音</span>
+                      </div>
+                    </div>
+
+                    {/* 5 层电梯水平指示轨道 */}
+                    <div className="grid grid-cols-5 gap-2 text-center">
+                      {[1, 2, 3, 4, 5].map((flNum) => {
+                        const kanaItem = currentFamily.kanas[flNum];
+                        const isStart = flNum === 3;
+                        const isTarget = flNum === currentFloorMeta.targetFloor;
+                        const danName = flNum === 1 ? 'あ段' : flNum === 2 ? 'い段' : flNum === 3 ? 'う段' : flNum === 4 ? 'え段' : 'お段';
+
+                        return (
+                          <button
+                            key={flNum}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              speakJapanese(kanaItem.kana);
+                            }}
+                            className={`p-2 sm:p-3 rounded-xl border transition-all duration-200 cursor-pointer relative flex flex-col items-center justify-between gap-1 group/fl ${
+                              isTarget
+                                ? 'bg-gradient-to-b from-sky-500 to-indigo-600 text-white border-transparent shadow-md ring-2 ring-sky-300 scale-103 z-10'
+                                : isStart
+                                ? 'bg-amber-50/90 border-amber-300 text-amber-950 shadow-2xs hover:bg-amber-100'
+                                : 'bg-white hover:bg-slate-100/90 border-slate-200 text-slate-700'
+                            }`}
+                            title={`点击朗读: ${kanaItem.kana}`}
+                          >
+                            {isTarget && (
+                              <span className="absolute -top-2.5 px-2 py-0.2 rounded-full bg-amber-400 text-amber-950 font-black text-[9px] shadow-xs animate-bounce">
+                                🎯 到达 {flNum}F
+                              </span>
+                            )}
+                            {isStart && !isTarget && (
+                              <span className="absolute -top-2 px-1.5 py-0.2 rounded bg-amber-500 text-white font-bold text-[8px] shadow-2xs">
+                                🚪 起点 3F
+                              </span>
+                            )}
+
+                            <div className="text-[10px] font-extrabold opacity-80">
+                              {flNum}F · {danName}
+                            </div>
+                            <div className="text-lg sm:text-2xl font-black font-mono my-0.5">
+                              {kanaItem.kana}
+                            </div>
+                            <div className={`text-[10px] font-mono ${isTarget ? 'text-sky-100' : 'text-slate-400'}`}>
+                              {kanaItem.romaji}
+                            </div>
+                            <div className={`text-[9px] truncate w-full font-bold pt-1 border-t ${
+                              isTarget ? 'border-white/20 text-sky-100' : 'border-slate-100 text-slate-500'
+                            }`}>
+                              {flNum === 1 ? '否定/被动' : flNum === 2 ? 'ます形' : flNum === 3 ? '辞书原形' : flNum === 4 ? '可能/假定' : '意志形'}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* 底部电梯调度解说 */}
+                    <div className="text-xs text-slate-700 bg-white p-3 rounded-xl border border-sky-100 flex flex-col sm:flex-row sm:items-center justify-between gap-1 font-medium">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-bold text-sky-700">🛗 电梯轨迹：</span>
+                        <span>原形尾巴「{endingChar}」住在 <strong>3楼 (u段)</strong></span>
+                        {currentFloorMeta.targetFloor ? (
+                          currentFloorMeta.targetFloor === 3 ? (
+                            <span>➔ 原形起点，停留在 3 楼。</span>
+                          ) : currentFloorMeta.targetFloor > 3 ? (
+                            <span>➔ 坐电梯<strong>向上升到 {currentFloorMeta.targetFloor} 楼 ({currentFloorMeta.floorName})「<strong className="text-sky-600 font-mono">{currentFamily.kanas[currentFloorMeta.targetFloor].kana}</strong>」</strong>，再接后缀「<strong className="text-indigo-600">{currentDerivation.connectionEnding || '无'}</strong>」！</span>
+                          ) : (
+                            <span>➔ 坐电梯<strong>向下降到 {currentFloorMeta.targetFloor} 楼 ({currentFloorMeta.floorName})「<strong className="text-sky-600 font-mono">{currentFamily.kanas[currentFloorMeta.targetFloor].kana}</strong>」</strong>，再接后缀「<strong className="text-indigo-600">{currentDerivation.connectionEnding || '无'}</strong>」！</span>
+                          )
+                        ) : (
+                          <span>➔ {currentFormMeta.shortName}（发生特殊音便，不走常规楼层，直接发生音便脱落/变音）。</span>
+                        )}
+                      </div>
+                      <span className="text-[11px] text-slate-400 shrink-0">
+                        所属家族：{currentFamily.family}
+                      </span>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (selectedVerb.group === 'group2_ichidan') {
+                return (
+                  <div className="bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 rounded-2xl p-4 sm:p-5 border border-emerald-200 shadow-xs space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1 rounded-lg bg-emerald-600 text-white font-black text-xs">
+                        🪄
+                      </span>
+                      <h4 className="text-xs sm:text-sm font-black text-emerald-950">
+                        一段动词专属法则：【不坐电梯，直接摘掉尾巴「る」！】
+                      </h4>
+                    </div>
+                    <div className="bg-white p-3 rounded-xl border border-emerald-100 text-xs text-slate-700 font-medium flex items-center justify-between gap-2 flex-wrap">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-bold text-slate-400 line-through">{selectedVerb.kanji}</span>
+                        <span>➔</span>
+                        <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">摘掉「る」留词干「{currentDerivation.stem}」</span>
+                        <span>➔</span>
+                        <span className="px-2 py-0.5 rounded bg-sky-100 text-sky-800 font-bold">贴上新后缀「{currentDerivation.connectionEnding || '无'}」</span>
+                        <span>➔</span>
+                        <span className="text-emerald-700 font-black font-mono text-sm">{currentDerivation.result}</span>
+                      </div>
+                      <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded">
+                        比五段简单 10 倍！
+                      </span>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (selectedVerb.group === 'group3_irregular') {
+                return (
+                  <div className="bg-gradient-to-r from-purple-50 via-violet-50 to-purple-50 rounded-2xl p-4 sm:p-5 border border-purple-200 shadow-xs space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1 rounded-lg bg-purple-600 text-white font-black text-xs">
+                        🦎
+                      </span>
+                      <h4 className="text-xs sm:text-sm font-black text-purple-950">
+                        3类不规则动词：【特殊变色龙，全语系就两个】
+                      </h4>
+                    </div>
+                    <div className="bg-white p-3 rounded-xl border border-purple-100 text-xs text-slate-700 font-medium flex items-center justify-between gap-2 flex-wrap">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono font-bold text-slate-500">{selectedVerb.kanji}</span>
+                        <span>➔ 当前异化为 ➔</span>
+                        <span className="text-purple-700 font-black font-mono text-sm">{currentDerivation.result}</span>
+                        <span className="text-slate-400 font-mono">({currentDerivation.furigana})</span>
+                      </div>
+                      <span className="text-[10px] text-purple-600 font-bold bg-purple-50 px-2 py-0.5 rounded">
+                        作为特例独立熟记
+                      </span>
+                    </div>
+                  </div>
+                );
+              }
+
+              return null;
+            })()}
 
             {/* 结果大字播报栏 */}
             <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
