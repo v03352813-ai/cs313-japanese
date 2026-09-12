@@ -160,12 +160,12 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
     steps: [
       {
         stepNum: '01',
-        stepLabel: '第 1 步 · 夯实假名',
-        title: '五十音图发音与象形口诀',
-        targetBadge: '攻克清音·浊音·拗音',
+        stepLabel: '第 1 步 · 夯实假名与音拍',
+        title: '五十音图与特殊音拍·语音规则',
+        targetBadge: '假名全图 · 特殊音拍 · 语流规则',
         badgeBg: 'bg-emerald-100 text-emerald-800 border border-emerald-200/70',
-        desc: '平假名片假名对照、汉字字源演变解析、趣味象形联想口诀与标准东京腔原生 TTS 发音。',
-        actionText: '进入五十音发音工坊',
+        desc: '平片假名对照、三大特殊音拍 (促音/长音/拨音) 节拍器、语流连续发音法则 (母音无声化/连浊) 与片假名死敌诊疗。',
+        actionText: '进入语音规则工作台',
         targetTab: 'phonetics',
         icon: Sparkles,
         buttonBg: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'

@@ -84,17 +84,17 @@ export const GojuonView: React.FC = () => {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold">
-              🌸 零基础入门工坊
+              🌸 零基础音韵筑基 · 日本语教育学标准
             </span>
             <span className="text-xs font-semibold text-slate-400">
               标准东京腔真人发音
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-            五十音图速记与发音工坊
+            日语五十音图与特殊音拍·语音规则工作台
           </h1>
           <p className="text-xs sm:text-sm text-slate-500">
-            清音·浊音·拗音全面覆盖，平片假名一键对照，汉字象形起源速记，摆脱死记硬背！
+            清音·浊音·拗音假名全图 · 特殊音拍 (促音/长音/拨音) 节拍器 · 语流发音法则 (母音无声化/连浊) · 片假名死敌诊疗！
           </p>
         </div>
 
