@@ -44,6 +44,7 @@ export interface AnimeDramaScene {
   category: string;
   episode?: string;
   posterBg: string;
+  posterUrl?: string;
   tags: string[];
   isFreePreview: boolean;
   dialogues: AnimeDialogueLine[];
@@ -60,6 +61,7 @@ export const ANIME_GENRE_CATEGORIES = [
 export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   {
     "id": "anime-spirited-away-onigiri",
+    "posterUrl": "/images/posters/anime-spirited-away-onigiri.jpg",
     "title": "千与千寻",
     "japaneseTitle": "千と千尋の神隠し",
     "sceneTitle": "白龙递给千寻施了魔法的饭团",
@@ -146,6 +148,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-your-name-twilight",
+    "posterUrl": "/images/posters/anime-your-name-twilight.jpg",
     "title": "你的名字。",
     "japaneseTitle": "君の名は。",
     "sceneTitle": "分身之时（黄昏之时）陨石坑边缘的相遇",
@@ -232,6 +235,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-howls-castle-find",
+    "posterUrl": "/images/posters/anime-howls-castle-find.jpg",
     "title": "哈尔的移动城堡",
     "japaneseTitle": "ハウルの動く城",
     "sceneTitle": "空中漫步与穿越时空的重逢",
@@ -300,6 +304,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-totoro-bus-stop",
+    "posterUrl": "/images/posters/anime-totoro-bus-stop.jpg",
     "title": "龙猫",
     "japaneseTitle": "となりのトトロ",
     "sceneTitle": "雨夜公交车站与大龙猫的奇妙偶遇",
@@ -375,6 +380,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-weathering-with-you-sky",
+    "posterUrl": "/images/posters/anime-weathering-with-you-sky.jpg",
     "title": "天气之子",
     "japaneseTitle": "天気の子",
     "sceneTitle": "帆高飞向云层紧握阳菜：“比起晴天我更要你！”",
@@ -423,6 +429,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-suzume-door",
+    "posterUrl": "/images/posters/anime-suzume-door.jpg",
     "title": "铃芽之旅",
     "japaneseTitle": "すずめの戸締まり",
     "sceneTitle": "常世草太与铃芽关闭灾厄之门：“我出发了！”",
@@ -471,6 +478,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-princess-mononoke-live",
+    "posterUrl": "/images/posters/anime-princess-mononoke-live.jpg",
     "title": "幽灵公主",
     "japaneseTitle": "もののけ姫",
     "sceneTitle": "阿席达卡对桑说：“活下去，你很美丽”",
@@ -519,6 +527,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-5cm-per-second-sakura",
+    "posterUrl": "/images/posters/anime-5cm-per-second-sakura.jpg",
     "title": "秒速5厘米",
     "japaneseTitle": "秒速5センチメートル",
     "sceneTitle": "樱花落下的速度是每秒5厘米",
@@ -567,6 +576,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-kikis-delivery-service-fly",
+    "posterUrl": "/images/posters/anime-kikis-delivery-service-fly.jpg",
     "title": "魔女宅急便",
     "japaneseTitle": "魔女の宅急便",
     "sceneTitle": "琪琪在海边面包房的独立飞翔物语",
@@ -615,6 +625,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-laputa-castle-balse",
+    "posterUrl": "/images/posters/anime-laputa-castle-balse.jpg",
     "title": "天空之城",
     "japaneseTitle": "天空の城ラピュタ",
     "sceneTitle": "毁灭与守护的古老咒语“巴鲁斯”",
@@ -663,6 +674,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-nausicaa-golden-field",
+    "posterUrl": "/images/posters/anime-nausicaa-golden-field.jpg",
     "title": "风之谷",
     "japaneseTitle": "風の谷のナウシカ",
     "sceneTitle": "娜乌西卡守护王虫平息金色草原",
@@ -711,6 +723,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-escape-useful-contract",
+    "posterUrl": "/images/posters/drama-escape-useful-contract.jpg",
     "title": "逃避虽可耻但有用",
     "japaneseTitle": "逃げるは恥だが役に立つ",
     "sceneTitle": "实栗与平匡的契约婚姻与“拥抱日”规则",
@@ -759,6 +772,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-proposal-operation-hallelujah",
+    "posterUrl": "/images/posters/drama-proposal-operation-hallelujah.jpg",
     "title": "求婚大作战",
     "japaneseTitle": "プロポーズ大作戦",
     "sceneTitle": "健三“哈利路亚·机会”奔跑追寻礼的青春誓言",
@@ -800,6 +814,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-long-vacation-relax",
+    "posterUrl": "/images/posters/drama-long-vacation-relax.jpg",
     "title": "悠长假期",
     "japaneseTitle": "ロングバケーション",
     "sceneTitle": "濑名对小南说：“不顺的时候，就当作是神赐给你的长假吧”",
@@ -848,6 +863,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-kodoku-gourmet-hungry",
+    "posterUrl": "/images/posters/drama-kodoku-gourmet-hungry.jpg",
     "title": "孤独的美食家",
     "japaneseTitle": "孤独のグルメ",
     "sceneTitle": "五郎叔“咚·咚·咚”饥肠辘辘后的地道居酒屋点单",
@@ -889,6 +905,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-unnatural-win",
+    "posterUrl": "/images/posters/drama-unnatural-win.jpg",
     "title": "非自然死亡 (Unnatural)",
     "japaneseTitle": "アンナチュラル",
     "sceneTitle": "三澄美琴关于绝望与生存的救赎名言",
@@ -957,6 +974,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-hanzawa-naoki-double",
+    "posterUrl": "/images/posters/drama-hanzawa-naoki-double.jpg",
     "title": "半泽直树",
     "japaneseTitle": "半沢直樹",
     "sceneTitle": "加倍奉还！燃爆全网的职场反击誓言",
@@ -998,6 +1016,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-quartet-cry",
+    "posterUrl": "/images/posters/drama-quartet-cry.jpg",
     "title": "四重奏 (Quartet)",
     "japaneseTitle": "カルテット",
     "sceneTitle": "在炸鸡块与大提琴之间关于人生的神级对白",
@@ -1039,6 +1058,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-juhan-shuttai-passion",
+    "posterUrl": "/images/posters/drama-juhan-shuttai-passion.jpg",
     "title": "重版出来！",
     "japaneseTitle": "重版出来！",
     "sceneTitle": "黑泽心在漫画编辑部的热血元气奋斗",
@@ -1087,6 +1107,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "drama-grand-maison-tokyo-stars",
+    "posterUrl": "/images/posters/drama-grand-maison-tokyo-stars.jpg",
     "title": "东京大饭店",
     "japaneseTitle": "グランメゾン東京",
     "sceneTitle": "尾花夏树冲击米其林三星的料理哲学与团队执着",
@@ -1135,6 +1156,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-conan-truth",
+    "posterUrl": "/images/posters/anime-conan-truth.jpg",
     "title": "名侦探柯南",
     "japaneseTitle": "名探偵コナン",
     "sceneTitle": "“真相永远只有一个！”工藤新一推理宣告",
@@ -1176,6 +1198,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-spy-family-wakuwaku",
+    "posterUrl": "/images/posters/anime-spy-family-wakuwaku.jpg",
     "title": "间谍过家家",
     "japaneseTitle": "SPY×FAMILY",
     "sceneTitle": "阿尼亚“哇库哇库”与劳埃德黄昏的名校面试",
@@ -1217,6 +1240,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-slam-dunk-coach",
+    "posterUrl": "/images/posters/anime-slam-dunk-coach.jpg",
     "title": "灌篮高手",
     "japaneseTitle": "SLAM DUNK",
     "sceneTitle": "三井寿双膝跪地泪崩：“安西教练，我想打篮球！”",
@@ -1265,6 +1289,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-attack-on-titan-freedom",
+    "posterUrl": "/images/posters/anime-attack-on-titan-freedom.jpg",
     "title": "进击的巨人",
     "japaneseTitle": "進撃の巨人",
     "sceneTitle": "艾伦关于向往墙外世界与自由的终极呐喊",
@@ -1313,6 +1338,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-demon-slayer-resolve",
+    "posterUrl": "/images/posters/anime-demon-slayer-resolve.jpg",
     "title": "鬼灭之刃",
     "japaneseTitle": "鬼滅の刃",
     "sceneTitle": "富冈义勇叱责炭治郎：“生杀予夺的权利绝不要交给他人！”",
@@ -1361,6 +1387,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-haikyuu-ball-not-dropped",
+    "posterUrl": "/images/posters/anime-haikyuu-ball-not-dropped.jpg",
     "title": "排球少年！！",
     "japaneseTitle": "ハイキュー!!",
     "sceneTitle": "日向翔阳与影山飞雄：“排球这项运动，球还没落地呢！”",
@@ -1409,6 +1436,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-jujutsu-kaisen-domain",
+    "posterUrl": "/images/posters/anime-jujutsu-kaisen-domain.jpg",
     "title": "咒术回战",
     "japaneseTitle": "呪術廻戦",
     "sceneTitle": "五条悟摘下眼罩：“领域展开·无量空处”",
@@ -1457,6 +1485,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-one-piece-king",
+    "posterUrl": "/images/posters/anime-one-piece-king.jpg",
     "title": "海贼王 (航海王)",
     "japaneseTitle": "ONE PIECE",
     "sceneTitle": "路飞扬帆出海誓言：“我是要成为海贼王的男人！”",
@@ -1505,6 +1534,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-naruto-ninja-way",
+    "posterUrl": "/images/posters/anime-naruto-ninja-way.jpg",
     "title": "火影忍者",
     "japaneseTitle": "NARUTO -ナルト-",
     "sceneTitle": "鸣人握拳宣告：“有话直说说到做到，这就是我的忍道！”",
@@ -1546,6 +1576,7 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
   },
   {
     "id": "anime-gintama-soul",
+    "posterUrl": "/images/posters/anime-gintama-soul.jpg",
     "title": "银魂",
     "japaneseTitle": "銀魂",
     "sceneTitle": "坂田银时：“天塌下来只要有武士的刀，就什么都能斩断！”",

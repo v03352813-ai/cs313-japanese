@@ -188,10 +188,18 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
           
           {/* Cover + Poster Header with Atmospheric Cinematic Mood */}
           <div className="relative min-h-[210px] sm:min-h-[250px] bg-slate-950 overflow-hidden flex flex-col justify-between p-5 sm:p-7 text-white">
-            <div 
-              className="absolute inset-0 w-full h-full opacity-30 mix-blend-luminosity scale-105 transition-transform duration-700 hover:scale-100"
-              style={{ background: currentScene.posterBg }}
-            />
+            {currentScene.posterUrl ? (
+              <img 
+                src={currentScene.posterUrl}
+                alt={currentScene.title}
+                className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity scale-105 transition-transform duration-700 hover:scale-100"
+              />
+            ) : (
+              <div 
+                className="absolute inset-0 w-full h-full opacity-30 mix-blend-luminosity scale-105 transition-transform duration-700 hover:scale-100"
+                style={{ background: currentScene.posterBg }}
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/85 to-slate-900/40"></div>
             
             <div className="relative z-10 space-y-3">
@@ -656,11 +664,20 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
                   {/* Left: Thumbnail Poster (Compact) */}
                   <div className="flex items-center gap-3 w-full sm:w-auto">
                     <div 
-                      className="relative w-20 sm:w-24 md:w-28 h-14 sm:h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100 shadow-2xs flex flex-col items-center justify-center p-1 text-white font-black text-center text-[11px]"
-                      style={{ background: s.posterBg }}
+                      className="relative w-20 sm:w-24 md:w-28 h-14 sm:h-16 rounded-xl overflow-hidden shrink-0 border border-slate-100 shadow-2xs flex flex-col items-center justify-center p-1 text-white font-black text-center text-[11px] bg-slate-900"
                     >
-                      <span className="drop-shadow-sm line-clamp-1">《{s.title}》</span>
-                      <span className="text-[9px] font-medium text-white/80 line-clamp-1">{s.episode}</span>
+                      {s.posterUrl ? (
+                        <img 
+                          src={s.posterUrl} 
+                          alt={s.title}
+                          className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition duration-300"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 w-full h-full" style={{ background: s.posterBg }} />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-1">
+                        <span className="text-[10px] text-white font-bold truncate drop-shadow-sm">《{s.title}》</span>
+                      </div>
                       {isSelected && (
                         <div className="absolute top-1 left-1 px-1.5 py-0.2 rounded-md bg-sky-600 text-white text-[9px] font-black shadow-md flex items-center gap-0.5">
                           <span className="w-1 h-1 rounded-full bg-white animate-pulse" />
@@ -785,14 +802,23 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
                     }`}
                   >
                     <div 
-                      className="w-full h-24 rounded-xl p-3 text-white flex flex-col justify-between font-black"
-                      style={{ background: s.posterBg }}
+                      className="relative w-full h-28 rounded-xl p-3 text-white flex flex-col justify-between font-black overflow-hidden bg-slate-900"
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] bg-black/30 px-1.5 py-0.2 rounded-md">{s.levelTag}</span>
-                        {isLocked && <span className="text-[10px] bg-amber-500 px-1.5 py-0.2 rounded-md">VIP</span>}
+                      {s.posterUrl ? (
+                        <img 
+                          src={s.posterUrl} 
+                          alt={s.title}
+                          className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:scale-105 transition duration-300"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 w-full h-full" style={{ background: s.posterBg }} />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/20" />
+                      <div className="relative z-10 flex items-center justify-between">
+                        <span className="text-[10px] bg-black/40 backdrop-blur-xs px-1.5 py-0.2 rounded-md border border-white/20">{s.levelTag}</span>
+                        {isLocked && <span className="text-[10px] bg-amber-500 px-1.5 py-0.2 rounded-md font-bold">VIP</span>}
                       </div>
-                      <span className="text-sm">《{s.title}》</span>
+                      <span className="relative z-10 text-sm drop-shadow-md">《{s.title}》</span>
                     </div>
 
                     <div className="mt-2 space-y-1">
@@ -829,14 +855,23 @@ export const AnimeDramaView: React.FC<AnimeDramaViewProps> = ({
                   }`}
                 >
                   <div 
-                    className="w-full h-28 p-3 text-white flex flex-col justify-between font-black"
-                    style={{ background: s.posterBg }}
+                    className="relative w-full h-32 p-3 text-white flex flex-col justify-between font-black overflow-hidden bg-slate-900"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] bg-black/30 px-1.5 py-0.2 rounded-md">{s.levelTag}</span>
-                      {isLocked && <span className="text-[10px] bg-amber-500 px-1.5 py-0.2 rounded-md">VIP</span>}
+                    {s.posterUrl ? (
+                      <img 
+                        src={s.posterUrl} 
+                        alt={s.title}
+                        className="absolute inset-0 w-full h-full object-cover opacity-75 group-hover:scale-105 transition duration-300"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 w-full h-full" style={{ background: s.posterBg }} />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/20" />
+                    <div className="relative z-10 flex items-center justify-between">
+                      <span className="text-[10px] bg-black/40 backdrop-blur-xs px-1.5 py-0.2 rounded-md border border-white/20">{s.levelTag}</span>
+                      {isLocked && <span className="text-[10px] bg-amber-500 px-1.5 py-0.2 rounded-md font-bold">VIP</span>}
                     </div>
-                    <span className="text-sm">《{s.title}》</span>
+                    <span className="relative z-10 text-sm drop-shadow-md">《{s.title}》</span>
                   </div>
 
                   <div className="p-3 space-y-1">
