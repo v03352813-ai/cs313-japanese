@@ -74,7 +74,7 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
     activeBorder: 'border-emerald-500',
     activeBg: 'bg-emerald-50/70 border-emerald-400 text-emerald-950',
     activeRing: 'ring-2 ring-emerald-500/20 shadow-md',
-    desc: '初学者零压力入门路线：掌握 46 清音与浊音/拗音象形口诀 ➔ 刷透 6,500+ JLPT 核心词 ➔ 搞懂 420+ 体系文法与动词活用 ➔ AI情境开口对练！',
+    desc: '初学者零压力入门路线：掌握 46 清音与浊音/拗音象形口诀 ➔ 刷透 6,500+ JLPT 核心词 ➔ 攻克动词 10 大活用变形 ➔ 搞懂 420+ 体系文法宝典！',
     steps: [
       {
         stepNum: '01',
@@ -115,15 +115,16 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
       },
       {
         stepNum: '04',
-        stepLabel: '第 4 步 · 口语实战',
-        title: 'AI 语伴 24h 东京腔情境对练',
-        targetBadge: '情境模拟 · 纠音打分',
-        badgeBg: 'bg-teal-100 text-teal-800 border border-teal-200/70',
-        desc: '居酒屋点单、秋叶原购物与日常会话，麦克风直接说日语，标准东京腔 AI 考官即时纠错打分。',
-        actionText: '开启 AI 情境对练',
-        targetTab: 'speaking',
-        icon: Mic,
-        buttonBg: 'bg-teal-600 hover:bg-teal-700 text-white shadow-xs'
+        stepLabel: '第 4 步 · 搭建框架',
+        title: '420+ 体系文法与全景思维导图',
+        targetBadge: '72考点树 · 助词辨析',
+        badgeBg: 'bg-indigo-100 text-indigo-800 border border-indigo-200/70',
+        desc: 'N5~N1 分级核心句型公式、四大助词 は/が/に/で/を 深度辨析与全景树状思维导图。',
+        actionText: '查阅体系文法宝典',
+        targetTab: 'grammar',
+        sceneId: 'library',
+        icon: BookOpen,
+        buttonBg: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs'
       }
     ]
   },
