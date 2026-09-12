@@ -69,6 +69,83 @@ interface TrackConfig {
   steps: TrackStep[];
 }
 
+
+interface JapaneseDayQuest {
+  day: number;
+  title: string;
+  subtitle: string;
+  focus: string;
+  targetTab: ActiveTab;
+  badge: string;
+  tips: string;
+}
+
+const JAPANESE_7DAY_QUESTS: JapaneseDayQuest[] = [
+  {
+    day: 1,
+    title: 'あ行~さ行 (15音)',
+    subtitle: 'あいうえお · かきくけこ · さしすせそ',
+    focus: '五大元音口型基石 · 假名草书汉字字源',
+    targetTab: 'phonetics',
+    badge: '元音基石',
+    tips: 'あ源于「安」，い源于「以」，う源于「宇」；嘴型比汉语小，发音短促清脆'
+  },
+  {
+    day: 2,
+    title: 'た行~ま行 (15音)',
+    subtitle: 'たちつてと · なにぬねの · まみむめも',
+    focus: '发音器官舌位 · 平片假名易混笔顺',
+    targetTab: 'phonetics',
+    badge: '器官象形',
+    tips: '注意「ち(chi)」与「つ(tsu)」的特殊发音；「ぬ」与「め」右侧有无打圈'
+  },
+  {
+    day: 3,
+    title: 'や行~わ行+ん (16音)',
+    subtitle: 'やゆよ · らりるれろ · わを · ん',
+    focus: '五十音图清音大圆满 · 假名拼读实战',
+    targetTab: 'phonetics',
+    badge: '清音圆满',
+    tips: 'ら行是弹舌轻音，不是边音l也不是卷舌r；「を」专作宾语助词'
+  },
+  {
+    day: 4,
+    title: '浊音·半浊音+拗音 (58音)',
+    subtitle: 'がざだば行(20) · ぱ行(5) · きゃ/しゃ/ちゃ(33)',
+    focus: '声带震动声调 · 复合滑音快速拼读',
+    targetTab: 'phonetics',
+    badge: '进阶全音',
+    tips: '加两点声带震动成浊音；加小圆圈成半浊爆破音；小写ゃゅょ构成拗音'
+  },
+  {
+    day: 5,
+    title: '三大特殊音拍 (Mora)',
+    subtitle: '促音(っ) · 长音(ー) · 拨音(ん)',
+    focus: '肌肉断气刹车 · 节拍器拉满两拍 · 口腔同化',
+    targetTab: 'phonetics',
+    badge: '击碎中式发音',
+    tips: '促音憋满一整拍；长音拖满两拍；拨音在m/b/p前闭唇[m]，t/d/n前抵牙龈[n]'
+  },
+  {
+    day: 6,
+    title: '片假名多胞胎死敌攻坚',
+    subtitle: 'シ vs ツ · ソ vs ン · ウ vs ワ vs ク',
+    focus: '起笔方向与顺撇挑笔 · 汉字偏旁字源',
+    targetTab: 'phonetics',
+    badge: '告别假名盲',
+    tips: 'シ由下往上仰头提笔，ツ由上往下顺水撇；ソ曾祖父向下扫，ン点头往上翘'
+  },
+  {
+    day: 7,
+    title: '黄金助词与见字能读',
+    subtitle: 'は vs が · に vs で · ありがとう · すみません',
+    focus: '大舞台vs聚光灯 · 静态存在vs动态舞台 · 毕业！',
+    targetTab: 'phonetics',
+    badge: '毕业蜕变',
+    tips: 'は管全句大主题，が聚焦未知主语；掌握拼读公式，任意动漫歌词见字能读！'
+  }
+];
+
 const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
   beginner: {
     id: 'beginner',
@@ -302,6 +379,37 @@ export const HomePortal: React.FC<HomePortalProps> = ({
     }, 2800);
     return () => clearInterval(timer);
   }, [isLogHovered]);
+
+    // 零基础 7 天五十音与筑基通关打卡进度
+  const [completedJapaneseDays, setCompletedJapaneseDays] = useState<number[]>(() => {
+    try {
+      const saved = localStorage.getItem('japanese_completed_days');
+      return saved ? JSON.parse(saved) : [1];
+    } catch {
+      return [1];
+    }
+  });
+
+  const toggleJapaneseDayComplete = (day: number, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setCompletedJapaneseDays(prev => {
+      let next: number[];
+      if (prev.includes(day)) {
+        next = prev.filter(d => d !== day);
+      } else {
+        next = [...prev, day];
+        confetti({
+          particleCount: 35,
+          spread: 50,
+          origin: { y: 0.7 }
+        });
+      }
+      try {
+        localStorage.setItem('japanese_completed_days', JSON.stringify(next));
+      } catch (err) {}
+      return next;
+    });
+  };
 
   const handleCheckIn = () => {
     const newCount = checkInToday();
@@ -785,6 +893,126 @@ export const HomePortal: React.FC<HomePortalProps> = ({
             );
           })}
         </div>
+
+        {/* 零基础专属：Day 1 ~ Day 7 零基础筑基通关打卡路线 */}
+        {selectedTrack === 'beginner' && (
+          <div className="mt-4 pt-5 border-t border-slate-200/80 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold flex items-center gap-1">
+                    <Sparkles className="w-3.5 h-3.5" /> 东京外国语大学教研大纲
+                  </span>
+                  <span className="text-xs font-bold text-slate-500">
+                    Day 1 ~ Day 7 零基础筑基通关打卡路线
+                  </span>
+                </div>
+                <h4 className="text-sm sm:text-base font-black text-slate-900">
+                  每天 20 分钟 · 7 天告别假名盲 · 见字能读、听音能写
+                </h4>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <div className="text-xs font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/60">
+                  <span>通关进度: </span>
+                  <strong className="text-emerald-600">{completedJapaneseDays.length}</strong>/7 天
+                </div>
+              </div>
+            </div>
+
+            {/* 7 Days Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {JAPANESE_7DAY_QUESTS.map((quest) => {
+                const isDone = completedJapaneseDays.includes(quest.day);
+
+                return (
+                  <div
+                    key={quest.day}
+                    onClick={() => onSelectModule(quest.targetTab)}
+                    className={`p-4 rounded-2xl border transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-3 relative group ${
+                      isDone
+                        ? 'bg-emerald-50/40 border-emerald-300/80 shadow-2xs hover:border-emerald-500'
+                        : 'bg-white border-slate-200/80 hover:border-sky-300 hover:shadow-sm'
+                    }`}
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className={`px-2 py-0.5 rounded-lg font-mono text-[11px] font-black ${
+                          isDone ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white'
+                        }`}>
+                          DAY {quest.day}
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={(e) => toggleJapaneseDayComplete(quest.day, e)}
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold transition cursor-pointer flex items-center gap-1 border ${
+                            isDone 
+                              ? 'bg-emerald-500 text-white border-emerald-600 shadow-2xs' 
+                              : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-emerald-50 hover:text-emerald-700'
+                          }`}
+                          title={isDone ? '点击取消打卡' : '点击标记已掌握'}
+                        >
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>{isDone ? '已通关' : '打卡'}</span>
+                        </button>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <h5 className="text-sm font-black text-slate-900 group-hover:text-sky-600 transition">
+                            {quest.title}
+                          </h5>
+                          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-sky-50 text-sky-700 border border-sky-200/60">
+                            {quest.badge}
+                          </span>
+                        </div>
+                        <p className="text-[11px] font-mono text-slate-400 truncate mt-0.5 font-bold">
+                          {quest.subtitle}
+                        </p>
+                      </div>
+
+                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                        {quest.focus}
+                      </p>
+
+                      <div className="p-2 rounded-xl bg-slate-50 border border-slate-100 text-[11px] text-slate-500 space-y-0.5">
+                        <span className="font-bold text-slate-700 block">💡 老师秘诀:</span>
+                        <p className="line-clamp-2">{quest.tips}</p>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold text-sky-600">
+                      <span>进入当天训练</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Final Completion Badge Card */}
+              <div className="p-4 rounded-2xl border border-dashed border-amber-300 bg-amber-50/50 flex flex-col justify-between space-y-3 text-center">
+                <div className="space-y-2 my-auto">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center mx-auto shadow-xs text-lg">
+                    🌸
+                  </div>
+                  <h5 className="text-sm font-black text-amber-950">
+                    7天达成通关
+                  </h5>
+                  <p className="text-xs text-amber-800 leading-relaxed font-medium">
+                    掌握清浊拗 + 片假名死敌 + 特殊音拍 + 黄金助词，见字能读、任意动漫生肉随心看！
+                  </p>
+                </div>
+                <button
+                  onClick={() => onSelectModule('phonetics')}
+                  className="w-full py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-xs transition cursor-pointer"
+                >
+                  去五十音工坊打卡 ➔
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
 

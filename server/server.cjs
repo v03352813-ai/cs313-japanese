@@ -109,8 +109,8 @@ async function handleApiRequest(req, res) {
       return sendJson(res, result.success ? 200 : 400, result);
     }
 
-    // 4. 路由：学员学习进度双向实时同步
-    if (method === 'POST' && pathname === '/api/user/sync') {
+    // 4. 路由：学员学习进度双向实时同步 (支持 /api/user/sync 与 /api/study/sync 别名)
+    if (method === 'POST' && (pathname === '/api/user/sync' || pathname === '/api/study/sync')) {
       const body = await parseBody(req);
       const { userId, progress } = body;
       if (!userId) {
@@ -118,6 +118,11 @@ async function handleApiRequest(req, res) {
       }
       const result = db.saveStudentProgress(userId, progress || {});
       return sendJson(res, 200, result);
+    }
+
+    // 4.1 路由：商业运营埋点事件静默接收
+    if (method === 'POST' && pathname === '/api/admin/track') {
+      return sendJson(res, 200, { success: true });
     }
 
     // 5. 路由：获取学员最新云端进度

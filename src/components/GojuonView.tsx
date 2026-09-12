@@ -20,15 +20,23 @@ import {
   KanaItem 
 } from '../data/japanese/gojuon';
 import { speakJapanese } from '../utils/speech';
+import { KatakanaClinic } from './KatakanaClinic';
+import { SpecialMoraPitchGuide } from './SpecialMoraPitchGuide';
+import { JapaneseParticleGuide } from './JapaneseParticleGuide';
+
+
+export type KanaTab = 'seion' | 'dakuon' | 'youon' | 'katakanaClinic' | 'moraPitch' | 'particles' | 'rules';
 
 export const GojuonView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'seion' | 'dakuon' | 'youon' | 'rules'>('seion');
+  const [activeTab, setActiveTab] = useState<KanaTab>('seion');
   const [displayScript, setDisplayScript] = useState<'hiragana' | 'katakana'>('hiragana');
   const [selectedKana, setSelectedKana] = useState<KanaItem | null>(() => SEION_ROWS[0].items[0]);
   const [practiceMode, setPracticeMode] = useState<boolean>(false);
   const [quizQuestion, setQuizQuestion] = useState<{ target: KanaItem; options: KanaItem[] } | null>(null);
   const [quizResult, setQuizResult] = useState<{ selectedId: string; isCorrect: boolean } | null>(null);
   const [streak, setStreak] = useState<number>(0);
+
+  const isSpecialTab = ['katakanaClinic', 'moraPitch', 'particles'].includes(activeTab);
 
   const handlePlaySound = (kana: KanaItem) => {
     setSelectedKana(kana);
@@ -209,13 +217,14 @@ export const GojuonView: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
           {/* Left / Center: 50-Sound Interactive Grid (8 cols) */}
-          <div className="lg:col-span-8 bg-white rounded-3xl border border-slate-200/80 shadow-xs p-4 sm:p-6 space-y-4">
+          <div className={`bg-white rounded-3xl border border-slate-200/80 shadow-xs p-4 sm:p-6 space-y-4 ${isSpecialTab ? "lg:col-span-12" : "lg:col-span-8"}`}>
+
             
-            {/* Category Tabs: Seion / Dakuon / Youon / Rules */}
+            {/* Category Tabs: Expanded with Professor-level Clinics */}
             <div className="flex items-center gap-1.5 border-b border-slate-100 pb-3 overflow-x-auto no-scrollbar">
               <button
                 onClick={() => setActiveTab('seion')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                   activeTab === 'seion'
                     ? 'bg-sky-600 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
@@ -225,17 +234,17 @@ export const GojuonView: React.FC = () => {
               </button>
               <button
                 onClick={() => setActiveTab('dakuon')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                   activeTab === 'dakuon'
                     ? 'bg-sky-600 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >
-                浊音·半浊音 (25音)
+                浊音·半浊 (25音)
               </button>
               <button
                 onClick={() => setActiveTab('youon')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                   activeTab === 'youon'
                     ? 'bg-sky-600 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
@@ -244,14 +253,44 @@ export const GojuonView: React.FC = () => {
                 拗音 (33音)
               </button>
               <button
+                onClick={() => setActiveTab('katakanaClinic')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1 ${
+                  activeTab === 'katakanaClinic'
+                    ? 'bg-rose-600 text-white shadow-xs'
+                    : 'text-rose-700 bg-rose-50/70 hover:bg-rose-100 border border-rose-200/60'
+                }`}
+              >
+                <span>🔥 片假名诊疗室</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('moraPitch')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1 ${
+                  activeTab === 'moraPitch'
+                    ? 'bg-indigo-600 text-white shadow-xs'
+                    : 'text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100 border border-indigo-200/60'
+                }`}
+              >
+                <span>🎵 特殊音拍·声调</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('particles')}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer flex items-center gap-1 ${
+                  activeTab === 'particles'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-amber-800 bg-amber-50/70 hover:bg-amber-100 border border-amber-200/60'
+                }`}
+              >
+                <span>💡 黄金助词对决</span>
+              </button>
+              <button
                 onClick={() => setActiveTab('rules')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                   activeTab === 'rules'
-                    ? 'bg-sky-600 text-white shadow-xs'
+                    ? 'bg-slate-800 text-white shadow-xs'
                     : 'text-slate-600 hover:bg-slate-100'
                 }`}
               >
-                音变规则 (促音/长音)
+                音变速查
               </button>
             </div>
 
@@ -396,9 +435,31 @@ export const GojuonView: React.FC = () => {
               </div>
             )}
 
+            {/* TAB 5: 片假名多胞胎诊疗室 */}
+            {activeTab === 'katakanaClinic' && (
+              <div className="pt-2">
+                <KatakanaClinic />
+              </div>
+            )}
+
+            {/* TAB 6: 特殊音拍与高低音调核 */}
+            {activeTab === 'moraPitch' && (
+              <div className="pt-2">
+                <SpecialMoraPitchGuide />
+              </div>
+            )}
+
+            {/* TAB 7: 黄金助词大辨析 */}
+            {activeTab === 'particles' && (
+              <div className="pt-2">
+                <JapaneseParticleGuide />
+              </div>
+            )}
+
           </div>
 
           {/* Right: Selected Kana Deep Dive Inspector (4 cols) */}
+          {!isSpecialTab && (
           <div className="lg:col-span-4 bg-white rounded-3xl border border-slate-200/80 shadow-xs p-5 space-y-5 sticky top-24">
             {selectedKana ? (
               <div className="space-y-4">
@@ -485,6 +546,7 @@ export const GojuonView: React.FC = () => {
               </div>
             )}
           </div>
+          )}
 
         </div>
       )}
