@@ -35,7 +35,12 @@ import { speakJapanese } from '../utils/speech';
 import { DramaThumbnail } from './DramaThumbnail';
 import { WallpaperBanner } from './WallpaperBanner';
 
-export type TrackId = 'beginner' | 'speaking' | 'exam';
+const STEP_VERB_DEMOS = [
+  { dict: '飲む (喝)', result: '飲める (可能态)', tag: '五段跃迁至え段+る', sound: 'のめる' },
+  { dict: '書く (写)', result: '書かれる (被动态)', tag: '五段跃迁至あ段+れる', sound: 'かかれる' },
+  { dict: '行く (去)', result: '行って (て形特例)', tag: '🚨 促音便最大特例', sound: 'いって' },
+  { dict: 'する (做)', result: 'できる (可能态)', tag: '🚨 サ变完全异化演变', sound: 'できる' },
+];
 
 interface TrackStep {
   stepNum: string;
@@ -104,9 +109,9 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
         stepNum: '03',
         stepLabel: '第 3 步 · 独家自研',
         title: '动词 10 大活用变形可视化演练器',
-        targetBadge: '独家自研推导 · 段位跃迁',
+        targetBadge: '✨ 独家自研推导引擎',
         badgeBg: 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-2xs',
-        desc: '五段/一段动词辞书形、て形、ない形、可能态、被动态一键推导演示，假名段位跳变与音便轨迹秒懂！',
+        desc: '彻底攻克日语活用最大痛点！辞书形/て形/ない形/可能态/被动态一键推导，假名段位跃迁与音便轨迹秒懂。',
         actionText: '开启独家动词变形演练器',
         targetTab: 'grammar',
         sceneId: 'conjugation',
@@ -243,6 +248,7 @@ export const HomePortal: React.FC<HomePortalProps> = ({
 }) => {
   const [streak, setStreak] = useState(() => getStudyStreak());
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState<number>(0);
+  const [activeVerbDemoIdx, setActiveVerbDemoIdx] = useState<number>(0);
   const quote: DailyQuote = DAILY_QUOTES_POOL[currentQuoteIndex];
 
   // 学习主线选择器状态（自动记忆在本地，默认推荐零基础入门）
@@ -616,6 +622,153 @@ export const HomePortal: React.FC<HomePortalProps> = ({
                   <p className="text-xs text-slate-500 leading-relaxed font-medium">
                     {step.desc}
                   </p>
+
+                  {/* STEP 03 专属：动词变形可视化演练器互动演示窗（整合自原底部横幅） */}
+                  {selectedTrack === 'beginner' && step.stepNum === '03' && (
+                    <div className="bg-sky-50/70 rounded-xl p-2.5 border border-sky-200/80 space-y-2">
+                      {/* 4 个动词切换药丸 */}
+                      <div className="flex items-center justify-between gap-1">
+                        {STEP_VERB_DEMOS.map((demo, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveVerbDemoIdx(idx);
+                              speakJapanese(demo.sound);
+                            }}
+                            className={`flex-1 py-0.5 rounded text-[10px] font-bold transition cursor-pointer text-center ${
+                              activeVerbDemoIdx === idx
+                                ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-2xs'
+                                : 'bg-white text-slate-600 hover:bg-sky-100 hover:text-sky-700 border border-slate-200/60'
+                            }`}
+                          >
+                            {demo.dict.split(' ')[0]}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* 选中的变形推导卡片 */}
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          speakJapanese(STEP_VERB_DEMOS[activeVerbDemoIdx].sound);
+                        }}
+                        className="bg-white p-2 rounded-lg border border-sky-100 hover:border-sky-300 transition cursor-pointer flex items-center justify-between group/pill shadow-2xs"
+                        title="点击朗读变形读音"
+                      >
+                        <div className="min-w-0 space-y-0.5">
+                          <div className="flex items-center gap-1 text-[11px]">
+                            <span className="text-slate-400 line-through text-[10px] truncate">
+                              {STEP_VERB_DEMOS[activeVerbDemoIdx].dict}
+                            </span>
+                            <span className="text-sky-500 font-bold">➔</span>
+                            <span className="font-mono font-black text-sky-700 text-xs truncate">
+                              {STEP_VERB_DEMOS[activeVerbDemoIdx].result}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 font-bold truncate">
+                            {STEP_VERB_DEMOS[activeVerbDemoIdx].tag}
+                          </p>
+                        </div>
+                        <div className="p-1 rounded-md bg-sky-50 text-sky-600 group-hover/pill:bg-sky-500 group-hover/pill:text-white transition shrink-0 ml-1">
+                          <Volume2 className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 01 专属：假名象形与发音点读 */}
+                  {selectedTrack === 'beginner' && step.stepNum === '01' && (
+                    <div className="bg-emerald-50/60 rounded-xl p-2.5 border border-emerald-200/70 space-y-2">
+                      <div className="flex items-center justify-between text-[10px] text-emerald-800 font-bold">
+                        <span>清音·浊音·拗音·象形联想</span>
+                        <span className="text-[9px] bg-white px-1.5 py-0.2 rounded border border-emerald-200/80">点读发音</span>
+                      </div>
+                      <div className="grid grid-cols-4 gap-1 text-center">
+                        {[
+                          { k: 'あ', r: 'a', o: '安' },
+                          { k: 'か', r: 'ka', o: '加' },
+                          { k: 'さ', r: 'sa', o: '左' },
+                          { k: 'た', r: 'ta', o: '太' }
+                        ].map((item, i) => (
+                          <button
+                            key={i}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              speakJapanese(item.k);
+                            }}
+                            className="bg-white p-1 rounded-lg border border-emerald-100 hover:border-emerald-400 hover:bg-emerald-50 transition cursor-pointer group/k"
+                            title={`点击发音: ${item.k}`}
+                          >
+                            <div className="text-xs font-black text-slate-800 group-hover/k:text-emerald-700">{item.k}</div>
+                            <div className="text-[9px] text-slate-400 font-medium">{item.o}·{item.r}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 02 专属：高频分级词卡预览 */}
+                  {selectedTrack === 'beginner' && step.stepNum === '02' && (
+                    <div className="bg-sky-50/60 rounded-xl p-2.5 border border-sky-200/70 space-y-2">
+                      <div className="flex items-center justify-between text-[10px] text-sky-800 font-bold">
+                        <span>6,500+ 分级 · 高低音调核</span>
+                        <span className="text-[9px] bg-white px-1.5 py-0.2 rounded border border-sky-200/80">遮挡默写</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-1 text-xs">
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speakJapanese('さくら');
+                          }}
+                          className="bg-white p-1.5 rounded-lg border border-sky-100 hover:border-sky-300 transition cursor-pointer flex items-center justify-between group/v shadow-2xs"
+                          title="点击发音"
+                        >
+                          <div className="min-w-0">
+                            <span className="font-bold text-slate-800 text-xs">桜 ①</span>
+                            <p className="text-[10px] text-slate-400">sakura / 樱花</p>
+                          </div>
+                          <Volume2 className="w-3 h-3 text-slate-300 group-hover/v:text-sky-600" />
+                        </div>
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speakJapanese('やくそく');
+                          }}
+                          className="bg-white p-1.5 rounded-lg border border-sky-100 hover:border-sky-300 transition cursor-pointer flex items-center justify-between group/v shadow-2xs"
+                          title="点击发音"
+                        >
+                          <div className="min-w-0">
+                            <span className="font-bold text-slate-800 text-xs">約束 ⓪</span>
+                            <p className="text-[10px] text-slate-400">yakusoku / 约定</p>
+                          </div>
+                          <Volume2 className="w-3 h-3 text-slate-300 group-hover/v:text-sky-600" />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 04 专属：420+ 体系文法与思维导图 */}
+                  {selectedTrack === 'beginner' && step.stepNum === '04' && (
+                    <div className="bg-indigo-50/60 rounded-xl p-2.5 border border-indigo-200/70 space-y-2">
+                      <div className="flex items-center justify-between text-[10px] text-indigo-800 font-bold">
+                        <span>420+ 文法宝典 · 助词辨析</span>
+                        <span className="text-[9px] bg-white px-1.5 py-0.2 rounded border border-indigo-200/80">思维导图</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-1 text-xs">
+                        <div className="bg-white p-1.5 rounded-lg border border-indigo-100 shadow-2xs p-1.5">
+                          <div className="font-bold text-slate-800 text-xs">は / が</div>
+                          <p className="text-[10px] text-slate-400">主格/主题辨析</p>
+                        </div>
+                        <div className="bg-white p-1.5 rounded-lg border border-indigo-100 shadow-2xs p-1.5">
+                          <div className="font-bold text-slate-800 text-xs">に / で</div>
+                          <p className="text-[10px] text-slate-400">时间/动作场所</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Action CTA Button */}
