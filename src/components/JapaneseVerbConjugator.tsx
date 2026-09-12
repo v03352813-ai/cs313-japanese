@@ -284,71 +284,71 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
       </div>
 
       {/* ========================================================================= */}
-      {/* 🛗 独家自研教学法 · 动词变形【坐电梯法则】1分钟秒懂速成看板 (核心心法置顶) */}
+      {/* 🛗 独家自研教学法 · 动词变形【坐电梯法则】1分钟秒懂速成看板 (优雅清爽轻底色) */}
       {/* ========================================================================= */}
-      <div className="bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-700 text-white rounded-3xl p-5 sm:p-6 shadow-md space-y-4">
+      <div className="bg-gradient-to-br from-white via-sky-50/35 to-indigo-50/20 rounded-3xl p-5 sm:p-6 border border-sky-200/90 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="p-1.5 rounded-xl bg-white/20 text-amber-200 text-base">
+              <span className="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 border border-sky-200/70 flex items-center justify-center text-base shadow-2xs">
                 🛗
               </span>
-              <h2 className="text-lg sm:text-xl font-black tracking-tight flex items-center gap-2">
+              <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
                 <span>独家自研教学法 · 动词变形【坐电梯法则】</span>
               </h2>
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-400 text-amber-950 font-black text-xs shadow-2xs">
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200/80 font-bold text-xs shadow-2xs">
                 彻底告别晦涩术语 · 1分钟秒懂
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-sky-100 font-medium">
-              核心心法：<strong>所有日语动词原形，尾巴全住在 3 楼（u段）！所谓变形，就是词尾坐电梯上下楼，再贴个新尾巴！</strong>
+            <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+              <strong className="text-sky-700">核心心法：</strong>所有日语动词原形，尾巴全住在 <strong>3 楼（u段）</strong>！所谓变形，就是词尾坐电梯上下楼，再贴个新尾巴！
             </p>
           </div>
 
           <button
             onClick={() => setShowElevatorGuide(!showElevatorGuide)}
-            className="px-3.5 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition flex items-center gap-1 shrink-0 self-start sm:self-auto cursor-pointer border border-white/20"
+            className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 shrink-0 self-start sm:self-auto cursor-pointer border border-slate-200/80 shadow-2xs"
           >
-            {showElevatorGuide ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            {showElevatorGuide ? <ChevronUp className="w-3.5 h-3.5 text-slate-500" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-500" />}
             <span>{showElevatorGuide ? '收起法则说明' : '展开法则说明'}</span>
           </button>
         </div>
 
         {showElevatorGuide && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 border-t border-white/20 animate-in fade-in duration-300">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-3 border-t border-sky-100 animate-in fade-in duration-300">
             {/* Card 1 */}
-            <div className="bg-white/10 backdrop-blur-xs p-4 rounded-2xl border border-white/15 space-y-1.5">
-              <div className="flex items-center gap-2 font-black text-sm text-amber-300">
+            <div className="bg-white/90 p-4 rounded-2xl border border-slate-200/90 shadow-2xs space-y-2 hover:border-amber-300 hover:shadow-xs transition">
+              <div className="flex items-center gap-2 font-black text-sm text-amber-900">
                 <span>🏢 1. 为什么叫【坐电梯】？</span>
               </div>
-              <p className="text-xs text-sky-100 leading-relaxed font-medium">
-                看五十音图的纵向 5 个假名（あ/い/う/え/お），就像一栋 <strong>5 层的电梯楼</strong>！
-                查字典的原形词尾（如 <strong className="text-white">書く、飲む、話す</strong>），其尾巴<strong>全都住在 3 楼（u段）</strong>，这是所有变形的始发站。
+              <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                看五十音图的纵向 5 个假名（あ/い/う/え/お），就像一栋 <strong className="text-slate-900">5 层的电梯楼</strong>！
+                查字典的原形词尾（如 <strong className="text-slate-800">書く、飲む、話す</strong>），其尾巴<strong className="text-amber-800 font-bold">全都住在 3 楼（u段）</strong>，这是所有变形的始发站。
               </p>
             </div>
 
             {/* Card 2 */}
-            <div className="bg-white/10 backdrop-blur-xs p-4 rounded-2xl border border-white/15 space-y-1.5">
-              <div className="flex items-center gap-2 font-black text-sm text-sky-200">
+            <div className="bg-white/90 p-4 rounded-2xl border border-slate-200/90 shadow-2xs space-y-2 hover:border-sky-300 hover:shadow-xs transition">
+              <div className="flex items-center gap-2 font-black text-sm text-sky-900">
                 <span>🛗 2. 去哪一层变什么形态？</span>
               </div>
-              <ul className="text-xs text-sky-100 space-y-1 font-medium leading-relaxed">
-                <li>• <strong className="text-white">升4楼 (え段) + る</strong> ➔ 【可能态：能写/会喝】</li>
-                <li>• <strong className="text-white">降1楼 (あ段) + ない</strong> ➔ 【否定形：不写/不喝】</li>
-                <li>• <strong className="text-white">降1楼 (あ段) + れる</strong> ➔ 【被动态：被写/被喝】</li>
-                <li>• <strong className="text-white">升5楼 (お段) + う</strong> ➔ 【意志形：写吧/喝吧】</li>
-                <li>• <strong className="text-white">降2楼 (い段) + ます</strong> ➔ 【礼貌形：敬语客气】</li>
+              <ul className="text-xs text-slate-700 space-y-1 font-medium leading-relaxed">
+                <li>• <strong className="text-sky-700 font-bold">升4楼 (え段) + る</strong> ➔ 【可能态：能写/会喝】</li>
+                <li>• <strong className="text-rose-700 font-bold">降1楼 (あ段) + ない</strong> ➔ 【否定形：不写/不喝】</li>
+                <li>• <strong className="text-purple-700 font-bold">降1楼 (あ段) + れる</strong> ➔ 【被动态：被写/被喝】</li>
+                <li>• <strong className="text-indigo-700 font-bold">升5楼 (お段) + う</strong> ➔ 【意志形：写吧/喝吧】</li>
+                <li>• <strong className="text-teal-700 font-bold">降2楼 (い段) + ます</strong> ➔ 【礼貌形：敬语客气】</li>
               </ul>
             </div>
 
             {/* Card 3 */}
-            <div className="bg-white/10 backdrop-blur-xs p-4 rounded-2xl border border-white/15 space-y-1.5">
-              <div className="flex items-center gap-2 font-black text-sm text-emerald-300">
+            <div className="bg-white/90 p-4 rounded-2xl border border-slate-200/90 shadow-2xs space-y-2 hover:border-emerald-300 hover:shadow-xs transition">
+              <div className="flex items-center gap-2 font-black text-sm text-emerald-900">
                 <span>🪄 3. 一段动词与不规则</span>
               </div>
-              <p className="text-xs text-sky-100 leading-relaxed font-medium">
-                • <strong>一段动词（食べる/見る）</strong>：最省心！<strong>不坐电梯</strong>，直接摘掉尾巴「る」，贴上对应新尾巴！<br />
-                • <strong>不规则（する/来る）</strong>：超级变色龙，全语系就这两个，直接当独立单词熟记。
+              <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                • <strong className="text-emerald-800 font-bold">一段动词（食べる/見る）</strong>：最省心！<strong className="text-slate-900">不坐电梯</strong>，直接摘掉尾巴「る」，贴上对应新尾巴！<br />
+                • <strong className="text-purple-800 font-bold">不规则（する/来る）</strong>：超级变色龙，全语系就这两个，直接当独立单词熟记。
               </p>
             </div>
           </div>
