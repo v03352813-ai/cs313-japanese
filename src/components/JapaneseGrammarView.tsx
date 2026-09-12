@@ -33,24 +33,26 @@ import { JapaneseVerbConjugator } from './JapaneseVerbConjugator';
 interface JapaneseGrammarViewProps {
   isVip?: boolean;
   onOpenVipModal?: (reason?: string) => void;
-  initialTab?: 'library' | 'conjugation' | 'particles';
+  initialTab?: 'library' | 'conjugation' | 'particles' | 'mindmap';
 }
 
+export type GrammarTab = 'library' | 'conjugation' | 'particles' | 'mindmap';
+
 export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip = false, onOpenVipModal, initialTab }) => {
-  const [activeTab, setActiveTab] = useState<'library' | 'conjugation' | 'particles'>(() => {
+  const [activeTab, setActiveTab] = useState<GrammarTab>(() => {
     if (initialTab) return initialTab;
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const sub = urlParams.get('sub') || urlParams.get('tab');
-      if (sub === 'conjugation' || sub === 'particles' || sub === 'library') return sub as any;
+      if (sub === 'conjugation' || sub === 'particles' || sub === 'library' || sub === 'mindmap') return sub as GrammarTab;
       if (window.location.hash.includes('conjugation')) return 'conjugation';
       const saved = localStorage.getItem('cs313_jp_grammar_tab');
-      if (saved === 'conjugation' || saved === 'library' || saved === 'particles') return saved as any;
+      if (saved === 'conjugation' || saved === 'library' || saved === 'particles' || saved === 'mindmap') return saved as GrammarTab;
     }
     return 'conjugation';
   });
 
-  const handleTabChange = (tab: 'library' | 'conjugation' | 'particles') => {
+  const handleTabChange = (tab: GrammarTab) => {
     setActiveTab(tab);
     if (typeof window !== 'undefined') {
       localStorage.setItem('cs313_jp_grammar_tab', tab);
@@ -183,10 +185,10 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
           </p>
         </div>
 
-        {/* Right Action Controls: Tab Switchers + Mindmap (Only in Library) */}
+        {/* Right Action Controls: Tab Switchers + Mindmap & Overview */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 shrink-0 flex-wrap">
-          {/* Tab Switchers (动词变形演练器置于首位) */}
-          <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shrink-0">
+          {/* Tab Switchers (动词变形演练器置于首位高亮，全景思维导图作为低调辅助) */}
+          <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 shrink-0 flex-wrap gap-0.5">
             <button
               onClick={() => handleTabChange('conjugation')}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
@@ -217,32 +219,43 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
             >
               四大助词辨析
             </button>
+            <button
+              onClick={() => handleTabChange('mindmap')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1 ${
+                activeTab === 'mindmap' 
+                  ? 'bg-indigo-600 text-white shadow-2xs font-black' 
+                  : 'text-slate-500 hover:text-indigo-700 hover:bg-slate-200/60'
+              }`}
+              title="查看日语72核心考点全景文法思维导图 (辅助视角)"
+            >
+              <Network className="w-3.5 h-3.5" />
+              <span>全景思维导图</span>
+              <span className="text-[10px] opacity-75 font-normal">(辅助)</span>
+            </button>
           </div>
 
-          {/* 仅在句型库模式下展示思维导图与通览切换 */}
-          {activeTab === 'library' && (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setShowMindMap(!showMindMap)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs border cursor-pointer ${
-                  showMindMap
-                    ? 'bg-sky-500 text-white border-sky-600 shadow-sky-500/20'
-                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-slate-200'
-                }`}
-              >
-                <Network className="w-3.5 h-3.5" />
-                <span>{showMindMap ? '收起导图' : '展开思维导图'}</span>
-              </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleTabChange(activeTab === 'mindmap' ? 'conjugation' : 'mindmap')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs border cursor-pointer ${
+                activeTab === 'mindmap'
+                  ? 'bg-indigo-50 text-indigo-700 border-indigo-200 shadow-xs'
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
+              }`}
+              title="查看日语文法全景思维导图"
+            >
+              <Network className="w-3.5 h-3.5 text-indigo-600" />
+              <span>{activeTab === 'mindmap' ? '返回动词演练' : '文法导图'}</span>
+            </button>
 
-              <button
-                onClick={() => setIsFullOverviewOpen(true)}
-                className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
-              >
-                <Compass className="w-3.5 h-3.5" />
-                <span>全体系通览 (72点)</span>
-              </button>
-            </div>
-          )}
+            <button
+              onClick={() => setIsFullOverviewOpen(true)}
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
+            >
+              <Compass className="w-3.5 h-3.5" />
+              <span>全体系通览 (72点)</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -648,12 +661,33 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
         </div>
       )}
 
-      {/* TAB 2: 独家研发 · 动词 10 大活用变形可视化演练推导工作台 */}
+      {/* TAB 2: 独家研发 · 动词 10 大活用变形可视化演练推导工作台 (默认核心主舞台) */}
       {activeTab === 'conjugation' && (
-        <JapaneseVerbConjugator
-          isVip={isVip}
-          onOpenVipModal={onOpenVipModal}
-        />
+        <div className="space-y-4">
+          {/* 轻量非侵入式辅助导读条 (可以不作为重点显示) */}
+          <div className="px-4 py-2.5 rounded-2xl bg-white border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-slate-600 shadow-2xs">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100 flex items-center justify-center shrink-0">
+                <Network className="w-3.5 h-3.5" />
+              </span>
+              <span>
+                <strong>语法宏观视角：</strong>日语为严密的粘着语体系，动词变形属于三大用言（谓语）之一。想查看变形在日语文法大树中的全局位置？
+              </span>
+            </div>
+            <button
+              onClick={() => handleTabChange('mindmap')}
+              className="px-3 py-1 rounded-xl bg-slate-50 hover:bg-indigo-50 text-indigo-700 hover:text-indigo-800 font-bold text-xs transition flex items-center gap-1 shrink-0 border border-slate-200/90 hover:border-indigo-200 cursor-pointer self-end sm:self-auto shadow-2xs"
+            >
+              <span>查看文法全景思维导图</span>
+              <ArrowRight className="w-3 h-3" />
+            </button>
+          </div>
+
+          <JapaneseVerbConjugator
+            isVip={isVip}
+            onOpenVipModal={onOpenVipModal}
+          />
+        </div>
       )}
 
       {/* TAB 3: 四大助词辨析 */}
@@ -676,6 +710,46 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* TAB 4: 全景日本语语法可视化思维导图 (Visual Tree Graph Mind Map - 辅助导图大树) */}
+      {activeTab === 'mindmap' && (
+        <div className="space-y-4 animate-in fade-in duration-200">
+          <div className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/80">
+                  🗺️ 全景文法大树 · 辅助视角
+                </span>
+                <h2 className="text-sm sm:text-base font-black text-slate-800">
+                  日本语核心文法全景思维导图 (72 核心考点全景树状图)
+                </h2>
+              </div>
+              <p className="text-xs text-slate-500 font-medium">
+                涵盖四大支柱：①品词体系与体言用言 ②动词活用与派生态 ③格助词与粘着连接 ④N5~N1核心句型。点击分支节点可一键穿梭定位！
+              </p>
+            </div>
+
+            <button
+              onClick={() => handleTabChange('conjugation')}
+              className="px-3.5 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-2xs self-start sm:self-auto cursor-pointer shrink-0"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+              <span>返回动词变形演练器</span>
+            </button>
+          </div>
+
+          <JapaneseGrammarVisualMindMap
+            onSelectGrammar={scrollToGrammar}
+            onSelectTab={(tab) => {
+              handleTabChange(tab);
+              setTimeout(() => {
+                window.scrollTo({ top: 320, behavior: 'smooth' });
+              }, 50);
+            }}
+            onOpenFullOverview={() => setIsFullOverviewOpen(true)}
+          />
         </div>
       )}
 
