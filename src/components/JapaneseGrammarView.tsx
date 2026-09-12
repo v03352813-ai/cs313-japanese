@@ -236,21 +236,8 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
 
           <div className="flex items-center gap-2">
             <button
-              onClick={() => handleTabChange(activeTab === 'mindmap' ? 'conjugation' : 'mindmap')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs border cursor-pointer ${
-                activeTab === 'mindmap'
-                  ? 'bg-indigo-50 text-indigo-700 border-indigo-200 shadow-xs'
-                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
-              }`}
-              title="查看日语文法全景思维导图"
-            >
-              <Network className="w-3.5 h-3.5 text-indigo-600" />
-              <span>{activeTab === 'mindmap' ? '返回动词演练' : '文法导图'}</span>
-            </button>
-
-            <button
               onClick={() => setIsFullOverviewOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white text-xs font-bold transition flex items-center gap-1 shadow-2xs cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Compass className="w-3.5 h-3.5" />
               <span>全体系通览 (72点)</span>
@@ -664,25 +651,6 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
       {/* TAB 2: 独家研发 · 动词 10 大活用变形可视化演练推导工作台 (默认核心主舞台) */}
       {activeTab === 'conjugation' && (
         <div className="space-y-4">
-          {/* 轻量非侵入式辅助导读条 (可以不作为重点显示) */}
-          <div className="px-4 py-2.5 rounded-2xl bg-white border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs text-slate-600 shadow-2xs">
-            <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100 flex items-center justify-center shrink-0">
-                <Network className="w-3.5 h-3.5" />
-              </span>
-              <span>
-                <strong>语法宏观视角：</strong>日语为严密的粘着语体系，动词变形属于三大用言（谓语）之一。想查看变形在日语文法大树中的全局位置？
-              </span>
-            </div>
-            <button
-              onClick={() => handleTabChange('mindmap')}
-              className="px-3 py-1 rounded-xl bg-slate-50 hover:bg-indigo-50 text-indigo-700 hover:text-indigo-800 font-bold text-xs transition flex items-center gap-1 shrink-0 border border-slate-200/90 hover:border-indigo-200 cursor-pointer self-end sm:self-auto shadow-2xs"
-            >
-              <span>查看文法全景思维导图</span>
-              <ArrowRight className="w-3 h-3" />
-            </button>
-          </div>
-
           <JapaneseVerbConjugator
             isVip={isVip}
             onOpenVipModal={onOpenVipModal}

@@ -202,102 +202,20 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* ========================================================================= */}
-      {/* 🚀 顶部高光 Hero 看板：自研技术招牌与核心卖点 */}
+      {/* 🛗 独家自研 · 动词活用推导中心 & 坐电梯法则速查 */}
       {/* ========================================================================= */}
-      <div className="bg-gradient-to-br from-white via-sky-50/40 to-indigo-50/30 rounded-3xl border border-sky-200/80 shadow-xs p-5 sm:p-6 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500 text-white text-xs font-black shadow-xs">
-                <Sparkles className="w-3.5 h-3.5 text-amber-200" />
-                独家研发 · 动词活用推导引擎
-              </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold">
-                10 大核心活用形态 · 假名段位跃迁 · 音便轨迹秒懂
-              </span>
-            </div>
-            <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-              <span>日语动词 10 大活用变形可视化演练器</span>
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">
-              彻底告别枯燥死记硬背！选择任意动词，系统一键锁定「词干」，动态演示假名从 <strong>う段跃迁到 あ/い/え/お段</strong>、<strong>促音便/拨音便/イ音便</strong> 及 <strong>一段动词去る接续</strong> 的完整演变轨迹，配备东京腔原声即点即读。
-            </p>
-          </div>
-
-          {/* 模式切换按钮 */}
-          <div className="flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200/80 shrink-0 self-start md:self-auto">
-            <button
-              onClick={() => setViewMode('workbench')}
-              className={`px-4 py-2 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 ${
-                viewMode === 'workbench'
-                  ? 'bg-white text-sky-700 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <Zap className="w-3.5 h-3.5 text-sky-500" />
-              <span>交互推导工作台</span>
-            </button>
-            <button
-              onClick={() => setViewMode('rules')}
-              className={`px-4 py-2 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 ${
-                viewMode === 'rules'
-                  ? 'bg-white text-sky-700 shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
-              <span>全景法则宝典 (10大卡)</span>
-            </button>
-          </div>
-        </div>
-
-        {/* 动词 3 大分类极简速判口诀 */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs pt-1 border-t border-sky-100">
-          <div className="p-3 rounded-2xl bg-white/80 border border-slate-200/70 space-y-1">
-            <div className="flex items-center gap-1.5 font-bold text-sky-900">
-              <span className="w-2 h-2 rounded-full bg-sky-500" />
-              <span>1类动词 (五段动词)</span>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-snug">
-              词尾非「る」，或词尾是「る」但倒数第二假名在「あ/う/お段」。(如: 書く, 飲む, 帰る)
-            </p>
-          </div>
-          <div className="p-3 rounded-2xl bg-white/80 border border-slate-200/70 space-y-1">
-            <div className="flex items-center gap-1.5 font-bold text-indigo-900">
-              <span className="w-2 h-2 rounded-full bg-indigo-500" />
-              <span>2类动词 (一段动词)</span>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-snug">
-              词尾必为「る」，且倒数第二假名在「い段」(上一段)或「え段」(下一段)。(如: 食べる, 見る)
-            </p>
-          </div>
-          <div className="p-3 rounded-2xl bg-white/80 border border-slate-200/70 space-y-1">
-            <div className="flex items-center gap-1.5 font-bold text-purple-900">
-              <span className="w-2 h-2 rounded-full bg-purple-500" />
-              <span>3类动词 (不规则动词)</span>
-            </div>
-            <p className="text-[11px] text-slate-500 leading-snug">
-              日语全语系仅有两个：<strong>する (サ变)</strong> 与 <strong>来る (くる/カ变)</strong>。
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 🛗 独家自研教学法 · 动词变形【坐电梯法则】1分钟秒懂速成看板 (优雅清爽轻底色) */}
-      {/* ========================================================================= */}
-      <div className="bg-gradient-to-br from-white via-sky-50/35 to-indigo-50/20 rounded-3xl p-5 sm:p-6 border border-sky-200/90 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-gradient-to-br from-white via-sky-50/30 to-indigo-50/20 rounded-3xl p-5 sm:p-6 border border-sky-200/80 shadow-xs space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 border border-sky-200/70 flex items-center justify-center text-base shadow-2xs">
                 🛗
               </span>
               <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                <span>独家自研教学法 · 动词变形【坐电梯法则】</span>
+                <span>动词活用推导 ·【坐电梯法则】速查指南</span>
               </h2>
               <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200/80 font-bold text-xs shadow-2xs">
-                彻底告别晦涩术语 · 1分钟秒懂
+                独家自研教学法 · 1分钟秒懂
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
@@ -305,13 +223,42 @@ export const JapaneseVerbConjugator: React.FC<JapaneseVerbConjugatorProps> = ({
             </p>
           </div>
 
-          <button
-            onClick={() => setShowElevatorGuide(!showElevatorGuide)}
-            className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 shrink-0 self-start sm:self-auto cursor-pointer border border-slate-200/80 shadow-2xs"
-          >
-            {showElevatorGuide ? <ChevronUp className="w-3.5 h-3.5 text-slate-500" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-500" />}
-            <span>{showElevatorGuide ? '收起法则说明' : '展开法则说明'}</span>
-          </button>
+          <div className="flex items-center gap-2 self-start md:self-auto shrink-0 flex-wrap">
+            {/* 视图切换 */}
+            <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200/80 shrink-0">
+              <button
+                onClick={() => setViewMode('workbench')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 ${
+                  viewMode === 'workbench'
+                    ? 'bg-white text-sky-700 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5 text-sky-500" />
+                <span>交互推导工作台</span>
+              </button>
+              <button
+                onClick={() => setViewMode('rules')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 ${
+                  viewMode === 'rules'
+                    ? 'bg-white text-indigo-700 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5 text-indigo-500" />
+                <span>全景法则宝典</span>
+              </button>
+            </div>
+
+            {/* 收起 / 展开 说明 */}
+            <button
+              onClick={() => setShowElevatorGuide(!showElevatorGuide)}
+              className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-1 shrink-0 cursor-pointer border border-slate-200/80 shadow-2xs"
+            >
+              {showElevatorGuide ? <ChevronUp className="w-3.5 h-3.5 text-slate-500" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-500" />}
+              <span>{showElevatorGuide ? '收起法则' : '展开法则'}</span>
+            </button>
+          </div>
         </div>
 
         {showElevatorGuide && (
