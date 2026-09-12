@@ -102,15 +102,16 @@ const TRACKS_CONFIG: Record<TrackId, TrackConfig> = {
       },
       {
         stepNum: '03',
-        stepLabel: '第 3 步 · 攻克文法',
-        title: '420+ 文法宝典与动词 10 大活用',
-        targetBadge: '接续公式 · 助词辨析',
-        badgeBg: 'bg-indigo-100 text-indigo-800 border border-indigo-200/70',
-        desc: '五段/一段动词 10 大活用变形器、四大助词 は/が/に/で/を 深度辨析与历届常考句型公式。',
-        actionText: '查阅体系文法宝典',
+        stepLabel: '第 3 步 · 独家自研',
+        title: '动词 10 大活用变形可视化演练器',
+        targetBadge: '独家自研推导 · 段位跃迁',
+        badgeBg: 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-2xs',
+        desc: '五段/一段动词辞书形、て形、ない形、可能态、被动态一键推导演示，假名段位跳变与音便轨迹秒懂！',
+        actionText: '开启独家动词变形演练器',
         targetTab: 'grammar',
+        sceneId: 'conjugation',
         icon: BookOpenCheck,
-        buttonBg: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs'
+        buttonBg: 'bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white shadow-xs'
       },
       {
         stepNum: '04',
@@ -631,6 +632,81 @@ export const HomePortal: React.FC<HomePortalProps> = ({
           })}
         </div>
 
+      </div>
+
+      {/* --- 4.5 独家研发 · 日语动词 10 大活用变形推导演练器 (高光王牌 C 位展示) --- */}
+      <div
+        onClick={() => onSelectModule('grammar', 'conjugation')}
+        className="group bg-gradient-to-r from-white via-sky-50/40 to-indigo-50/30 rounded-3xl p-5 sm:p-7 border border-sky-200/90 shadow-md shadow-sky-100/50 hover:shadow-xl hover:border-sky-400 transition-all duration-300 cursor-pointer overflow-hidden space-y-4 relative"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="p-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white shadow-xs">
+                <Sparkles className="w-4 h-4 text-amber-200" />
+              </span>
+              <h3 className="text-xl font-black text-slate-900 group-hover:text-sky-600 transition">
+                独家研发【动词变形可视化演练器】
+              </h3>
+              <span className="px-2.5 py-0.5 rounded-full bg-sky-500 text-white text-xs font-black shadow-2xs">
+                ✨ 独家自研推导引擎
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold">
+                文法逻辑秒懂 · 10大活用全覆盖
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-3xl leading-relaxed">
+              彻底攻克日语动词活用最大痛点！辞书形、て形、ない形、可能态、被动态一键推导演示。词干精准锁定 + 假名段位跃迁 + 促音/拨音/イ音便轨迹拆解，全形态配备东京标准音即点即读！
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1 self-start sm:self-auto shrink-0">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelectModule('grammar', 'conjugation');
+              }}
+              className="text-xs font-black text-white bg-gradient-to-r from-sky-500 to-indigo-600 hover:from-sky-600 hover:to-indigo-700 px-4 py-2.5 rounded-xl border border-sky-300/40 flex items-center gap-1.5 group-hover:scale-102 transition shadow-xs cursor-pointer"
+            >
+              <span>开启动词变形演练器</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+
+        {/* 动态演练预览药丸胶囊 */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+          {[
+            { dict: '飲む (喝)', result: '飲める (可能态)', tag: '五段跃迁至え段+る', meaning: '能喝 / 会喝酒' },
+            { dict: '書く (写)', result: '書かれる (被动态)', tag: '五段跃迁至あ段+れる', meaning: '被写 / 被报道' },
+            { dict: '行く (去)', result: '行って (て形特例)', tag: '🚨 促音便全日语最大特例', meaning: '去 / 前往' },
+            { dict: 'する (做)', result: 'できる (可能态)', tag: '🚨 サ变完全异化演变', meaning: '能做 / 会做' },
+          ].map((demo, idx) => (
+            <div
+              key={idx}
+              onClick={(e) => {
+                e.stopPropagation();
+                speakJapanese(demo.result.split(' ')[0]);
+              }}
+              className="p-3 rounded-2xl bg-white/90 border border-slate-200/90 hover:border-sky-400 hover:bg-sky-50/50 transition duration-200 shadow-2xs space-y-1 cursor-pointer group/pill"
+              title="点击朗读变形发音"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] text-slate-400 line-through">
+                  {demo.dict}
+                </span>
+                <Volume2 className="w-3 h-3 text-slate-300 group-hover/pill:text-sky-600 transition" />
+              </div>
+              <div className="flex items-center gap-1 text-xs font-black text-sky-700">
+                <span>➔</span>
+                <span className="text-sm font-mono font-black">{demo.result}</span>
+              </div>
+              <p className="text-[10px] text-slate-500 font-bold truncate">
+                {demo.tag}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* --- 5. 原声名台词精听研习室 (精选 4 部 + 30部全库直达) --- */}

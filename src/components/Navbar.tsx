@@ -151,7 +151,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
 
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-slate-900">
-                  日语备考与口语听力，从未如此简单
+                  日语备考，从未如此简单
                 </h1>
 
                 <p className="text-xs text-slate-500 font-medium leading-snug">

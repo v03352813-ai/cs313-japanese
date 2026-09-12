@@ -243,6 +243,7 @@ export function App() {
   }, []);
 
   const [selectedDramaSceneId, setSelectedDramaSceneId] = useState<string | undefined>();
+  const [selectedGrammarTab, setSelectedGrammarTab] = useState<'library' | 'conjugation' | 'particles' | undefined>();
 
   // 监听页面向下滚动距离，超过 200px 时在右下角优雅浮现快捷控制（回到顶部 / 返回首页）
   const [showScrollControls, setShowScrollControls] = useState(false);
@@ -257,8 +258,15 @@ export function App() {
 
   const handleTabChange = (tab: ActiveTab, sceneId?: string) => {
     setActiveTab(tab);
-    if (sceneId) {
+    if (tab === 'kdrama' && sceneId) {
       setSelectedDramaSceneId(sceneId);
+    }
+    if (tab === 'grammar') {
+      if (sceneId === 'conjugation' || sceneId === 'particles') {
+        setSelectedGrammarTab(sceneId);
+      } else {
+        setSelectedGrammarTab('library');
+      }
     }
     window.location.hash = tab === 'home' ? '' : tab;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -380,6 +388,7 @@ export function App() {
               <GrammarView
                 isVip={license.isVip}
                 onOpenVipModal={handleOpenVipModal}
+                initialTab={selectedGrammarTab}
               />
             )}
             {activeTab === 'kdrama' && (

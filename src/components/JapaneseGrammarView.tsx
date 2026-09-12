@@ -28,14 +28,25 @@ import {
 } from '../data/japanese/jlptGrammar';
 import { speakJapanese } from '../utils/speech';
 import { JapaneseGrammarVisualMindMap } from './JapaneseGrammarVisualMindMap';
+import { JapaneseVerbConjugator } from './JapaneseVerbConjugator';
 
 interface JapaneseGrammarViewProps {
   isVip?: boolean;
   onOpenVipModal?: (reason?: string) => void;
+  initialTab?: 'library' | 'conjugation' | 'particles';
 }
 
-export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip = false, onOpenVipModal }) => {
-  const [activeTab, setActiveTab] = useState<'library' | 'conjugation' | 'particles'>('library');
+export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip = false, onOpenVipModal, initialTab }) => {
+  const [activeTab, setActiveTab] = useState<'library' | 'conjugation' | 'particles'>(() => {
+    if (initialTab) return initialTab;
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sub = urlParams.get('sub') || urlParams.get('tab');
+      if (sub === 'conjugation' || sub === 'particles') return sub;
+      if (window.location.hash.includes('conjugation')) return 'conjugation';
+    }
+    return 'library';
+  });
   const [selectedLevel, setSelectedLevel] = useState<string>('全部');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [viewMode, setViewMode] = useState<'focused' | 'list'>('focused');
@@ -190,11 +201,17 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
             </button>
             <button
               onClick={() => setActiveTab('conjugation')}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                activeTab === 'conjugation' ? 'bg-white text-sky-700 shadow-2xs font-black' : 'text-slate-600 hover:text-slate-900'
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                activeTab === 'conjugation' ? 'bg-sky-500 text-white shadow-xs font-black' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              动词10大变形
+              <Sparkles className={`w-3.5 h-3.5 ${activeTab === 'conjugation' ? 'text-amber-200' : 'text-sky-500'}`} />
+              <span>动词变形演练器</span>
+              <span className={`text-[10px] px-1 py-0.2 rounded font-black ${
+                activeTab === 'conjugation' ? 'bg-white text-sky-700' : 'bg-sky-100 text-sky-800'
+              }`}>
+                自研
+              </span>
             </button>
             <button
               onClick={() => setActiveTab('particles')}
@@ -610,68 +627,12 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
         </div>
       )}
 
-      {/* TAB 2: 动词 10 大活用变形规则 */}
+      {/* TAB 2: 独家研发 · 动词 10 大活用变形可视化演练推导工作台 */}
       {activeTab === 'conjugation' && (
-        <div className="space-y-4">
-          <div className="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-xs text-sky-950 space-y-1">
-            <span className="font-bold text-sky-900 text-sm block">
-              ⚡ 日语动词活用核心秘籍：3大动词分类
-            </span>
-            <p>
-              • <strong>1类动词 (五段动词)</strong>：词尾非「る」，或词尾是「る」但倒数第二个假名在「あ/う/お段」。(如: 書く, 泳ぐ, 飲む, 買う, 帰る)<br />
-              • <strong>2类动词 (一段动词)</strong>：词尾是「る」，且倒数第二个假名在「い段」或「え段」。(如: 食べる, 見る)<br />
-              • <strong>3类动词 (不规则)</strong>：只有两个：<strong>する (サ变)</strong> 和 <strong>来る (くる/カ变)</strong>。
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {VERB_CONJUGATION_RULES.map(rule => (
-              <div key={rule.formName} className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-base font-black text-slate-900 text-sky-700">
-                    {rule.formName}
-                  </h3>
-                  <span className="text-xs text-slate-500 font-medium">
-                    {rule.functionDesc}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
-                    <span className="font-bold text-slate-700 block">1类动词 (五段)</span>
-                    <p className="text-slate-600 text-[11px]">{rule.rules.group1}</p>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
-                    <span className="font-bold text-slate-700 block">2类动词 (一段)</span>
-                    <p className="text-slate-600 text-[11px]">{rule.rules.group2}</p>
-                  </div>
-                  <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
-                    <span className="font-bold text-slate-700 block">3类动词 (不规则)</span>
-                    <p className="text-slate-600 text-[11px]">{rule.rules.group3}</p>
-                  </div>
-                </div>
-
-                {/* Samples */}
-                <div className="pt-2 border-t border-slate-100 flex items-center gap-2 flex-wrap text-xs">
-                  <span className="text-slate-400 font-bold text-[11px]">代表范例：</span>
-                  {rule.sample.map((s, idx) => (
-                    <span
-                      key={idx}
-                      onClick={() => speakJapanese(s.conjugated)}
-                      className="px-2.5 py-1 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 font-semibold cursor-pointer transition flex items-center gap-1"
-                      title="点击朗读变形发音"
-                    >
-                      <span className="text-slate-400 line-through mr-0.5">{s.dict}</span>
-                      <ArrowRight className="w-2.5 h-2.5 text-sky-500" />
-                      <span className="font-bold">{s.conjugated}</span>
-                      <span className="text-[10px] text-slate-400">({s.meaning})</span>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <JapaneseVerbConjugator
+          isVip={isVip}
+          onOpenVipModal={onOpenVipModal}
+        />
       )}
 
       {/* TAB 3: 四大助词辨析 */}
