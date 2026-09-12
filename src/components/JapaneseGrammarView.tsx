@@ -47,6 +47,13 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
     }
     return 'library';
   });
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
+
   const [selectedLevel, setSelectedLevel] = useState<string>('全部');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [viewMode, setViewMode] = useState<'focused' | 'list'>('focused');
