@@ -119,8 +119,8 @@ export async function bindDeviceToLicense(cardKey, device, tier) {
     const newLicense = {
       cardKey: cleanKey,
       status: 'ACTIVE',
-      tier: tier || (cleanKey.includes('-ALL-') ? 'all_lang' : (cleanKey.includes('-JP-') ? 'jp_lifetime' : 'kr_lifetime')),
-      planName: cleanKey.includes('-ALL-') ? 'CS313 全球小语种黑金终身通卡' : (cleanKey.includes('-JP-') ? 'CS313 日语单语种终身VIP' : 'CS313 韩语单语种终身VIP'),
+      tier: tier || (cleanKey.includes('-ALL-') ? 'all_lang' : (cleanKey.includes('-FR-') ? 'fr_lifetime' : (cleanKey.includes('-JP-') ? 'jp_lifetime' : 'kr_lifetime'))),
+      planName: cleanKey.includes('-ALL-') ? 'CS313 全球小语种黑金终身通卡' : (cleanKey.includes('-FR-') ? 'CS313 法语单语种终身VIP' : (cleanKey.includes('-JP-') ? 'CS313 日语单语种终身VIP' : 'CS313 韩语单语种终身VIP')),
       userId,
       activatedAt: now,
       lastActiveAt: now,

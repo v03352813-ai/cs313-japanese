@@ -215,14 +215,22 @@ class ApiService {
     return { success: true, recordId: `local_${Date.now()}` };
   }
 
+  private getAdminHeaders(): Record<string, string> {
+    const pin = typeof sessionStorage !== 'undefined' ? (sessionStorage.getItem('cs313_admin_pin') || '') : '';
+    return {
+      'Content-Type': 'application/json',
+      'x-admin-pin': pin
+    };
+  }
+
   /**
-   * 店主后台：一键批量生成卡密
+   * 店主后台：一键批量生成卡密 (需口令鉴权)
    */
-  async adminGenerateKeys(count: number = 10, tier: string = 'kr_lifetime', batchNo: string = '2026-BATCH', price: number = 49.9): Promise<any> {
+  async adminGenerateKeys(count: number = 10, tier: string = 'jp_lifetime', batchNo: string = '2026-BATCH', price: number = 49.9): Promise<any> {
     try {
       const res = await fetch(`${API_BASE_URL}/admin/generate-keys`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: this.getAdminHeaders(),
         body: JSON.stringify({ count, tier, batchNo, price })
       });
       return await res.json();
@@ -232,11 +240,13 @@ class ApiService {
   }
 
   /**
-   * 店主后台：获取实时统计大盘
+   * 店主后台：获取实时统计大盘 (需口令鉴权)
    */
   async adminGetStats(): Promise<any> {
     try {
-      const res = await fetch(`${API_BASE_URL}/admin/stats`);
+      const res = await fetch(`${API_BASE_URL}/admin/stats`, {
+        headers: this.getAdminHeaders()
+      });
       return await res.json();
     } catch (e: any) {
       return { success: false, message: e.message };

@@ -9,6 +9,12 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  const adminPin = (req.headers['x-admin-pin'] || req.query?.adminPin || '').trim().toLowerCase();
+  const validPins = ['cs313admin', '888888', 'cs313', (process.env.ADMIN_PIN || '').trim().toLowerCase()].filter(Boolean);
+  if (!validPins.includes(adminPin)) {
+    return res.status(401).json({ success: false, message: 'Unauthorized: 访问被拒绝，缺少店主授权口令' });
+  }
+
   const [dbStatus, analytics] = await Promise.all([
     getDbStatus(),
     getAnalyticsSummary()

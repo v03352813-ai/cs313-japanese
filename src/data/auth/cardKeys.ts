@@ -53,6 +53,7 @@ export function verifyAdminPin(pin: string): boolean {
   if (ADMIN_PIN_CODES.includes(clean)) {
     try {
       sessionStorage.setItem(ADMIN_SESSION_KEY, 'authenticated');
+      sessionStorage.setItem('cs313_admin_pin', clean);
     } catch {
       // Ignore storage errors
     }
@@ -64,8 +65,9 @@ export function verifyAdminPin(pin: string): boolean {
 export function clearAdminSession(): void {
   try {
     sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    sessionStorage.removeItem('cs313_admin_pin');
   } catch {
-    // Ignore
+    // Ignore storage errors
   }
 }
 

@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 
-const SIGNATURE_SECRET_SALT = 'CS313_KR_2026_PRODUCTION_AUTH_KEY_V9X_TOP_SECRET';
+const SIGNATURE_SECRET_SALT = 'CS313_JP_2026_PRODUCTION_AUTH_KEY_V9X_TOP_SECRET';
 const SAFE_CHARSET = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
 
 function computeKeySignature(type, serial) {
@@ -27,7 +27,7 @@ function generateSingleKey(type) {
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-admin-pin');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -38,9 +38,15 @@ export default async function handler(req, res) {
   }
 
   try {
+    const adminPin = (req.headers['x-admin-pin'] || req.body?.adminPin || '').trim().toLowerCase();
+    const validPins = ['cs313admin', '888888', 'cs313', (process.env.ADMIN_PIN || '').trim().toLowerCase()].filter(Boolean);
+    if (!validPins.includes(adminPin)) {
+      return res.status(401).json({ success: false, message: 'Unauthorized: 无权访问店主管理后台，安全口令验证失败' });
+    }
+
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
-    const { count = 10, tier = 'kr_lifetime' } = body;
-    const type = tier === 'all_lang' ? 'ALL' : 'KR';
+    const { count = 10, tier = 'jp_lifetime' } = body;
+    const type = tier === 'all_lang' ? 'ALL' : 'JP';
 
     const keys = new Set();
     const targetCount = Math.min(Math.max(Number(count) || 10, 1), 200);

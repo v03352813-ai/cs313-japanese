@@ -42,7 +42,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Method Not Allowed' });
   }
 
-  const clientIp = req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '127.0.0.1';
+  const rawFwd = req.headers['x-forwarded-for'];
+  const rawIp = req.headers['x-real-ip'] || (typeof rawFwd === 'string' ? rawFwd.split(',')[0].trim() : req.socket?.remoteAddress) || '127.0.0.1';
+  const clientIp = String(rawIp).replace(/[^0-9a-fA-F:.]/g, '').slice(0, 45);
 
   try {
     // 1. 防暴力破解限流保护 (5分钟输错超5次锁定)
@@ -61,6 +63,12 @@ export default async function handler(req, res) {
     if (!cleanKey) {
       return res.status(400).json({ success: false, message: '请输入激活卡密' });
     }
+
+    const safeDevice = {
+      deviceId: String(device?.deviceId || 'dev_unknown').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 64),
+      deviceType: String(device?.deviceType || device?.browser || '主力学习设备').slice(0, 50),
+      browser: String(device?.browser || '').slice(0, 50)
+    };
 
     let tier = 'jp_lifetime';
     let planName = 'CS313 日语单语种终身VIP';
@@ -101,7 +109,7 @@ export default async function handler(req, res) {
     }
 
     // 5. 云数据库持久化 & 设备绑定与找回逻辑
-    const dbResult = await bindDeviceToLicense(cleanKey, device, tier);
+    const dbResult = await bindDeviceToLicense(cleanKey, safeDevice, tier);
 
     if (!dbResult.success) {
       return res.status(403).json({
