@@ -3,7 +3,7 @@
  * 统一抽象韩语、日语、俄语、西班牙语的考试体系、主题风格与模块配置
  */
 
-export type LanguageCode = 'ko' | 'ja' | 'ru' | 'es';
+export type LanguageCode = 'ko' | 'ja' | 'fr' | 'es' | 'ru';
 
 export interface LanguageProfile {
   code: LanguageCode;
@@ -85,6 +85,33 @@ export const CS313_LANGUAGES: Record<LanguageCode, LanguageProfile> = {
       grammarCount: '420+ 经典句型与句尾接续',
       examCount: 'N1~N5 历届官方考期真题库（每年7月/12月考后持续同步扩充）',
       mediaTheme: '经典影视名台词 & 原声对白精听（每周持续扩充更新）'
+    },
+    status: 'ONLINE'
+  },
+  fr: {
+    code: 'fr',
+    name: '法语',
+    nativeName: 'Français',
+    flag: '🇫🇷',
+    brandTitle: 'CS313 法语研习社',
+    subdomain: 'fr.cs313.cn',
+    routePath: '/fr',
+    themeColor: {
+      primary: '#80142A', // Royal Carmine Red
+      gradient: 'from-rose-800 via-red-700 to-amber-600',
+      lightBg: 'bg-rose-50',
+      badgeBg: 'bg-rose-50 text-rose-800 border-rose-200'
+    },
+    examSystem: {
+      name: 'DELF / DALF & 考研二外',
+      description: '法国教育部终身文凭 / 国内高校考研双轨备考',
+      levels: ['DELF A1-A2 (基础突破)', 'DELF B1-B2 (中高级独立)', 'DALF C1-C2 (精通)', '全国高校考研二外法语 241/242/243']
+    },
+    features: {
+      vocabCount: '5,000+ 核心考纲词汇与阴阳性搭配',
+      grammarCount: '直陈/虚拟/条件/命令全时态变位器',
+      examCount: '全国考研二外与 DELF 全真模拟卷',
+      mediaTheme: '经典原声电影台词精听与高频句型解析'
     },
     status: 'ONLINE'
   },
