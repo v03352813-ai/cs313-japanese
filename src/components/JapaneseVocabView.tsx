@@ -467,7 +467,7 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
 
       {/* 3. View Mode 1: 旗舰级 3D 宽屏大卡片模式 */}
       {viewMode === 'flashcard' && activeVocab.length > 0 && currentWord && (
-        <div className="space-y-4 w-full">
+        <div className="max-w-2xl mx-auto space-y-4 w-full">
           
           {/* Progress Indicator */}
           <div className="flex items-center justify-between text-xs text-slate-500 px-1 font-bold">
@@ -489,8 +489,8 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
               isFlipped ? 'rotate-y-180' : ''
             }`}>
               
-              {/* --- FRONT OF CARD (卡片正面) --- */}
-              <div className="absolute inset-0 w-full h-full bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-lg shadow-slate-200/50 flex flex-col justify-between backface-hidden">
+              {/* --- FRONT OF CARD (卡片正面: 典雅海洋蓝双层画框与柔光光晕) --- */}
+              <div className="absolute inset-0 w-full h-full rounded-3xl p-6 sm:p-8 border-2 border-sky-300 ring-4 ring-sky-400/10 bg-gradient-to-b from-sky-50/60 via-white to-sky-50/20 shadow-lg shadow-sky-200/30 flex flex-col justify-between backface-hidden transition-all">
                 
                 {/* Top Badge Info */}
                 <div className="flex items-center justify-between">
@@ -602,8 +602,8 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                 </div>
               </div>
 
-              {/* --- BACK OF CARD (卡片背面) --- */}
-              <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-sky-50/70 via-white to-indigo-50/50 text-slate-900 rounded-3xl p-6 sm:p-8 border border-sky-200/90 shadow-xl flex flex-col justify-between rotate-y-180 backface-hidden">
+              {/* --- BACK OF CARD (卡片背面: 典雅双层画框与柔光光晕) --- */}
+              <div className="absolute inset-0 w-full h-full rounded-3xl p-6 sm:p-8 border-2 border-sky-300 ring-4 ring-sky-400/10 bg-gradient-to-br from-sky-50/80 via-white to-indigo-50/40 text-slate-900 shadow-xl shadow-sky-200/30 flex flex-col justify-between rotate-y-180 backface-hidden transition-all">
                 
                 {/* Top Info */}
                 <div className="flex items-center justify-between">
