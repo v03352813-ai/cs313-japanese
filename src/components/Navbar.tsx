@@ -411,9 +411,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* VIP Status or Activation Button */}
               {license.isVip ? (
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white text-xs font-bold shadow-xs shadow-sky-500/20 shrink-0 whitespace-nowrap">
+                <div 
+                  onClick={onOpenVipModal}
+                  className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 text-white text-xs font-bold shadow-xs shadow-sky-500/20 shrink-0 whitespace-nowrap cursor-pointer hover:opacity-95 transition active:scale-95"
+                  title={license.planName || 'VIP 终身卡'}
+                >
                   <Crown className="w-3.5 h-3.5 shrink-0" />
-                  <span className="whitespace-nowrap">{license.planName || 'VIP 终身卡'}</span>
+                  <span className="hidden sm:inline whitespace-nowrap">{license.planName || 'VIP 终身卡'}</span>
+                  <span className="inline sm:hidden whitespace-nowrap font-black">终身VIP</span>
                 </div>
               ) : (
                 <button
