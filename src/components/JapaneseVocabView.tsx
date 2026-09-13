@@ -42,6 +42,62 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
   const [viewMode, setViewMode] = useState<'flashcard' | 'list'>('flashcard');
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(false);
+  const [speechRate, setSpeechRate] = useState<0.8 | 1.0>(1.0);
+
+  // 音调核图示与通俗心法
+  const getPitchVisual = (pitch: number) => {
+    if (pitch === 0) {
+      return {
+        type: '0型 · 平板调',
+        symbol: '─',
+        desc: '首拍低，后拍持续高平不掉落 (像高铁平稳开)',
+        color: 'bg-emerald-50 text-emerald-800 border-emerald-200'
+      };
+    }
+    if (pitch === 1) {
+      return {
+        type: '1型 · 头高调',
+        symbol: '＼',
+        desc: '首拍最高，次拍急剧下跌 (像坐跳楼机)',
+        color: 'bg-rose-50 text-rose-800 border-rose-200'
+      };
+    }
+    if (pitch === 2) {
+      return {
+        type: '2型 · 中高调',
+        symbol: '╭╮',
+        desc: '第2拍最高，第3拍跌落',
+        color: 'bg-amber-50 text-amber-800 border-amber-200'
+      };
+    }
+    return {
+      type: `${pitch}型 · 中/尾高调`,
+      symbol: '╭──╮',
+      desc: `第${pitch}拍最高后跌落`,
+      color: 'bg-sky-50 text-sky-800 border-sky-200'
+    };
+  };
+
+  // 自他动词成对速记库
+  const TRANSITIVE_PAIRS: Record<string, { partner: string; type: '自' | '他'; example: string }> = {
+    '開く': { partner: '開ける', type: '自', example: 'ドアが開く (门开了) ↔ ドアを開ける (开门)' },
+    '開ける': { partner: '開く', type: '他', example: 'ドアを開ける (开门) ↔ ドアが開く (门开了)' },
+    '閉まる': { partner: '閉める', type: '自', example: '窓が閉まる (窗关了) ↔ 窓を閉める (关窗)' },
+    '閉める': { partner: '閉まる', type: '他', example: '窓を閉める (关窗) ↔ 窓が閉まる (窗关了)' },
+    '始まる': { partner: '始める', type: '自', example: '授業が始まる (课开始了) ↔ 授業を始める (开始上课)' },
+    '始める': { partner: '始まる', type: '他', example: '授業を始める (开始上课) ↔ 授業が始まる (课开始了)' },
+    '終わる': { partner: '終える', type: '自', example: '仕事が終わる (工作结束) ↔ 仕事を終える (完成工作)' },
+    '消える': { partner: '消す', type: '自', example: '電気が消える (灯熄了) ↔ 電気を消す (关灯)' },
+    '消す': { partner: '消える', type: '他', example: '電気を消す (关灯) ↔ 電気が消える (灯熄了)' },
+    '出る': { partner: '出す', type: '自', example: '汗が出る (流汗) ↔ 手紙を出す (寄信)' },
+    '出す': { partner: '出る', type: '他', example: '手紙を出す (寄信) ↔ 汗が出る (流汗)' },
+    '入る': { partner: '入れる', type: '自', example: '部屋に入る (进房间) ↔ お茶を入れる (泡茶)' },
+    '入れる': { partner: '入る', type: '他', example: 'お茶を入れる (泡茶) ↔ 部屋に入る (进房间)' },
+    '壊れる': { partner: '壊す', type: '自', example: '時計が壊れる (表坏了) ↔ 時計を壊す (弄坏表)' },
+    '壊す': { partner: '壊れる', type: '他', example: '時計を壊す (弄坏表) ↔ 時計が壊れる (表坏了)' },
+    '落ちる': { partner: '落とす', type: '自', example: '財布が落ちる (钱包掉落) ↔ 財布を落とす (弄丢钱包)' },
+    '落とす': { partner: '落ちる', type: '他', example: '財布を落とす (弄丢钱包) ↔ 財布が落ちる (钱包掉落)' },
+  };
 
   // 非 VIP 仅开放 N5 且仅限 Day 1 试背
   useEffect(() => {
@@ -113,37 +169,31 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
 
     const word = activeVocab[currentIndex];
     if (word) {
-      speakJapanese(word.kanji || word.furigana);
+      speakJapanese(word.kanji || word.furigana, speechRate);
     }
 
     autoPlayTimerRef.current = setTimeout(() => {
       setCurrentIndex((prev) => {
-        if (prev >= activeVocab.length - 1) {
-          setIsAutoPlaying(false);
-          return 0;
-        }
-        return prev + 1;
+        if (prev + 1 < activeVocab.length) return prev + 1;
+        setIsAutoPlaying(false);
+        return prev;
       });
-      setIsFlipped(false);
-    }, 2800);
+    }, 3800);
 
     return () => {
       if (autoPlayTimerRef.current) clearTimeout(autoPlayTimerRef.current);
     };
-  }, [isAutoPlaying, currentIndex, activeVocab]);
+  }, [isAutoPlaying, currentIndex, activeVocab, speechRate]);
+
+  // 切词控制
+  const handlePrev = () => {
+    setIsFlipped(false);
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : activeVocab.length - 1));
+  };
 
   const handleNext = () => {
     setIsFlipped(false);
-    if (currentIndex < activeVocab.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    setIsFlipped(false);
-    if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
-    }
+    setCurrentIndex((prev) => (prev + 1 < activeVocab.length ? prev + 1 : 0));
   };
 
   const handleShuffle = () => {
@@ -164,8 +214,34 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
 
   const playVoice = (e: React.MouseEvent, text: string) => {
     e.stopPropagation();
-    speakJapanese(text);
+    speakJapanese(text, speechRate);
   };
+
+  // 全键盘快捷键监听
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const targetTag = (e.target as HTMLElement)?.tagName;
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(targetTag)) return;
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        setIsFlipped(prev => !prev);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handleNext();
+      } else if (e.key === '1') {
+        e.preventDefault();
+        if (currentWord) toggleMastered(currentWord.id);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (currentWord) speakJapanese(currentWord.kanji || currentWord.furigana, speechRate);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentWord, speechRate]);
 
   const dayMasteredCount = activeVocab.filter(v => masteredIds.includes(v.id)).length;
 
@@ -196,8 +272,31 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
           </div>
         </div>
 
-        {/* 顶部快捷开关: 遮挡模式 + 自动连读 + 视图切换 + 随机抽词 */}
+        {/* 顶部快捷开关: 语速切换 + 遮挡模式 + 自动连读 + 视图切换 + 随机抽词 */}
         <div className="flex items-center gap-2 w-full md:w-auto justify-between md:justify-end shrink-0 flex-wrap pt-2 md:pt-0 border-t md:border-t-0 border-slate-100">
+          
+          {/* 语速选择: 0.8x 慢速精听 vs 1.0x 原速 */}
+          <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs">
+            <button
+              onClick={() => setSpeechRate(0.8)}
+              className={`px-2 py-1 rounded-lg font-bold text-xs transition cursor-pointer ${
+                speechRate === 0.8 ? 'bg-amber-500 text-white shadow-2xs font-black' : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="0.8x 慢速精听：清晰辨析促音与长音"
+            >
+              0.8x 慢速
+            </button>
+            <button
+              onClick={() => setSpeechRate(1.0)}
+              className={`px-2 py-1 rounded-lg font-bold text-xs transition cursor-pointer ${
+                speechRate === 1.0 ? 'bg-white text-slate-900 shadow-2xs font-black' : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="1.0x 原速标准发音"
+            >
+              1.0x 原速
+            </button>
+          </div>
+
           <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs">
             <button
               onClick={() => setMaskMode('none')}
@@ -390,8 +489,9 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                     <span className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">
                       {currentWord.pos}
                     </span>
-                    <span className="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 text-xs font-bold border border-amber-200/60">
-                      音调核: {currentWord.pitch}型
+                    <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border flex items-center gap-1 shadow-2xs ${getPitchVisual(currentWord.pitch).color}`}>
+                      <span className="font-mono font-black">{getPitchVisual(currentWord.pitch).symbol}</span>
+                      <span>{getPitchVisual(currentWord.pitch).type}</span>
                     </span>
                   </div>
                   
@@ -422,7 +522,7 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                     <button
                       onClick={(e) => playVoice(e, currentWord.kanji || currentWord.furigana)}
                       className="p-2.5 rounded-full bg-sky-50 text-sky-600 hover:bg-sky-100 hover:scale-110 active:scale-95 transition shadow-xs cursor-pointer"
-                      title="朗读发音"
+                      title="朗读发音 (支持 0.8x 慢速)"
                     >
                       <Volume2 className="w-5 h-5" />
                     </button>
@@ -433,6 +533,11 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                   }`}>
                     {currentWord.furigana} <span className="text-slate-400 text-sm font-normal">({currentWord.romaji})</span>
                   </p>
+
+                  {/* 音调心法通俗解读 */}
+                  <div className="inline-block px-3 py-1 rounded-full bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 font-medium">
+                    🎵 音调秘诀：{getPitchVisual(currentWord.pitch).desc}
+                  </div>
 
                   {currentWord.tags && currentWord.tags.length > 0 && (
                     <div className="flex items-center justify-center gap-1.5 flex-wrap pt-1">
@@ -455,7 +560,7 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                 {/* Bottom Hint */}
                 <div className="text-center">
                   <p className="text-xs text-slate-400 font-bold">
-                    💡 点击翻转查看【中文释义 · 真题例句 · 考点】
+                    💡 点击翻转查看【中文释义 · 真题例句 · 自他动词 · 考点】
                   </p>
                 </div>
               </div>
@@ -470,8 +575,8 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                       {currentWord.kanji}
                     </span>
                     <span className="text-xs text-sky-700 font-bold font-mono">[{currentWord.furigana}]</span>
-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">
-                      {currentWord.pitch}型
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border ${getPitchVisual(currentWord.pitch).color}`}>
+                      {getPitchVisual(currentWord.pitch).symbol} {getPitchVisual(currentWord.pitch).type}
                     </span>
                   </div>
                   <button
@@ -483,8 +588,8 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                   </button>
                 </div>
 
-                {/* Center Content: Meaning & Example */}
-                <div className="space-y-4 my-auto">
+                {/* Center Content: Meaning & Example & Transitive Pairs */}
+                <div className="space-y-3.5 my-auto">
                   {/* Meaning */}
                   <div>
                     <span className="text-[10px] font-bold tracking-wider text-sky-600 uppercase">
@@ -496,6 +601,19 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                       {currentWord.meaning}
                     </p>
                   </div>
+
+                  {/* 自他动词成对焦点提示 */}
+                  {TRANSITIVE_PAIRS[currentWord.kanji] && (
+                    <div className="bg-amber-50/90 p-3 rounded-2xl border border-amber-200/80 text-xs text-amber-950 space-y-1 shadow-2xs">
+                      <div className="flex items-center gap-1.5 font-bold text-amber-800">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                        <span>自他动词成对速记 (考级必考避坑焦点)：</span>
+                      </div>
+                      <p className="font-medium leading-relaxed">
+                        {TRANSITIVE_PAIRS[currentWord.kanji].example}
+                      </p>
+                    </div>
+                  )}
 
                   {/* Example sentence */}
                   <div className="bg-white/90 p-3.5 sm:p-4 rounded-2xl border border-sky-200/70 space-y-1.5 shadow-2xs">
