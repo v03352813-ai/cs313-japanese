@@ -212,9 +212,9 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
     });
   };
 
-  const playVoice = (e: React.MouseEvent, text: string) => {
+  const playVoice = (e: React.MouseEvent, text: string, customRate?: number) => {
     e.stopPropagation();
-    speakJapanese(text, speechRate);
+    speakJapanese(text, customRate ?? speechRate);
   };
 
   // 全键盘快捷键监听
@@ -532,11 +532,11 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                       {currentWord.kanji}
                     </h2>
                     
-                    <div className="flex items-center gap-1 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/90 shadow-2xs">
+                    <div className="flex items-center gap-1 bg-white/95 p-1 rounded-2xl border border-slate-200/90 shadow-2xs">
                       <button
                         type="button"
-                        onClick={(e) => playVoice(e, currentWord.kanji || currentWord.furigana)}
-                        className="px-2.5 py-1.5 rounded-xl bg-white text-sky-700 hover:bg-sky-600 hover:text-white transition shadow-2xs cursor-pointer flex items-center gap-1 font-bold text-xs"
+                        onClick={(e) => playVoice(e, currentWord.kanji || currentWord.furigana, speechRate)}
+                        className="px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-sky-600 text-sky-700 hover:text-white transition cursor-pointer flex items-center gap-1 font-bold text-xs"
                         title={`当前语速 (${speechRate}x) 朗读`}
                       >
                         <Volume2 className="w-4 h-4" />
@@ -555,11 +555,11 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                           className={`px-2 py-1 rounded-lg text-xs font-black transition cursor-pointer ${
                             speechRate === rate
                               ? 'bg-sky-600 text-white shadow-2xs'
-                              : 'text-slate-500 hover:text-slate-900 hover:bg-white/80'
+                              : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
                           }`}
                           title={`切换并以 ${rate}x 语速朗读`}
                         >
-                          {rate}x
+                          {rate === 1.0 ? '1x' : `${rate}x`}
                         </button>
                       ))}
                     </div>
@@ -616,13 +616,17 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                       {getPitchVisual(currentWord.pitch).symbol} {getPitchVisual(currentWord.pitch).type}
                     </span>
                   </div>
-                  <button
-                    onClick={(e) => playVoice(e, currentWord.kanji || currentWord.furigana)}
-                    className="p-1.5 rounded-lg bg-sky-100/70 text-sky-600 hover:bg-sky-200 transition cursor-pointer"
-                    title="朗读单词"
-                  >
-                    <Volume2 className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center gap-1 bg-white/90 p-1 rounded-xl border border-slate-200 shadow-2xs">
+                    <button
+                      type="button"
+                      onClick={(e) => playVoice(e, currentWord.kanji || currentWord.furigana, speechRate)}
+                      className="px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-sky-600 text-sky-700 hover:text-white transition cursor-pointer flex items-center gap-1.5 font-black text-xs"
+                      title={`以当前语速 (${speechRate}x) 朗读`}
+                    >
+                      <Volume2 className="w-3.5 h-3.5" />
+                      <span>{speechRate}x</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Center Content: Meaning & Example & Transitive Pairs */}
