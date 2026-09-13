@@ -658,26 +658,327 @@ export const JapaneseGrammarView: React.FC<JapaneseGrammarViewProps> = ({ isVip 
         </div>
       )}
 
-      {/* TAB 3: 四大助词辨析 */}
+      {/* TAB 3: 四大助词辨析与高频核心心法 */}
       {activeTab === 'particles' && (
-        <div className="space-y-4">
-          {PARTICLE_COMPARISONS.map(comp => (
-            <div key={comp.title} className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-black text-slate-900">{comp.title}</span>
-                <span className="text-xs text-slate-400 font-medium">({comp.summary})</span>
-              </div>
-
-              <div className="space-y-2">
-                {comp.points.map((pt, idx) => (
-                  <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-0.5">
-                    <span className="font-bold text-sky-700 block">⚡ {pt.aspect}：</span>
-                    <p className="text-slate-700 leading-relaxed">{pt.desc}</p>
-                  </div>
-                ))}
+        <div className="space-y-6">
+          
+          {/* ========================================================================= */}
+          {/* 🎯 助词世纪难题：「は (照后面)」vs「が (照前面)」聚光灯终极速决法则 */}
+          {/* ========================================================================= */}
+          <div className="bg-gradient-to-br from-white via-sky-50/40 to-indigo-50/20 rounded-3xl p-5 sm:p-7 border border-sky-200/90 shadow-xs space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-sky-100 pb-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded-full bg-sky-50 text-sky-800 border border-sky-200 text-xs font-black">
+                    🎯 教授级终极心法
+                  </span>
+                  <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                    助词世纪难题：「は」vs「が」聚光灯终极速决法则
+                  </h2>
+                  <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-[11px] font-black">
+                    口诀：は 照后面，が 照前面
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                  学日语十年还在混淆 は 和 が？只要记住舞台聚光灯：<strong>聚光灯照向哪里，哪里就是全句真正强调的核心！</strong>
+                </p>
               </div>
             </div>
-          ))}
+
+            {/* 聚光灯对比展示台 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* は 卡片 */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-sky-200 shadow-xs space-y-3 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-sky-100/50 rounded-bl-full pointer-events-none -mr-4 -mt-4" />
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-1 rounded-xl bg-sky-50 text-sky-800 font-black text-sm border border-sky-200 flex items-center gap-1.5">
+                    <span>🔦【は】提示助词</span>
+                    <span className="text-[10px] text-sky-600 bg-white px-1.5 py-0.2 rounded font-mono">照后面</span>
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">大主题 · 铺垫已知</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-500">舞台结构模型：</span>
+                    <span className="text-sky-600 font-bold">聚光灯 ➔ 扫向后半段</span>
+                  </div>
+                  <div className="text-sm font-black text-slate-800 flex items-center gap-1 flex-wrap">
+                    <span className="text-slate-500 font-normal">已知话题 +</span>
+                    <span className="px-2 py-0.5 rounded bg-sky-100 text-sky-800 border border-sky-300">は</span>
+                    <span className="text-slate-400">➔</span>
+                    <span className="px-2.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-extrabold ring-2 ring-amber-300/50">
+                      【重点陈述说明】💡
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-xs text-slate-700">
+                  <p className="leading-relaxed">
+                    <strong>何时必用：</strong>用来引出“已知信息/大主题”，重点在告诉别人<strong>“这个东西怎么了”</strong>！
+                  </p>
+                  <div className="p-2.5 rounded-xl bg-sky-50/60 border border-sky-100 space-y-1.5">
+                    <div className="flex items-center justify-between font-bold text-slate-900">
+                      <span>田中さんは 学生です。</span>
+                      <button 
+                        onClick={() => speakJapanese('田中さんは学生です。')}
+                        className="text-sky-600 hover:text-sky-800 p-1 cursor-pointer"
+                        title="朗读"
+                      >
+                        <Volume2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      （问：田中怎么了？答：田中先生是<strong>“学生”</strong>！聚光灯照在“学生”上）
+                    </p>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-[11px] text-slate-600">
+                    <span className="font-bold text-sky-700">对比与排他：</span>『お酒は 飲みません。』（酒我不喝，但茶或咖啡我可能喝，隐含有对比暗示）
+                  </div>
+                </div>
+              </div>
+
+              {/* が 卡片 */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-indigo-200 shadow-xs space-y-3 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-100/50 rounded-bl-full pointer-events-none -mr-4 -mt-4" />
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-1 rounded-xl bg-indigo-50 text-indigo-800 font-black text-sm border border-indigo-200 flex items-center gap-1.5">
+                    <span>🔦【が】格助词</span>
+                    <span className="text-[10px] text-indigo-600 bg-white px-1.5 py-0.2 rounded font-mono">照前面</span>
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">排他唯一 · 突发客观</span>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-slate-500">舞台结构模型：</span>
+                    <span className="text-indigo-600 font-bold">聚光灯 ➔ 锁定前半段</span>
+                  </div>
+                  <div className="text-sm font-black text-slate-800 flex items-center gap-1 flex-wrap">
+                    <span className="px-2.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-extrabold ring-2 ring-amber-300/50">
+                      💡【唯一指定主体】
+                    </span>
+                    <span className="text-slate-400">➔</span>
+                    <span className="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 border border-indigo-300">が</span>
+                    <span className="text-slate-500 font-normal">+ 动作/状态</span>
+                  </div>
+                </div>
+
+                <div className="space-y-2 text-xs text-slate-700">
+                  <p className="leading-relaxed">
+                    <strong>何时必用：</strong>用来指定“正是这个人/唯一排他”或“眼前突发自然现象”，重点在<strong>“是谁做的主体”</strong>！
+                  </p>
+                  <div className="p-2.5 rounded-xl bg-indigo-50/60 border border-indigo-100 space-y-1.5">
+                    <div className="flex items-center justify-between font-bold text-slate-900">
+                      <span>田中さんが 学生です。</span>
+                      <button 
+                        onClick={() => speakJapanese('田中さんが学生です。')}
+                        className="text-indigo-600 hover:text-indigo-800 p-1 cursor-pointer"
+                        title="朗读"
+                      >
+                        <Volume2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      （问：谁是学生？答：<strong>“正是田中”</strong>是学生！聚光灯死死咬住“田中”，排除别人）
+                    </p>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/70 text-[11px] text-slate-600">
+                    <span className="font-bold text-indigo-700">突发现象句：</span>『あ、雨が 降ってきた！』（下雨了！眼前映入的纯客观事实，无主观铺垫，强制用 が）
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 4步秒杀速决决策流 */}
+            <div className="p-4 rounded-2xl bg-white border border-slate-200/90 space-y-2.5">
+              <span className="text-xs font-black text-slate-900 uppercase tracking-wider block">
+                ⚡ 考场 4 步秒杀速决决策流（一秒选对）：
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs">
+                <div className="p-2.5 rounded-xl bg-sky-50/70 border border-sky-100 space-y-1">
+                  <span className="font-black text-sky-900 block">① 疑问词在前 ➔ 必用 が</span>
+                  <p className="text-[11px] text-slate-600">
+                    谁 (だれ) / 哪个 (どれ) 做主语，重点在寻找主体，强制用 が！<br/>
+                    例：<strong>誰が</strong> 来ましたか。
+                  </p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-indigo-50/70 border border-indigo-100 space-y-1">
+                  <span className="font-black text-indigo-900 block">② 疑问词在后 ➔ 必用 は</span>
+                  <p className="text-[11px] text-slate-600">
+                    询问已知话题怎么样 (どう / いつ)，主题已确定，强制用 は！<br/>
+                    例：試験<strong>は</strong> いつですか。
+                  </p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-amber-50/70 border border-amber-100 space-y-1">
+                  <span className="font-black text-amber-900 block">③ 从句小主语 ➔ 降格为 が</span>
+                  <p className="text-[11px] text-slate-600">
+                    定语从句或时间从句内部的主语必须降级，绝不能用 は！<br/>
+                    例：[私<strong>が</strong> 買った] 本。
+                  </p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-100 space-y-1">
+                  <span className="font-black text-emerald-900 block">④ 情感能力对象 ➔ 必用 が</span>
+                  <p className="text-[11px] text-slate-600">
+                    表示喜欢 (好き)、想要 (欲しい)、擅长 (上手)、会 (できる) 的对象用 が！<br/>
+                    例：日本語<strong>が</strong> 好きです。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ========================================================================= */}
+          {/* 🎁 授受动词（あげる / くれる / もらう）内外视点同心圆动向图谱 */}
+          {/* ========================================================================= */}
+          <div className="bg-gradient-to-br from-white via-amber-50/30 to-rose-50/20 rounded-3xl p-5 sm:p-7 border border-amber-200/90 shadow-xs space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-100 pb-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-xs font-black">
+                    🎁 教授级核心图谱
+                  </span>
+                  <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                    授受动词（あげる / くれる / もらう）同心圆视点动向图谱
+                  </h2>
+                  <span className="px-2 py-0.5 rounded-full bg-rose-50 text-[#80142A] border border-rose-200 text-[11px] font-black">
+                    铁律：视点永远锁定在“我（内圈）”这一侧
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                  日语中的“给与拿”不是简单的代词互换，而是<strong>以“我/我方”为圆心的心理距离能量流动</strong>！只要看清视点方向，永不失分。
+                </p>
+              </div>
+            </div>
+
+            {/* 三大授受动向能量卡片 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* あげる */}
+              <div className="p-4 rounded-2xl bg-white border border-amber-200/90 shadow-2xs space-y-3 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-xl bg-amber-50 text-amber-900 font-black text-sm border border-amber-200 flex items-center gap-1">
+                      <span>➡️ あげる</span>
+                      <span className="text-[10px] text-amber-700 bg-white px-1.5 py-0.2 rounded font-mono">由内向外</span>
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-400">给出 / 施惠</span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-amber-50/50 border border-amber-100 text-xs font-mono font-bold text-amber-950">
+                    [我/我方] が [对方] に [物/行为] を あげる (〜てあげる)
+                  </div>
+
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    能量从“内圈（我方）”流向“外圈（对方）”，或第三者平级之间转移。
+                  </p>
+                </div>
+
+                <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
+                  <div className="p-2 rounded-lg bg-slate-50 flex items-center justify-between">
+                    <span className="font-bold text-slate-800">私は 友達に 本を あげました。</span>
+                    <button onClick={() => speakJapanese('私は友達に本をあげました。')} className="text-amber-600 hover:text-amber-800 p-0.5 cursor-pointer">
+                      <Volume2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <div className="p-2 rounded-lg bg-rose-50 text-[11px] text-[#80142A] border border-rose-100">
+                    <strong>⚠️ 避坑雷区：</strong>对长辈/上级切忌用「〜てあげる」（有上对下的施舍感，非常失礼！需换用谦让语「〜て差し上げる」或普通句式）。
+                  </div>
+                </div>
+              </div>
+
+              {/* くれる */}
+              <div className="p-4 rounded-2xl bg-white border border-rose-200/90 shadow-2xs space-y-3 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-xl bg-rose-50 text-[#80142A] font-black text-sm border border-rose-200 flex items-center gap-1">
+                      <span>⬅️ くれる</span>
+                      <span className="text-[10px] text-[#80142A] bg-white px-1.5 py-0.2 rounded font-mono">由外向内</span>
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-400">他人送来</span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-rose-50/50 border border-rose-100 text-xs font-mono font-bold text-[#80142A]">
+                    [对方] が [我/我方] に [物/行为] を くれる (〜てくれる)
+                  </div>
+
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    能量从“外圈（对方）”流入“内圈（我方）”！<strong>主语必须是别人，绝对不能是“私”！</strong>
+                  </p>
+                </div>
+
+                <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
+                  <div className="p-2 rounded-lg bg-slate-50 flex items-center justify-between">
+                    <span className="font-bold text-slate-800">田中さんが 私に 花を くれました。</span>
+                    <button onClick={() => speakJapanese('田中さんが私に花をくれました。')} className="text-rose-600 hover:text-rose-800 p-0.5 cursor-pointer">
+                      <Volume2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <div className="p-2 rounded-lg bg-rose-50 text-[11px] text-[#80142A] border border-rose-100">
+                    <strong>🚨 考试铁律：</strong>只要句尾动词是 くれる，主语绝对不能填 私は！凡是别人帮我做事，动词必用「〜てくれる」。
+                  </div>
+                </div>
+              </div>
+
+              {/* もらう */}
+              <div className="p-4 rounded-2xl bg-white border border-emerald-200/90 shadow-2xs space-y-3 flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-900 font-black text-sm border border-emerald-200 flex items-center gap-1">
+                      <span>🔄 もらう</span>
+                      <span className="text-[10px] text-emerald-700 bg-white px-1.5 py-0.2 rounded font-mono">内方领受</span>
+                    </span>
+                    <span className="text-[11px] font-bold text-slate-400">承蒙 / 领受</span>
+                  </div>
+
+                  <div className="p-2.5 rounded-xl bg-emerald-50/50 border border-emerald-100 text-xs font-mono font-bold text-emerald-950">
+                    [我/我方] が [对方] に/から [物/行为] を もらう (〜てもらう)
+                  </div>
+
+                  <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                    由内圈（我方）发起请求并获得恩惠，主语是<strong>受益者（我）</strong>，带着感激领受。
+                  </p>
+                </div>
+
+                <div className="space-y-2 pt-2 border-t border-slate-100 text-xs">
+                  <div className="p-2 rounded-lg bg-slate-50 flex items-center justify-between">
+                    <span className="font-bold text-slate-800">私は 先生に 教えて もらいました。</span>
+                    <button onClick={() => speakJapanese('私は先生に教えてもらいました。')} className="text-emerald-600 hover:text-emerald-800 p-0.5 cursor-pointer">
+                      <Volume2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <div className="p-2 rounded-lg bg-emerald-50 text-[11px] text-emerald-800 border border-emerald-100">
+                    <strong>💡 对比领悟：</strong>「田中さんが教えてくれた」与「田中さんに教えてもらった」意思相同，区别仅在主语视角不同！
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 原有四大助词系统对比表 */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-black text-slate-800 flex items-center gap-2">
+              <span>📋 经典四大格助词深度辨析速览表</span>
+              <span className="text-xs text-slate-400 font-normal">（で vs に / に vs へ / は vs が）</span>
+            </h3>
+            {PARTICLE_COMPARISONS.map(comp => (
+              <div key={comp.title} className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-black text-slate-900">{comp.title}</span>
+                  <span className="text-xs text-slate-400 font-medium">({comp.summary})</span>
+                </div>
+
+                <div className="space-y-2">
+                  {comp.points.map((pt, idx) => (
+                    <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-0.5">
+                      <span className="font-bold text-sky-700 block">⚡ {pt.aspect}：</span>
+                      <p className="text-slate-700 leading-relaxed">{pt.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       )}
 
