@@ -253,15 +253,84 @@ class ApiService {
     }
   }
 
+/**
+ * 智能渠道与搜索引擎/AI平台指纹识别 (First-touch Attribution)
+ */
+function detectInboundSource(): { channel: string; medium: string; keyword?: string; referrer?: string } {
+  if (typeof window === 'undefined') return { channel: 'direct', medium: 'none' };
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = (document.referrer || '').toLowerCase();
+  
+  // 1. 显式推广 UTM 参数
+  const utmSource = urlParams.get('utm_source');
+  const utmMedium = urlParams.get('utm_medium');
+  const utmTerm = urlParams.get('utm_term');
+  if (utmSource) {
+    return {
+      channel: utmSource,
+      medium: utmMedium || 'campaign',
+      keyword: utmTerm || undefined,
+      referrer: document.referrer
+    };
+  }
+
+  // 2. AI 搜索引擎与 RAG 平台 (GEO 核心引流追踪)
+  if (ref.includes('deepseek.com')) return { channel: 'ai_deepseek', medium: 'geo_ai', referrer: document.referrer };
+  if (ref.includes('doubao.com')) return { channel: 'ai_doubao', medium: 'geo_ai', referrer: document.referrer };
+  if (ref.includes('tongyi') || ref.includes('aliyun.com')) return { channel: 'ai_tongyi', medium: 'geo_ai', referrer: document.referrer };
+  if (ref.includes('kimi.moonshot.cn') || ref.includes('kimi.ai')) return { channel: 'ai_kimi', medium: 'geo_ai', referrer: document.referrer };
+  if (ref.includes('chatgpt.com') || ref.includes('openai.com')) return { channel: 'ai_chatgpt', medium: 'geo_ai', referrer: document.referrer };
+
+  // 3. 传统搜索引擎与主流社区
+  if (ref.includes('baidu.com')) return { channel: 'search_baidu', medium: 'organic_seo', referrer: document.referrer };
+  if (ref.includes('google.com')) return { channel: 'search_google', medium: 'organic_seo', referrer: document.referrer };
+  if (ref.includes('bing.com')) return { channel: 'search_bing', medium: 'organic_seo', referrer: document.referrer };
+  if (ref.includes('xiaohongshu.com') || ref.includes('xhslink.com')) return { channel: 'social_xhs', medium: 'social', referrer: document.referrer };
+  if (ref.includes('zhihu.com')) return { channel: 'community_zhihu', medium: 'social', referrer: document.referrer };
+  if (ref.includes('xianyu') || ref.includes('2.taobao.com')) return { channel: 'market_xianyu', medium: 'direct_sale', referrer: document.referrer };
+  if (ref.includes('weixin') || ref.includes('qq.com')) return { channel: 'social_wechat', medium: 'social', referrer: document.referrer };
+
+  return {
+    channel: ref ? 'referral_web' : 'direct',
+    medium: ref ? 'referral' : 'none',
+    referrer: document.referrer
+  };
+}
+
+function getOrSaveFirstTouchSource(): { channel: string; medium: string; keyword?: string; referrer?: string } {
+  if (typeof window === 'undefined') return { channel: 'direct', medium: 'none' };
+  try {
+    const cached = sessionStorage.getItem('cs313_first_touch');
+    if (cached) return JSON.parse(cached);
+    const current = detectInboundSource();
+    sessionStorage.setItem('cs313_first_touch', JSON.stringify(current));
+    return current;
+  } catch {
+    return detectInboundSource();
+  }
+}
+
   /**
-   * 商业运营埋点：静默上报访客访问 (PV/UV) 与 VIP 购买意向点击
+   * 商业运营与全链路漏斗埋点 (支持 page_view | feature_engage | paywall_hit | vip_intent | key_activate)
    */
-  async trackEvent(type: 'page_view' | 'vip_intent', meta?: Record<string, any>): Promise<void> {
+  async trackEvent(
+    type: 'page_view' | 'vip_intent' | 'feature_engage' | 'paywall_hit' | 'key_activate' | string,
+    meta?: Record<string, any>
+  ): Promise<void> {
     try {
-      // 1. 同步上报至 Vercel 官方 Web Analytics (与七宗罪保持一致，支持控制台查看实时访客与自定义事件)
+      const source = getOrSaveFirstTouchSource();
+      const combinedMeta = {
+        channel: source.channel,
+        medium: source.medium,
+        ...(source.keyword ? { keyword: source.keyword } : {}),
+        ...meta
+      };
+
+      // 1. 同步上报至 Vercel 官方 Web Analytics
       if (typeof window !== 'undefined' && (window as any).va) {
         try {
-          (window as any).va('event', { name: type, ...meta });
+          (window as any).va('event', { name: type, ...combinedMeta });
         } catch {}
       }
 
@@ -281,8 +350,9 @@ class ApiService {
           type,
           visitorId,
           deviceType,
-          ...meta
-        })
+          ...combinedMeta
+        }),
+        keepalive: true
       });
     } catch {
       // 埋点静默失败，不打扰用户

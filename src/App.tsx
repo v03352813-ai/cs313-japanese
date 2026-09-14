@@ -158,8 +158,11 @@ export function App() {
   const handleOpenVipModal = (reason?: string) => {
     setVipModalReason(reason);
     setIsVipModalOpen(true);
-    // 运营漏斗埋点：记录学员购买意向点击
+    // 运营漏斗埋点：记录学员购买意向点击与付费拦截触点
     api.trackEvent('vip_intent', { reason: reason || 'direct_click' });
+    if (reason) {
+      api.trackEvent('paywall_hit', { reason });
+    }
   };
 
   // 1. 运营流量统计：首屏加载与访客 UV/PV 静默上报
@@ -275,6 +278,7 @@ export function App() {
   const handleLicenseActivated = (newLicense: LicenseInfo) => {
     setLicense(newLicense);
     saveLicense(newLicense);
+    api.trackEvent('key_activate', { status: 'success', tier: newLicense.tier || 'lifetime' });
   };
 
   return (
