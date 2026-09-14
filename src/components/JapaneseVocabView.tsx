@@ -44,35 +44,35 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
   const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(false);
   const [speechRate, setSpeechRate] = useState<0.8 | 1.0 | 1.2>(1.0);
 
-  // 音调核图示与通俗心法
+  // 音调核阶梯图示与通俗心法 (NHK规范阶梯走势，直观不臃肿)
   const getPitchVisual = (pitch: number) => {
     if (pitch === 0) {
       return {
-        type: '0型 · 平板调',
-        symbol: '─',
-        desc: '首拍低，后拍持续高平不掉落 (像高铁平稳开)',
+        type: '⓪型 · 平板',
+        symbol: '＿|￣￣',
+        desc: '首拍低，后拍持续平高不降 (如：私/さくら)',
         color: 'bg-emerald-50 text-emerald-800 border-emerald-200'
       };
     }
     if (pitch === 1) {
       return {
-        type: '1型 · 头高调',
-        symbol: '＼',
-        desc: '首拍最高，次拍急剧下跌 (像坐跳楼机)',
+        type: '①型 · 头高',
+        symbol: '￣|＿＿',
+        desc: '首拍最高，次拍急剧下跌 (如：本/あめ)',
         color: 'bg-rose-50 text-rose-800 border-rose-200'
       };
     }
     if (pitch === 2) {
       return {
-        type: '2型 · 中高调',
-        symbol: '╭╮',
-        desc: '第2拍最高，第3拍跌落',
+        type: '②型 · 次高',
+        symbol: '＿|￣|＿',
+        desc: '第2拍最高，第3拍骤降 (如：たまご/かわ)',
         color: 'bg-amber-50 text-amber-800 border-amber-200'
       };
     }
     return {
-      type: `${pitch}型 · 中/尾高调`,
-      symbol: '╭──╮',
+      type: `${pitch}型 · 尾高`,
+      symbol: '＿|￣..|＿',
       desc: `第${pitch}拍最高后跌落`,
       color: 'bg-sky-50 text-sky-800 border-sky-200'
     };
@@ -117,11 +117,36 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
     }
   });
 
+  // SRS 艾宾浩斯记忆分级: Record<wordId, 'review' | 'fuzzy' | 'mastered'>
+  const [srsRatings, setSrsRatings] = useState<Record<string, 'review' | 'fuzzy' | 'mastered'>>(() => {
+    try {
+      const saved = localStorage.getItem('cs313_jp_srs_ratings');
+      if (saved) return JSON.parse(saved);
+      const legacy: string[] = JSON.parse(localStorage.getItem('cs313_jp_mastered_vocabs') || '[]');
+      const initial: Record<string, 'review' | 'fuzzy' | 'mastered'> = {};
+      legacy.forEach(id => { initial[id] = 'mastered'; });
+      return initial;
+    } catch {
+      return {};
+    }
+  });
+
+  // 靶场过滤: 全部 / 待复习(需重练+模糊) / 已吃透
+  const [srsFilter, setSrsFilter] = useState<'all' | 'need_review' | 'mastered'>('all');
+
   useEffect(() => {
     api.syncStudyProgress({}).then(progress => {
       if (progress && progress.masteredVocabIds && progress.masteredVocabIds.length > 0) {
-        setMasteredIds(prev => Array.from(new Set([...prev, ...progress.masteredVocabIds])));
+        setMasteredIds(prev => Array.from(new Set([...prev, ...progress.masteredVocabIds!])));
         localStorage.setItem('cs313_jp_mastered_vocabs', JSON.stringify(progress.masteredVocabIds));
+        setSrsRatings(prev => {
+          const updated = { ...prev };
+          progress.masteredVocabIds!.forEach(id => {
+            if (!updated[id]) updated[id] = 'mastered';
+          });
+          localStorage.setItem('cs313_jp_srs_ratings', JSON.stringify(updated));
+          return updated;
+        });
       }
     }).catch(() => {});
   }, []);
@@ -150,14 +175,23 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
     return levelVocabs.slice(start, start + WORDS_PER_DAY);
   }, [levelVocabs, selectedDay]);
 
+  // 根据 SRS 筛选（全部 / 待复习 / 已吃透）
+  const displayVocabs = useMemo(() => {
+    if (srsFilter === 'all') return activeVocab;
+    if (srsFilter === 'need_review') {
+      return activeVocab.filter(item => srsRatings[item.id] === 'review' || srsRatings[item.id] === 'fuzzy');
+    }
+    return activeVocab.filter(item => srsRatings[item.id] === 'mastered' || masteredIds.includes(item.id));
+  }, [activeVocab, srsFilter, srsRatings, masteredIds]);
+
   // 切换筛选时重置翻面与连读
   useEffect(() => {
     setCurrentIndex(0);
     setIsFlipped(false);
     setIsAutoPlaying(false);
-  }, [selectedLevel, searchQuery, selectedDay]);
+  }, [selectedLevel, searchQuery, selectedDay, srsFilter]);
 
-  const currentWord: JlptWord | undefined = activeVocab[currentIndex];
+  const currentWord: JlptWord | undefined = displayVocabs[currentIndex];
 
   // 自动连续朗读 (Auto Play 磨耳朵)
   const autoPlayTimerRef = useRef<any>(null);
@@ -188,29 +222,56 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
   // 切词控制
   const handlePrev = () => {
     setIsFlipped(false);
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : activeVocab.length - 1));
+    if (displayVocabs.length <= 1) return;
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : displayVocabs.length - 1));
   };
 
   const handleNext = () => {
     setIsFlipped(false);
-    setCurrentIndex((prev) => (prev + 1 < activeVocab.length ? prev + 1 : 0));
+    if (displayVocabs.length <= 1) return;
+    setCurrentIndex((prev) => (prev + 1 < displayVocabs.length ? prev + 1 : 0));
   };
 
   const handleShuffle = () => {
     setIsFlipped(false);
-    if (activeVocab.length <= 1) return;
-    const rand = Math.floor(Math.random() * activeVocab.length);
+    if (displayVocabs.length <= 1) return;
+    const rand = Math.floor(Math.random() * displayVocabs.length);
     setCurrentIndex(rand);
   };
 
-  const toggleMastered = (id: string) => {
+  const handleRateSrs = (id: string, rating: 'review' | 'fuzzy' | 'mastered', e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSrsRatings(prev => {
+      const updated = { ...prev, [id]: rating };
+      localStorage.setItem('cs313_jp_srs_ratings', JSON.stringify(updated));
+      return updated;
+    });
+
     setMasteredIds(prev => {
-      const updated = prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id];
+      let updated: string[];
+      if (rating === 'mastered') {
+        updated = prev.includes(id) ? prev : [...prev, id];
+      } else {
+        updated = prev.filter(i => i !== id);
+      }
       localStorage.setItem('cs313_jp_mastered_vocabs', JSON.stringify(updated));
       api.syncStudyProgress({ masteredVocabIds: updated }).catch(() => {});
       return updated;
     });
   };
+
+  const toggleMastered = (id: string) => {
+    const isCurrentlyMastered = srsRatings[id] === 'mastered' || masteredIds.includes(id);
+    handleRateSrs(id, isCurrentlyMastered ? 'fuzzy' : 'mastered');
+  };
+
+  const needReviewCount = useMemo(() => {
+    return activeVocab.filter(v => srsRatings[v.id] === 'review' || srsRatings[v.id] === 'fuzzy').length;
+  }, [activeVocab, srsRatings]);
+
+  const masteredCount = useMemo(() => {
+    return activeVocab.filter(v => srsRatings[v.id] === 'mastered' || masteredIds.includes(v.id)).length;
+  }, [activeVocab, srsRatings, masteredIds]);
 
   const playVoice = (e: React.MouseEvent, text: string, customRate?: number) => {
     e.stopPropagation();
@@ -469,15 +530,43 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
       {viewMode === 'flashcard' && activeVocab.length > 0 && currentWord && (
         <div className="max-w-2xl mx-auto space-y-4 w-full">
           
-          {/* Progress Indicator */}
-          <div className="flex items-center justify-between text-xs text-slate-500 px-1 font-bold">
-            <span>
-              当前词卡: <strong className="text-slate-900 font-black">{currentIndex + 1}</strong> / {activeVocab.length}
-              {selectedDay > 0 && ` (Day ${selectedDay})`} · <span className="text-sky-700">{selectedLevel} 词库</span>
-            </span>
-            <span className="flex items-center gap-1 text-slate-400">
-              <RotateCw className="w-3.5 h-3.5" /> 点击卡片翻面
-            </span>
+          {/* Progress & SRS Filter (极简紧凑，直观高效) */}
+          <div className="flex items-center justify-between text-xs text-slate-500 px-1 font-bold flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <span>
+                当前词卡: <strong className="text-slate-900 font-black">{currentIndex + 1}</strong> / {displayVocabs.length}
+                {selectedDay > 0 && ` (Day ${selectedDay})`} · <span className="text-sky-700">{selectedLevel} 词库</span>
+              </span>
+            </div>
+
+            {/* SRS 快速靶场: 全部 / 待复习 / 已吃透 */}
+            <div className="flex items-center bg-slate-100 p-0.5 rounded-xl text-[11px] font-bold">
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setSrsFilter('all'); }}
+                className={`px-2 py-0.5 rounded-lg transition cursor-pointer ${srsFilter === 'all' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-500 hover:text-slate-900'}`}
+              >
+                全部
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setSrsFilter('need_review'); }}
+                className={`px-2 py-0.5 rounded-lg transition cursor-pointer flex items-center gap-1 ${srsFilter === 'need_review' ? 'bg-rose-500 text-white shadow-2xs' : 'text-slate-500 hover:text-rose-600'}`}
+                title="需重练或模糊的词汇"
+              >
+                <span>待复习</span>
+                {needReviewCount > 0 && <span className={`text-[10px] px-1 rounded-full ${srsFilter === 'need_review' ? 'bg-white/20' : 'bg-rose-100 text-rose-700'}`}>{needReviewCount}</span>}
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); setSrsFilter('mastered'); }}
+                className={`px-2 py-0.5 rounded-lg transition cursor-pointer flex items-center gap-1 ${srsFilter === 'mastered' ? 'bg-emerald-600 text-white shadow-2xs' : 'text-slate-500 hover:text-emerald-700'}`}
+                title="已掌握吃透的词汇"
+              >
+                <span>已吃透</span>
+                {masteredCount > 0 && <span className={`text-[10px] px-1 rounded-full ${srsFilter === 'mastered' ? 'bg-white/20' : 'bg-emerald-100 text-emerald-700'}`}>{masteredCount}</span>}
+              </button>
+            </div>
           </div>
 
           {/* 3D Flip Container (全宽大屏幕 + 3D 空间立体翻转) */}
@@ -683,27 +772,50 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
                   </div>
                 </div>
 
-                {/* Bottom Mastery & Flip hint */}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-200/60">
-                  <span className="text-xs text-slate-400 font-bold">
-                    再次点击卡片翻回正面
+                {/* Bottom SRS Rating Buttons (紧凑三档，科学反馈) */}
+                <div className="flex items-center justify-between pt-2.5 border-t border-slate-200/60 mt-auto">
+                  <span className="text-[11px] text-slate-400 font-bold hidden sm:inline">
+                    记忆分级:
                   </span>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleMastered(currentWord.id);
-                    }}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                      masteredIds.includes(currentWord.id)
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                        : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200'
-                    }`}
-                  >
-                    <CheckCircle2 className={`w-3.5 h-3.5 ${
-                      masteredIds.includes(currentWord.id) ? 'text-emerald-600' : 'text-slate-400'
-                    }`} />
-                    <span>{masteredIds.includes(currentWord.id) ? '已掌握' : '标记掌握'}</span>
-                  </button>
+                  <div className="flex items-center gap-1.5 w-full sm:w-auto justify-end">
+                    <button
+                      type="button"
+                      onClick={(e) => handleRateSrs(currentWord.id, 'review', e)}
+                      className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer border ${
+                        srsRatings[currentWord.id] === 'review'
+                          ? 'bg-rose-500 text-white border-rose-600 shadow-2xs'
+                          : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
+                      }`}
+                      title="完全忘记，加入重点复习"
+                    >
+                      <span>🔴 重练</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => handleRateSrs(currentWord.id, 'fuzzy', e)}
+                      className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer border ${
+                        srsRatings[currentWord.id] === 'fuzzy'
+                          ? 'bg-amber-500 text-white border-amber-600 shadow-2xs'
+                          : 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
+                      }`}
+                      title="记忆模糊，需要巩固"
+                    >
+                      <span>🟡 模糊</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => handleRateSrs(currentWord.id, 'mastered', e)}
+                      className={`px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer border ${
+                        srsRatings[currentWord.id] === 'mastered'
+                          ? 'bg-emerald-600 text-white border-emerald-700 shadow-2xs'
+                          : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                      }`}
+                      title="已熟练吃透"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>🟢 吃透</span>
+                    </button>
+                  </div>
                 </div>
 
               </div>
