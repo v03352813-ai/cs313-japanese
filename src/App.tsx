@@ -236,8 +236,10 @@ export function App() {
       const hash = window.location.hash.replace('#', '').trim() as ActiveTab;
       if (!hash || hash === 'home') {
         setActiveTab('home');
+        window.scrollTo({ top: 0, behavior: 'instant' });
       } else if (['speaking', 'listening', 'exam', 'writing', 'phonetics', 'mistakes', 'vocab', 'grammar', 'kdrama'].includes(hash)) {
         setActiveTab(hash);
+        window.scrollTo({ top: 0, behavior: 'instant' });
       }
     };
     onHashChange();
