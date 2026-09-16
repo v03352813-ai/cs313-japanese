@@ -309,28 +309,24 @@ export const JapaneseVocabView: React.FC<JapaneseVocabViewProps> = ({ isVip = fa
   return (
     <div className="max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-in fade-in duration-300">
       
-      {/* 1. 顶部步骤导引条 (直观告知学习主线与词库目标，官方 JLPT 词汇分级体系) */}
-      <div className="bg-white rounded-2xl px-4 py-3 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white flex items-center justify-center font-black text-sm shrink-0 shadow-xs">
-            02
+      {/* 1. 顶部权威 Hero Banner (严格对标图3标准规范) */}
+      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-xs font-bold border border-sky-200">
+            <Sparkles className="w-3.5 h-3.5 text-sky-500" />
+            <span>JLPT 官方红蓝宝书词纲 · 3D 闪卡</span>
           </div>
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="px-2 py-0.5 rounded-full bg-sky-50 text-sky-600 border border-sky-200 text-[11px] font-black">
-                学习主线 · 第 2 步
-              </span>
-              <h1 className="text-sm sm:text-base font-black text-slate-900">
-                6,500+ 核心词汇 · 3D 闪卡切片记忆库
-              </h1>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hidden sm:inline">
-                已掌握 {masteredIds.length} 词
-              </span>
-            </div>
-            <p className="text-xs text-slate-500 font-medium">
-              作答建议：结合真题高频考点 ➔ 分组刷词（每组 30 词）➔ 遮挡测试加强默写记忆
-            </p>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              6,500+ 核心词汇 · 3D 闪卡切片记忆库
+            </h1>
+            <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+              已掌握 {masteredIds.length} 词
+            </span>
           </div>
+          <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
+            作答建议：结合真题高频考点 ➔ 分组刷词（每组 30 词）➔ 遮挡测试加强默写记忆与发音原声。
+          </p>
         </div>
 
         {/* 顶部快捷开关: 语速切换 + 遮挡模式 + 自动连读 + 视图切换 + 随机抽词 */}
