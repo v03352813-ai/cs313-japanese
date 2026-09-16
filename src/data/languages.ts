@@ -140,7 +140,7 @@ export const CS313_LANGUAGES: Record<LanguageCode, LanguageProfile> = {
       examCount: 'DELE B1/B2 历年模拟真题',
       mediaTheme: '《纸钞屋》《毒枭》等经典西语原声'
     },
-    status: 'UPCOMING'
+    status: 'ONLINE'
   },
   ru: {
     code: 'ru',

@@ -559,7 +559,9 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                 {currentQuestion.options.map((opt, optIdx) => {
                   const isSelected = answers[currentQuestionIndex] === optIdx;
                   const isCorrect = currentQuestion.correctAnswer === optIdx;
-                  const showResult = isSubmitted || (showInstantExplanation && answers[currentQuestionIndex] !== undefined);
+                  const userAnswered = answers[currentQuestionIndex] !== undefined;
+                  // 只对【用户实际作答过的题目】才展示对错反馈，未作答题目即使交卷也不显示正确答案
+                  const showResult = userAnswered && (isSubmitted || showInstantExplanation);
 
                   let optStyle = 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200';
                   if (isSelected) {
@@ -591,8 +593,8 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                 })}
               </div>
 
-              {/* Instant Explanation */}
-              {(isSubmitted || (showInstantExplanation && answers[currentQuestionIndex] !== undefined)) && (
+              {/* Instant Explanation — 只对已作答题目显示，不泄露未作答题目的答案 */}
+              {answers[currentQuestionIndex] !== undefined && (isSubmitted || showInstantExplanation) && (
                 <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-2.5 text-xs">
                   <div className="flex items-center gap-1.5 text-amber-900 font-black">
                     <Sparkles className="w-3.5 h-3.5 text-amber-600" />

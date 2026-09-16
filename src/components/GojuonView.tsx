@@ -236,29 +236,28 @@ export const GojuonView: React.FC<GojuonViewProps> = ({ isVip = true, onOpenVipM
       
       {/* 顶部工作台卡片 Header (完全对标韩语图2现代化模板) */}
       <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs space-y-4">
+        {/* 顶部标题与动态说明 (对标图3标准 Hero Banner 规范) */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-sky-600 via-indigo-600 to-sky-700 text-white font-black text-base flex items-center justify-center shrink-0 shadow-sm shadow-sky-600/20">
-              日
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-bold text-sky-800 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200">
+                🌸 零基础音韵筑基 · 日本语教育学标准
+              </span>
+              <span className="text-xs text-stone-500 font-medium">
+                46清音 · 25浊音 · 33拗音 · 3大特殊音拍 · 连浊与无声化铁律
+              </span>
             </div>
-            <div>
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-xs font-bold text-sky-700 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200/60">
-                  🌸 零基础音韵筑基 · 日本语教育学标准
-                </span>
-                <h2 className="text-lg sm:text-xl font-black text-slate-900">
-                  日语五十音图与特殊音拍·语音规则工作台
-                </h2>
-              </div>
-              <p className="text-xs text-slate-500 mt-1">
-                清音·浊音·拗音假名全图 · 特殊音拍（促音/长音/拨音）节拍器 · 语流发音法则（母音无声化/连浊） · 片假名死敌诊疗！
-              </p>
-            </div>
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              日语五十音图与特殊音拍·语音规则工作台
+            </h1>
+            <p className="text-xs sm:text-sm text-stone-500 font-medium">
+              清音·浊音·拗音假名全图 · 特殊音拍（促音/长音/拨音）节拍器 · 语流发音法则（母音无声化/连浊） · 片假名死敌诊疗！
+            </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-600 bg-slate-50 px-3.5 py-2 rounded-2xl border border-slate-200/60 shrink-0">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-200/80 shrink-0 self-start md:self-auto shadow-2xs">
             <Sparkles className="w-4 h-4 text-sky-500" />
-            <span>46清音 · 25浊音 · 33拗音 · 3大特殊音拍</span>
+            <span>全假名真人发音已就绪</span>
           </div>
         </div>
 
