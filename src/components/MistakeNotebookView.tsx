@@ -87,29 +87,27 @@ export const MistakeNotebookView: React.FC<MistakeNotebookViewProps> = ({ isVip,
   return (
     <div className="max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6">
       
-      {/* Lightweight Header Card */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-sky-500 text-white font-black text-sm flex items-center justify-center shrink-0 shadow-xs shadow-sky-500/20">
-            05
+      {/* Top Hero Banner */}
+      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs font-bold text-sky-700 bg-sky-50 px-3 py-0.5 rounded-full border border-sky-200/60 inline-flex items-center gap-1.5">
+              💡 提分闭环 · 靶向攻坚
+            </span>
+            <span className="text-xs text-slate-400 font-medium">
+              1-3-7-15 天遗忘衰减规律 · JLPT 错题周期性自动推送重测
+            </span>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200/60">
-                提分闭环
-              </span>
-              <h2 className="text-base sm:text-lg font-black text-slate-900">
-                艾宾浩斯智能错题本
-              </h2>
-            </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              基于 1-3-7-15 天遗忘衰减规律，JLPT 全真考场做错题目自动归集并周期推送重测
-            </p>
-          </div>
+          <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            艾宾浩斯智能错题本
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 font-medium">
+            基于 1-3-7-15 天遗忘衰减规律，JLPT 全真考场做错题目自动归集并周期推送重测，彻底攻克盲区！
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-semibold">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-2xl bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200/80 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-sky-500" />
             遗忘曲线靶向复习
           </span>
