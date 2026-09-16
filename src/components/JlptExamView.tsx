@@ -40,10 +40,12 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [levelFilter, setLevelFilter] = useState<LevelFilterType>('all');
+  const [yearFilter, setYearFilter] = useState<'all' | 'latest_2025' | 'mid_2023' | 'prev_2019' | 'classic_2014'>('all');
+  const [showOfficialGuide, setShowOfficialGuide] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showInstantExplanation, setShowInstantExplanation] = useState<boolean>(true);
 
-  // Filter papers purely by level and search query across the complete 155-paper repository (2010-2025)
+  // Filter papers purely by level, year, and search query across the complete 155-paper repository (2010-2025)
   const filteredPapers = useMemo(() => {
     return JAPANESE_JLPT_EXAMS.filter((paper) => {
       if (levelFilter !== 'all') {
@@ -57,6 +59,19 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
         if (!paper.level.includes(lvlMap[levelFilter])) return false;
       }
 
+      if (yearFilter !== 'all') {
+        const y = paper.yearSession || paper.title;
+        if (yearFilter === 'latest_2025') {
+          if (!y.includes('2025') && !y.includes('2024')) return false;
+        } else if (yearFilter === 'mid_2023') {
+          if (!y.includes('2023') && !y.includes('2022') && !y.includes('2021') && !y.includes('2020')) return false;
+        } else if (yearFilter === 'prev_2019') {
+          if (!y.includes('2019') && !y.includes('2018') && !y.includes('2017') && !y.includes('2016') && !y.includes('2015')) return false;
+        } else if (yearFilter === 'classic_2014') {
+          if (!y.includes('2014') && !y.includes('2013') && !y.includes('2012') && !y.includes('2011') && !y.includes('2010')) return false;
+        }
+      }
+
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         return paper.title.toLowerCase().includes(q) || paper.summary.toLowerCase().includes(q);
@@ -64,7 +79,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
 
       return true;
     });
-  }, [levelFilter, searchQuery]);
+  }, [levelFilter, yearFilter, searchQuery]);
 
   // Level counts across the whole 80-paper question bank (16 sets per level, 16*5 = 80)
   const levelCounts = useMemo(() => {
@@ -317,35 +332,73 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
         </div>
       </div>
 
-      {/* 📌 官方 JLPT 考纲权威指引横幅 (消除无写作顾虑，讲透客观机考体系) */}
-      <div className="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-sky-50 via-indigo-50/50 to-slate-50 border border-sky-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-        <div className="flex items-start gap-2.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-sky-500 mt-1 shrink-0 animate-pulse" />
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-2 font-black text-slate-900">
-              <span>JLPT 官方考纲权威说明</span>
-              <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-700 text-[10px] font-extrabold">
-                100% 客观选择题 · 官方无写作
-              </span>
-            </div>
-            <p className="text-slate-600 leading-relaxed font-medium">
-              日本语能力测试（JLPT N1~N5）官方全卷为 <strong>100% 客观四选一（官方不考作文）</strong>，完整覆盖【言语知识】、【文法排词★】、【读解分析】与【听解原声】四大板块。若您需备考 <strong>EJU 留考小论文、J-TEST 记述或商务邮件</strong>，可点击右侧按钮进入专属工坊练习。
-            </p>
-          </div>
+      {/* 📌 JLPT 考纲权威说明 (默认轻量收起，首屏直达考卷) */}
+      <div className="bg-sky-50/70 rounded-2xl border border-sky-200/80 px-4 py-2.5 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shadow-2xs">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="px-2 py-0.5 rounded-md bg-sky-200/90 text-sky-950 font-black text-[11px]">
+            JLPT 考纲须知
+          </span>
+          <span className="text-slate-700 font-bold text-xs">
+            100% 客观选择题（言语知识 + 读解 + 听解，满分 180 分，官方无写作）
+          </span>
         </div>
 
-        {onNavigateToWriting && (
-          <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        <div className="flex items-center gap-2 shrink-0">
+          {onNavigateToWriting && (
             <button
               onClick={onNavigateToWriting}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-bold text-xs shrink-0 flex items-center justify-center gap-1 border border-slate-200 transition cursor-pointer shadow-2xs whitespace-nowrap"
-              title="JLPT 官方无写作；此工坊专为备考 EJU 留考小论文、J-TEST 记述与商务邮件设计"
+              className="px-2.5 py-1 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-bold text-[11px] flex items-center gap-1 border border-slate-200 transition cursor-pointer shadow-2xs"
             >
               <span>✍️ 选修: 留考/商务写作</span>
+              <ChevronRight className="w-3 h-3" />
             </button>
-          </div>
-        )}
+          )}
+
+          <button
+            onClick={() => setShowOfficialGuide(prev => !prev)}
+            className="px-2.5 py-1 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-[11px] flex items-center gap-1 transition cursor-pointer shadow-2xs"
+          >
+            <span>{showOfficialGuide ? '收起说明' : '查看及格线与考纲'}</span>
+            <ChevronDown className={`w-3 h-3 transition-transform ${showOfficialGuide ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
       </div>
+
+      {showOfficialGuide && (
+        <div className="p-4 rounded-2xl bg-white border border-sky-200 space-y-3 text-slate-700 animate-in fade-in duration-200 text-xs shadow-xs">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+            <div className="p-3 rounded-xl bg-sky-50/50 border border-sky-200/70 space-y-1">
+              <div className="flex items-center gap-1.5 font-black text-sky-700">
+                <span>🏛️</span>
+                <span>官方 180 分标准制</span>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-relaxed">
+                全等级满分 180 分（言语知识 60分 + 读解 60分 + 听解 60分）。合格线：N1(100分)、N2(90分)、N3(95分)、N4(90分)、N5(80分)。
+              </p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-amber-50/50 border border-amber-200/70 space-y-1">
+              <div className="flex items-center gap-1.5 font-black text-amber-800">
+                <span>⚠️</span>
+                <span>单科 19 分否决制</span>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-relaxed">
+                即使总分超过合格线，任一单项得分低于 19 分，仍会被官方严格判定为不合格。本系统严格内建此判定！
+              </p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-emerald-50/50 border border-emerald-200/70 space-y-1">
+              <div className="flex items-center gap-1.5 font-black text-emerald-700">
+                <span>🎧</span>
+                <span>全考期原声音频收录</span>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-relaxed">
+                收录 2010~2025 全量 31 大考期真题，每套均配备考场原声音频、听力原文（大纲文本）与逐题双语名师详析。
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Level Filter & Paper Selection */}
       <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs space-y-3.5">
@@ -403,6 +456,36 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                 </button>
               );
             })}
+          </div>
+        </div>
+
+        {/* 考期年份快捷药丸 (消除 155 套长列表翻找疲劳) */}
+        <div className="flex items-center gap-2 pt-2 border-t border-slate-100 flex-wrap">
+          <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
+            <span className="w-1.5 h-3.5 bg-sky-500 rounded-full" />
+            <span>考期年份筛选:</span>
+          </div>
+
+          <div className="flex items-center gap-1 bg-slate-50 p-0.5 rounded-xl border border-slate-200/80 flex-wrap">
+            {[
+              { id: 'all' as const, label: '全部年份' },
+              { id: 'latest_2025' as const, label: '2025~2024 最新考期' },
+              { id: 'mid_2023' as const, label: '2023~2020 经典大卷' },
+              { id: 'prev_2019' as const, label: '2019~2015 历年真题' },
+              { id: 'classic_2014' as const, label: '2014~2010 早期改革卷' },
+            ].map((yf) => (
+              <button
+                key={yf.id}
+                onClick={() => setYearFilter(yf.id)}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer ${
+                  yearFilter === yf.id
+                    ? 'bg-sky-500 text-white font-black shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                }`}
+              >
+                {yf.label}
+              </button>
+            ))}
           </div>
         </div>
 
