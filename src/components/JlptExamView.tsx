@@ -43,7 +43,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
   const [yearFilter, setYearFilter] = useState<'all' | 'latest_2025' | 'mid_2023' | 'prev_2019' | 'classic_2014'>('all');
   const [showOfficialGuide, setShowOfficialGuide] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [showInstantExplanation, setShowInstantExplanation] = useState<boolean>(true);
+  const [showInstantExplanation, setShowInstantExplanation] = useState<boolean>(false);
 
   // Filter papers purely by level, year, and search query across the complete 155-paper repository (2010-2025)
   const filteredPapers = useMemo(() => {
