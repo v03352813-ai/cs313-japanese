@@ -411,7 +411,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               📚 JLPT 官方历届考期真题全真机考题库
             </span>
             <span className="text-slate-500 hidden sm:inline">
-              (收录 2010~2025 官方新大纲改革以来全量 31 大考期，每级各 31 套，全库共 155 套，每年 7月 / 12月 考后持续同步更新):
+              (收录 2010~2025 官方新大纲改革以来历届官方考期，每年 7月 / 12月 考后持续同步更新):
             </span>
           </div>
           <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70">
@@ -420,11 +420,11 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
               每年 7月 / 12月 考后官方考期同步入库
             </span>
             <span className="text-slate-300">|</span>
-            <span className="text-sky-600 font-extrabold">全真题库严格收录 155 套</span>
+            <span className="text-sky-600 font-extrabold">官方考期真题对齐</span>
           </div>
         </div>
 
-        {/* 等级快速筛选 (全部 155 套，各级别各 31 套) */}
+        {/* 等级快速筛选 */}
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
             <span className="w-1.5 h-3.5 bg-sky-500 rounded-full" />
@@ -434,12 +434,12 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           <div className="flex items-center gap-1.5 flex-wrap">
             {(['all', 'n1', 'n2', 'n3', 'n4', 'n5'] as LevelFilterType[]).map((lvl) => {
               const labelMap: Record<string, string> = {
-                all: `全部级别 (${levelCounts.all})`,
-                n1: `N1 (${levelCounts.n1})`,
-                n2: `N2 (${levelCounts.n2})`,
-                n3: `N3 (${levelCounts.n3})`,
-                n4: `N4 (${levelCounts.n4})`,
-                n5: `N5 (${levelCounts.n5})`
+                all: '全部级别',
+                n1: 'N1 (高级)',
+                n2: 'N2 (中高级)',
+                n3: 'N3 (中级)',
+                n4: 'N4 (初中级)',
+                n5: 'N5 (初级)'
               };
               const isSelected = levelFilter === lvl;
               return (
@@ -459,7 +459,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
           </div>
         </div>
 
-        {/* 考期年份快捷药丸 (消除 155 套长列表翻找疲劳) */}
+        {/* 考期年份快捷药丸 */}
         <div className="flex items-center gap-2 pt-2 border-t border-slate-100 flex-wrap">
           <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
             <span className="w-1.5 h-3.5 bg-sky-500 rounded-full" />
@@ -495,10 +495,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-700 shrink-0">
               <FileCheck2 className="w-4 h-4 text-sky-500" />
               <span>
-                选择作答试卷
-                {levelFilter === 'all'
-                  ? ` (全库共 ${filteredPapers.length} 套):`
-                  : ` (${levelFilter.toUpperCase()} · 共 ${filteredPapers.length} 套):`}
+                选择作答试卷:
               </span>
             </div>
 
@@ -524,7 +521,7 @@ export const JlptExamView: React.FC<JlptExamViewProps> = ({ isVip, onOpenVipModa
                   const statusLabel = isVip || isFreeTrial ? '✓ [可作答] ' : '🔒 [VIP专属] ';
                   return (
                     <option key={p.id} value={p.id}>
-                      {statusLabel}[{idx + 1}/{filteredPapers.length}] {p.yearSession} · {p.title} ({p.questions.length}题 · {p.totalTimeMinutes}分钟)
+                      {statusLabel}第 {idx + 1} 卷 · {p.yearSession} · {p.title} ({p.questions.length}题 · {p.totalTimeMinutes}分钟)
                     </option>
                   );
                 })}
