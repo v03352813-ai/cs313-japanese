@@ -648,11 +648,83 @@ export const AISpeakingView: React.FC<AISpeakingViewProps> = ({ isVip, onOpenVip
     return s.category === selectedCategory;
   });
 
-  // Current active suggestions from the latest AI message
+  // Current active suggestions: 结合 AI 当前对话语境与场景拓展灵感库进行多批次循环切换
   const latestAiMessage = [...chatMessages].reverse().find(m => m.sender === 'ai');
-  const activeSuggestions = normalizeSuggestions(latestAiMessage?.suggestedResponses).length > 0
-    ? normalizeSuggestions(latestAiMessage?.suggestedResponses)
-    : generateDynamicSuggestions(currentScenario, userTurnsCount, refreshSeed);
+  const aiSuggestions = normalizeSuggestions(latestAiMessage?.suggestedResponses);
+
+  const activeSuggestions = useMemo(() => {
+    const pools: SuggestionOption[][] = [];
+    if (aiSuggestions.length > 0) {
+      pools.push(aiSuggestions);
+    }
+    
+    // 场景预设的多批次拓展灵感
+    const isJlpt = currentScenario.category === 'jlpt_speaking';
+    const isDaily = currentScenario.category === 'daily_life';
+    const isBiz = currentScenario.category === 'business_work';
+    const isDrama = currentScenario.category === 'drama_roleplay';
+
+    if (isJlpt) {
+      pools.push(
+        [
+          { tag: '基础日常', text: '休日はたいてい家でアニメを見たり、友達とカフェに行ったりします。', zh: '休息日通常在家看动漫，或者和朋友去咖啡厅。' },
+          { tag: 'JLPT高分', text: '自由時間を有効に活用して、日本語能力を向上させるために日々努力しております。', zh: '我有效利用课余时间，为了提高日语水平每天都在努力。' },
+          { tag: '个性回答', text: '運動が好きなので、週末はよく代々木公園でジョギングをして気分転換をしています。', zh: '因为喜欢运动，周末经常在代代木公园慢跑转换心情。' }
+        ],
+        [
+          { tag: '理由说明', text: 'このような現象が起きた主な原因は、若者のライフスタイルの多様化にあると考えられます。', zh: '我认为出现这种现象的主要原因在于年轻人生活方式的多样化。' },
+          { tag: '逻辑对比', text: '短期的にはコストがかかりますが、長期的にはより大きなメリットをもたらすはずです。', zh: '虽然短期来看会有成本，但长远来看必然带来更大的效益。' },
+          { tag: '提出对策', text: '行政と民間が緊密に連携し、実効性のある具体的な支援策を講じるべきです。', zh: '政府与民间应紧密携手，采取具有实效性的具体支援对策。' }
+        ],
+        [
+          { tag: '委婉致歉', text: '大変申し訳ございませんが、あいにく急用が入ってしまい、出席が難しくなりました。', zh: '实在非常抱歉，不巧因突发急事，今天难以出席了。' },
+          { tag: '时间协商', text: 'もしよろしければ、来週の同じお時間にご都合を変更していただくことは可能でしょうか。', zh: '如果不介意的话，请问能否改至下周同一时间呢？' },
+          { tag: '弥补提议', text: '次回お会いした際には、ぜひ美味しいお店をご案内させてください。', zh: '下次见面时，请务必让我带您去品尝地道的美食。' }
+        ]
+      );
+    } else if (isDaily) {
+      pools.push(
+        [
+          { tag: '居酒屋点单', text: 'すみません、生ビール二つと、焼き鳥の盛り合わせをタレでお願いします！', zh: '不好意思，请来两杯生啤，还有一份烤鸡肉串拼盘（要酱烤的）！' },
+          { tag: '店员交流', text: 'このおすすめの刺身定食は、今日まだ残っていますか？', zh: '请问这份店长推荐的刺身定食，今天还有吗？' },
+          { tag: '买单结账', text: 'お会計を別々でお願いできますか？PayPayで支払います。', zh: '请问可以分开结账吗？我用 PayPay 支付。' }
+        ],
+        [
+          { tag: '便利店实战', text: '温めていただけますか？スプーンも一つ付けてください。', zh: '能帮我加热一下吗？请也附带一个汤匙。' },
+          { tag: '问路礼貌', text: 'すみません、ちょっとお尋ねしたいのですが、秋葉原駅の電気街口はどちらでしょうか？', zh: '劳驾打听一下，请问秋叶原站的电器街出口在哪个方向？' },
+          { tag: '常用感谢', text: 'とても助かりました！ご親切に教えていただき、本当にありがとうございます！', zh: '太感谢了帮了大忙！非常感谢您的热情指引！' }
+        ]
+      );
+    } else if (isBiz) {
+      pools.push(
+        [
+          { tag: '正式汇报', text: 'かしこまりました。いただいたフィードバックを踏まえ、修正案を作成の上、本日中にご報告いたします。', zh: '明白。我将结合您的反馈意见撰写修改案，并在今天内向您汇报。' },
+          { tag: '商务敬语', text: 'お忙しいところ恐縮ですが、添付の資料につきましてご確認いただけますと幸いに存じます。', zh: '百忙之中打扰实在抱歉，如能请您过目附件中的资料，我将不胜感激。' },
+          { tag: '工作推进', text: '関連部署と密に連携を取りながら、納期内に確実に完了できるよう推進してまいります。', zh: '我将与相关部门紧密配合，确保在交期内切实完成并稳步推进。' }
+        ],
+        [
+          { tag: '面试志望', text: '私の強みは、どんな困難な課題にも粘り強く挑戦し、解決に導く主体性です。', zh: '我的优势在于面对任何困难课题都能坚韧挑战并引领解决的主动性。' },
+          { tag: '谦逊求教', text: '今後さらに改善すべき点などがございましたら、率直なご指導を賜れますと幸いです。', zh: '后续如有需要进一步改善的地方，恳请您给予指导。' },
+          { tag: '积极承接', text: 'はい、責任を持って迅速にフォローアップし、進捗を随時共有いたします。', zh: '好的，我将负责迅速跟进并随时同步最新进展。' }
+        ]
+      );
+    } else if (isDrama) {
+      pools.push([
+        { tag: '契约台词', text: 'ここで働かせてください！どんなに辛くても、絶対に諦めません！', zh: '请让我在您这里工作！无论有多辛苦，我都绝对不会放弃！' },
+        { tag: '内心独白', text: '名前を奪われても、本当の自分の心だけは絶対に忘れちゃいけないんだ。', zh: '就算被夺走了名字，也绝对不能忘记真正的自我内心。' },
+        { tag: '温暖告别', text: 'またどこかで会えるよね？絶対に振り向かないで前を向いて歩くよ！', zh: '我们一定还会在哪里重逢的对吧？我绝对不回头，向着前方大步走！' }
+      ]);
+    } else {
+      pools.push([
+        { tag: '积极回应', text: 'はい、おっしゃる通りだと思います。大変共感いたしました。', zh: '是的，正如您所说的那样。我深有共鸣。' },
+        { tag: '分享看法', text: '私の考えでは、このアプローチが最も効果的ではないかと思います。', zh: '依我看，这种方法或许是最有成效的。' },
+        { tag: '展开讨论', text: 'その点について、もう少し詳しくお聞かせいただけますでしょうか。', zh: '关于那一点，能否请您再多讲一些细节呢？' }
+      ]);
+    }
+
+    if (pools.length === 0) return [];
+    return pools[refreshSeed % pools.length];
+  }, [aiSuggestions, currentScenario, refreshSeed]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-in fade-in duration-300">
@@ -1010,10 +1082,10 @@ export const AISpeakingView: React.FC<AISpeakingViewProps> = ({ isVip, onOpenVip
 
               <button
                 onClick={() => setRefreshSeed(prev => prev + 1)}
-                className="flex items-center gap-1 text-[11px] text-sky-600 hover:text-sky-700 font-bold hover:underline cursor-pointer"
-                title="更换一批建议模版"
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-sky-100/70 hover:bg-sky-200/80 text-[11px] text-sky-800 font-bold transition active:scale-95 cursor-pointer"
+                title="点击切换下一批场景高分表达"
               >
-                <RefreshCw className="w-3 h-3" />
+                <RefreshCw className="w-3 h-3 text-sky-600 active:rotate-180 transition-transform" />
                 <span>换一批灵感</span>
               </button>
             </div>
@@ -1022,20 +1094,27 @@ export const AISpeakingView: React.FC<AISpeakingViewProps> = ({ isVip, onOpenVip
               {activeSuggestions.map((item, idx) => {
                 const tag = item?.tag || '标准回答';
                 const text = item?.text || '';
+                const zh = item?.zh || '';
                 if (!text) return null;
                 return (
                   <button
-                    key={idx}
+                    key={`${refreshSeed}-${idx}`}
                     onClick={() => {
                       setInputText(text);
                       speakJapanese(text, 1.0);
                     }}
-                    className="group px-3 py-1.5 rounded-xl bg-white hover:bg-sky-500 hover:text-white border border-sky-200/80 text-xs text-left transition shadow-2xs font-medium flex items-center gap-1.5 cursor-pointer"
+                    title={zh ? `中文释义: ${zh} (点击自动填入并试听)` : '点击直接填入输入框并试听发音'}
+                    className="group px-3 py-1.5 rounded-xl bg-white hover:bg-sky-500 hover:text-white border border-sky-200/80 text-xs text-left transition shadow-2xs font-medium flex items-center gap-1.5 cursor-pointer animate-in fade-in duration-200"
                   >
-                    <span className="px-1.5 py-0.2 rounded-md bg-sky-100 text-sky-700 text-[10px] font-black group-hover:bg-white/20 group-hover:text-white">
+                    <span className="px-1.5 py-0.5 rounded-md bg-sky-100 text-sky-700 text-[10px] font-black group-hover:bg-white/20 group-hover:text-white shrink-0">
                       {tag}
                     </span>
                     <span className="font-bold">{text}</span>
+                    {zh && (
+                      <span className="text-[11px] text-slate-400 group-hover:text-sky-100 font-normal ml-0.5">
+                        ({zh})
+                      </span>
+                    )}
                   </button>
                 );
               })}
