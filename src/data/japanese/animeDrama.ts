@@ -1615,6 +1615,471 @@ export const ANIME_DRAMA_SCENES: AnimeDramaScene[] = [
         "grammarNotes": "💡 ～ようじゃねえか：意志形+じゃねえか（反问劝诱：我们为什么不……呢！）。"
       }
     ]
+  },
+  {
+    "id": "scene-shingeki",
+    "title": "进击的巨人",
+    "japaneseTitle": "進撃の巨人",
+    "sceneTitle": "调查兵团的呐喊 · 为人类献出心脏",
+    "year": "2013-2023",
+    "levelTag": "中级进阶",
+    "genre": "热血冒险与动漫",
+    "category": "热血冒险与动漫",
+    "posterBg": "from-amber-900/60 to-red-950/80",
+    "tags": [
+      "进击的巨人",
+      "艾尔文",
+      "献出心脏",
+      "N2高频"
+    ],
+    "isFreePreview": false,
+    "dialogues": [
+      {
+        "id": 1,
+        "speaker": "艾尔文",
+        "role": "调查兵团第13任团长",
+        "ja": "兵士よ怒れ、兵士よ叫べ！兵士よ戦え！心臓を捧げよ！",
+        "furigana": "へいしよ いかれ、へいしよ さけべ！へいしよ たたかえ！しんぞうを ささげよ！",
+        "romaji": "Heishi yo ikare, heishi yo sakebe! Heishi yo tatakae! Shinzou o sasageyo!",
+        "zh": "士兵们，愤怒吧！士兵们，呐喊吧！士兵们，战斗吧！为了人类，献出心脏！",
+        "timeSec": 0,
+        "highlightWords": [
+          {
+            "word": "怒る",
+            "furigana": "いかる",
+            "romaji": "ikaru",
+            "meaning": "愤怒 / 动怒",
+            "jlptLevel": "N2"
+          },
+          {
+            "word": "叫ぶ",
+            "furigana": "さけぶ",
+            "romaji": "sakebu",
+            "meaning": "呐喊 / 呼喊",
+            "jlptLevel": "N3"
+          },
+          {
+            "word": "捧げる",
+            "furigana": "ささげる",
+            "romaji": "sasageru",
+            "meaning": "奉献 / 供奉",
+            "jlptLevel": "N1"
+          }
+        ],
+        "grammarNotes": "💡 ～よ（呼格祈使）：古语呼告与强命令形，怒れ/叫べ/戦え 均为一段/五段动词命令形。"
+      },
+      {
+        "id": 2,
+        "speaker": "利威尔",
+        "role": "人类最强士兵",
+        "ja": "悔いが残らない方を自分で選べ。",
+        "furigana": "くいが のこらない ほうを じぶんで えらべ。",
+        "romaji": "Kui ga nokoranai hou o jibun de erabe.",
+        "zh": "选择那个你回想起来不会留下悔恨的选项吧。",
+        "timeSec": 3,
+        "highlightWords": [
+          {
+            "word": "悔い",
+            "furigana": "くい",
+            "romaji": "kui",
+            "meaning": "后悔 / 悔恨",
+            "jlptLevel": "N2"
+          },
+          {
+            "word": "残る",
+            "furigana": "のこる",
+            "romaji": "nokoru",
+            "meaning": "残留 / 留下",
+            "jlptLevel": "N3"
+          }
+        ],
+        "grammarNotes": "💡 ～方を自分で選べ：～方（ほう）表示二选一的倾向；选べ 为选ぶ的命令形。"
+      }
+    ]
+  },
+  {
+    "id": "scene-kimetsu",
+    "title": "鬼灭之刃",
+    "japaneseTitle": "鬼滅の刃",
+    "sceneTitle": "那田蜘蛛山 · 火之神神乐初觉醒",
+    "year": "2019",
+    "levelTag": "初级进阶",
+    "genre": "热血冒险与动漫",
+    "category": "热血冒险与动漫",
+    "posterBg": "from-rose-900/60 to-orange-950/80",
+    "tags": [
+      "鬼灭之刃",
+      "炭治郎",
+      "火之神神乐",
+      "N3核心"
+    ],
+    "isFreePreview": false,
+    "dialogues": [
+      {
+        "id": 1,
+        "speaker": "灶门炭治郎",
+        "role": "鬼杀队剑士",
+        "ja": "折れていても、俺は絶対に諦めない！炭治郎、立ち向かえ！",
+        "furigana": "おれていても、おれは ぜったいに あきらめない！たんじろう、たちむかえ！",
+        "romaji": "Orete ite mo, ore wa zettai ni akiramenai! Tanjirou, tachimukae!",
+        "zh": "即便刀已折断，我也绝对不会轻言放弃！炭治郎，迎上前去吧！",
+        "timeSec": 0,
+        "highlightWords": [
+          {
+            "word": "折れる",
+            "furigana": "おれる",
+            "romaji": "oreru",
+            "meaning": "折断 / 弯折",
+            "jlptLevel": "N3"
+          },
+          {
+            "word": "諦める",
+            "furigana": "あきらめる",
+            "romaji": "akirameru",
+            "meaning": "死心 / 放弃",
+            "jlptLevel": "N3"
+          },
+          {
+            "word": "立ち向かう",
+            "furigana": "たちむかう",
+            "romaji": "tachimukau",
+            "meaning": "昂然面对 / 迎难而上",
+            "jlptLevel": "N2"
+          }
+        ],
+        "grammarNotes": "💡 ～ていても：即便是……也（即使处于折断的状态，动词+ていても）。"
+      },
+      {
+        "id": 2,
+        "speaker": "灶门炭十郎",
+        "role": "父亲",
+        "ja": "呼吸を整えて、ヒノカミ様になりきるんだ。",
+        "furigana": "こきゅうを ととのえて、ひのかみさまに なりきるんだ。",
+        "romaji": "Kokyuu o totonoete, Hinokami-sama ni narikirun da.",
+        "zh": "调匀呼吸，完完全全化身为火之神吧。",
+        "timeSec": 4,
+        "highlightWords": [
+          {
+            "word": "呼吸",
+            "furigana": "こきゅう",
+            "romaji": "kokyuu",
+            "meaning": "呼吸",
+            "jlptLevel": "N2"
+          },
+          {
+            "word": "整える",
+            "furigana": "ととのえる",
+            "romaji": "totonoeru",
+            "meaning": "整理 / 调理",
+            "jlptLevel": "N2"
+          }
+        ],
+        "grammarNotes": "💡 ～きる（切る）：复合动词后缀，表示“完全彻底地做到最后”。"
+      }
+    ]
+  },
+  {
+    "id": "scene-bocchi",
+    "title": "孤独摇滚",
+    "japaneseTitle": "ぼっち・ざ・ろっく！",
+    "sceneTitle": "文化祭舞台 · 崩断琴弦上的孤独Solo",
+    "year": "2022",
+    "levelTag": "初级进阶",
+    "genre": "治愈青春与感动",
+    "category": "治愈青春与感动",
+    "posterBg": "from-pink-900/60 to-purple-950/80",
+    "tags": [
+      "孤独摇滚",
+      "后藤一里",
+      "吉他英雄",
+      "N3日常"
+    ],
+    "isFreePreview": false,
+    "dialogues": [
+      {
+        "id": 1,
+        "speaker": "后藤一里",
+        "role": "吉他手 · 波奇酱",
+        "ja": "人と話すのは怖いけど、ギターを弾いている時だけは、世界と繋がれる気がする。",
+        "furigana": "ひとと はなすのは こわいけど、ぎたーを ひいている ときだけは、せかいと つながれる きがする。",
+        "romaji": "Hito to hanasu no wa kowai kedo, gitaa o hiite iru toki dake wa, sekai to tsunagareru ki ga suru.",
+        "zh": "和别人说话虽然很害怕，但唯独在弹吉他的时候，我感觉自己真正与世界连接在了一起。",
+        "timeSec": 0,
+        "highlightWords": [
+          {
+            "word": "怖い",
+            "furigana": "こわい",
+            "romaji": "kowai",
+            "meaning": "害怕的 / 恐惧的",
+            "jlptLevel": "N4"
+          },
+          {
+            "word": "繋がる",
+            "furigana": "つながる",
+            "romaji": "tsunagaru",
+            "meaning": "相连 / 连接",
+            "jlptLevel": "N2"
+          },
+          {
+            "word": "気がする",
+            "furigana": "きがする",
+            "romaji": "ki ga suru",
+            "meaning": "感觉 / 觉得",
+            "jlptLevel": "N3"
+          }
+        ],
+        "grammarNotes": "💡 ～気がする：惯用句，觉得…… / 有……的感觉。繋がれる 为可能形。"
+      },
+      {
+        "id": 2,
+        "speaker": "伊地知虹夏",
+        "role": "鼓手",
+        "ja": "ぼっちちゃん、私たちのギターヒーローになってよ！",
+        "furigana": "ぼっちちゃん、わたしたちの ぎたーひーろーに なってよ！",
+        "romaji": "Bocchi-chan, watashitachi no gitaa hiiroo ni natte yo!",
+        "zh": "波奇酱，成为属于我们大家的吉他英雄吧！",
+        "timeSec": 4,
+        "highlightWords": [
+          {
+            "word": "仲間",
+            "furigana": "なかま",
+            "romaji": "nakama",
+            "meaning": "同伴 / 伙伴",
+            "jlptLevel": "N3"
+          }
+        ],
+        "grammarNotes": "💡 ～になってよ：动词连用形（て形）+よ，表轻柔的亲密请求。"
+      }
+    ]
+  },
+  {
+    "id": "scene-hanzawa",
+    "title": "半泽直树",
+    "japaneseTitle": "半沢直樹",
+    "sceneTitle": "东京中央银行 · 加倍奉还的名台词对决",
+    "year": "2013-2020",
+    "levelTag": "中高级精通",
+    "genre": "高分职场与神剧",
+    "category": "高分职场与神剧",
+    "posterBg": "from-amber-950/70 to-slate-950/90",
+    "tags": [
+      "半泽直树",
+      "加倍奉还",
+      "职场敬语",
+      "N1考点"
+    ],
+    "isFreePreview": false,
+    "dialogues": [
+      {
+        "id": 1,
+        "speaker": "半泽直树",
+        "role": "东京中央银行次长",
+        "ja": "やられたらやり返す、倍返しだ！それが私の流儀です。",
+        "furigana": "やられたら やりかえす、ばいがえしだ！それが わたしの りゅうぎです。",
+        "romaji": "Yararetara yarikaesu, baigaeshi da! Sore ga watashi no ryuugi desu.",
+        "zh": "被侵犯了就一定要奉还回去，以牙还牙，加倍奉还！这就是我处世的信条。",
+        "timeSec": 0,
+        "highlightWords": [
+          {
+            "word": "やり返す",
+            "furigana": "やりかえす",
+            "romaji": "yarikaesu",
+            "meaning": "回击 / 还手",
+            "jlptLevel": "N2"
+          },
+          {
+            "word": "倍返し",
+            "furigana": "ばいがえし",
+            "romaji": "baigaeshi",
+            "meaning": "加倍奉还",
+            "jlptLevel": "N1"
+          },
+          {
+            "word": "流儀",
+            "furigana": "りゅうぎ",
+            "romaji": "ryuugi",
+            "meaning": "作风 / 信条 / 流派",
+            "jlptLevel": "N1"
+          }
+        ],
+        "grammarNotes": "💡 やられたら（受身+条件）：被动态+たら，表示“一旦被施加了不公”。"
+      },
+      {
+        "id": 2,
+        "speaker": "大和田晓",
+        "role": "常务董事",
+        "ja": "施されたら施し返す、恩返しです！",
+        "furigana": "ほどこされたら ほどこしかえす、おんがえしです！",
+        "romaji": "Hodokosaretara hodokoshikaesu, ongaeshi desu!",
+        "zh": "受人恩惠就要报答恩惠，这是知恩图报！",
+        "timeSec": 4,
+        "highlightWords": [
+          {
+            "word": "施す",
+            "furigana": "ほどこす",
+            "romaji": "hodokosu",
+            "meaning": "施行 / 施舍 / 给予",
+            "jlptLevel": "N1"
+          },
+          {
+            "word": "恩返し",
+            "furigana": "おんがえし",
+            "romaji": "ongaeshi",
+            "meaning": "报恩",
+            "jlptLevel": "N2"
+          }
+        ],
+        "grammarNotes": "💡 施される（受身形）：表示承受外界的善意或恩惠。"
+      }
+    ]
+  },
+  {
+    "id": "scene-suzume",
+    "title": "铃芽之旅",
+    "japaneseTitle": "すずめの戸締まり",
+    "sceneTitle": "废墟门扉前 · 关门师神圣祷词",
+    "year": "2022",
+    "levelTag": "中级进阶",
+    "genre": "吉卜力·新海诚经典",
+    "category": "吉卜力·新海诚经典",
+    "posterBg": "from-sky-950/70 to-indigo-950/80",
+    "tags": [
+      "铃芽之旅",
+      "新海诚",
+      "关门师",
+      "古语祝词"
+    ],
+    "isFreePreview": false,
+    "dialogues": [
+      {
+        "id": 1,
+        "speaker": "宗像草太",
+        "role": "关门师",
+        "ja": "かけまくも畏き日不見の神よ。遠つ御祖の産土よ。久しく拝領仕まつりしこの山河、謹んでお返し申す！",
+        "furigana": "かけまくも かしこき ひみずの かみよ。とおつ みおやの うぶすなよ。ひさしく はいりょうつかまつりし この やまかわ、つつしんで おかえしもうす！",
+        "romaji": "Kakemakumo kashikoki himizu no kami yo. Tootsu mioya no ubusuna yo. Hisashiku hairyou tsukamatsurishi kono yamakawa, tsutsushinde okaeshi mousu!",
+        "zh": "诚惶诚恐，祈告于司管地脉的日不见之神。远古先祖之故土啊。借用已久的锦绣山河，今恭敬奉还！",
+        "timeSec": 0,
+        "highlightWords": [
+          {
+            "word": "謹んで",
+            "furigana": "つつしんで",
+            "romaji": "tsutsushinde",
+            "meaning": "谨 / 毕恭毕敬地",
+            "jlptLevel": "N1"
+          },
+          {
+            "word": "拝領",
+            "furigana": "はいりょう",
+            "romaji": "hairyou",
+            "meaning": "领受 / 蒙受赏赐",
+            "jlptLevel": "N1"
+          },
+          {
+            "word": "申す",
+            "furigana": "もうす",
+            "romaji": "mousu",
+            "meaning": "自谦动词（言/做）",
+            "jlptLevel": "N2"
+          }
+        ],
+        "grammarNotes": "💡 お返し申す：最高自谦语表达（お + 动词连用形 + 申す）。"
+      },
+      {
+        "id": 2,
+        "speaker": "岩户铃芽",
+        "role": "高中生",
+        "ja": "私は、草太さんのいない世界が、怖いです！",
+        "furigana": "わたしは、そうたさんの いない せかいが、こわいです！",
+        "romaji": "Watashi wa, Souta-san no inai sekai ga, kowai desu!",
+        "zh": "在这个世界上，如果没有草太先生，那才是我最害怕的事情！",
+        "timeSec": 5,
+        "highlightWords": [
+          {
+            "word": "世界",
+            "furigana": "せかい",
+            "romaji": "sekai",
+            "meaning": "世界",
+            "jlptLevel": "N4"
+          }
+        ],
+        "grammarNotes": "💡 草太さんのいない世界：连体修饰句中，主格助词 が 可以转写为 の。"
+      }
+    ]
+  },
+  {
+    "id": "scene-silent",
+    "title": "静雪",
+    "japaneseTitle": "silent",
+    "sceneTitle": "车站月台 · 泪眼交织的无声手语对白",
+    "year": "2022",
+    "levelTag": "初级入门",
+    "genre": "治愈青春与感动",
+    "category": "治愈青春与感动",
+    "posterBg": "from-blue-950/70 to-slate-900/90",
+    "tags": [
+      "silent",
+      "目黑莲",
+      "川口春奈",
+      "手语与青春"
+    ],
+    "isFreePreview": false,
+    "dialogues": [
+      {
+        "id": 1,
+        "speaker": "佐仓想",
+        "role": "失聪少年",
+        "ja": "言葉が聞こえなくなっても、君が伝えようとしてくれた気持ちは、全部届いていたよ。",
+        "furigana": "ことばが きこえなくなっても、きみが つたえようと してくれた きもちは、ぜんぶ とどいていたよ。",
+        "romaji": "Kotoba ga kikoenaku natte mo, kimi ga tsutaeyou to shite kureta kimochi wa, zenbu todoite ita yo.",
+        "zh": "就算我再也听不见声音，但你竭尽全力想要传达给我的心意，我全都有真真切切地收到。",
+        "timeSec": 0,
+        "highlightWords": [
+          {
+            "word": "聞こえる",
+            "furigana": "きこえる",
+            "romaji": "kikoeru",
+            "meaning": "听见 / 能听到",
+            "jlptLevel": "N4"
+          },
+          {
+            "word": "伝える",
+            "furigana": "つたえる",
+            "romaji": "tsutaeru",
+            "meaning": "传达 / 表达",
+            "jlptLevel": "N3"
+          },
+          {
+            "word": "届く",
+            "furigana": "とどく",
+            "romaji": "todoku",
+            "meaning": "送达 / 传到",
+            "jlptLevel": "N3"
+          }
+        ],
+        "grammarNotes": "💡 ～ようとする：意志形+とする（正打算 / 竭尽全力想要做某事）；～てくれる（授受动词）。"
+      },
+      {
+        "id": 2,
+        "speaker": "青羽紬",
+        "role": "前女友",
+        "ja": "声じゃなくてもいい。好きな人の言葉なら、どんな形でもちゃんと受け取るから。",
+        "furigana": "こえじゃなくても いい。すきな ひとの ことばなら、どんな かたちでも ちゃんと うけとるから。",
+        "romaji": "Koe ja nakute mo ii. Sukina hito no kotoba nara, donna katachi demo chanto uketoru kara.",
+        "zh": "就算不是声音也没关系。只要是喜欢的人说出的话，无论是以何种形式，我都一定会好好接住它的。",
+        "timeSec": 5,
+        "highlightWords": [
+          {
+            "word": "受け取る",
+            "furigana": "うけとる",
+            "romaji": "uketoru",
+            "meaning": "接住 / 接收 / 理解",
+            "jlptLevel": "N2"
+          }
+        ],
+        "grammarNotes": "💡 ～なくてもいい：表示许可或没有必要；～なら（假定条件）。"
+      }
+    ]
   }
 ];
 
