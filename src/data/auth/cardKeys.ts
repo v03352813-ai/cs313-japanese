@@ -138,8 +138,9 @@ export function verifyCardKey(
 
   // 1. 第一道防线：官方特权示范卡直接通行，其余卡执行数学级数字防伪签名校验
   const isPresetDemo = Boolean(PRESET_VIP_KEYS[cleanKey]);
+  let sigResult: { valid: boolean; type?: string; reason?: string } = { valid: true, type: isPresetDemo ? 'ALL' : undefined };
   if (!isPresetDemo) {
-    const sigResult = verifyKeySignature(cleanKey);
+    sigResult = verifyKeySignature(cleanKey);
     if (!sigResult.valid) {
       return {
         success: false,
